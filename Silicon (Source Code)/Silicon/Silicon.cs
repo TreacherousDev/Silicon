@@ -348,7 +348,7 @@ namespace Silicon
                 
             //Console.WriteLine(currentCameraLookAtX + " " + currentCameraLookAtY + " " + currentCameraLookAtZ);
             //UpdateLabel(CameraPositionDataLabel, $"X: {currentCameraLookAtX:F2} Y: {currentCameraLookAtY:F2} Z: {currentCameraLookAtZ:F2} Pitch: {currentCameraPitch:F2} Yaw: {currentCameraYaw:F2}", Color.Red);
-            UpdateLabel(CameraLookAtInfoLabel, $"X: {currentCameraLookAtX:F2}   Y: {currentCameraLookAtY:F2}   Z: {currentCameraLookAtZ:F2}", Color.White);
+            UpdateLabel(CameraLookAtInfoLabel, $"X: {currentCameraLookAtX:F2}     Y: {currentCameraLookAtY:F2}     Z: {currentCameraLookAtZ:F2}", Color.White);
             UpdateLabel(CameraRotationInfoLabel, $"Pitch: {currentCameraPitch:F2}        Yaw: {currentCameraYaw:F2}", Color.White);
         }
 

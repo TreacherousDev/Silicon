@@ -73,9 +73,7 @@
   <PropertyGroup />
   <PropertyGroup />
   <PropertyGroup />
-  <PropertyGroup>
-    <ApplicationManifest>Config\app.manifest</ApplicationManifest>
-  </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="Memory, Version=1.2.27.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Memory.dll.x64.1.2.27\lib\netstandard2.0\Memory.dll</HintPath>
@@ -164,9 +162,7 @@
     <None Include="Resources\%24this.Icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="%24this.Icon.ico" />
     <Content Include="Silicon.ico" />
-    <Content Include="SiliconLogo.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

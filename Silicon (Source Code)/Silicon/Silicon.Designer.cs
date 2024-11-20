@@ -31,7 +31,7 @@ namespace Silicon
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SiliconForm));
             this.metroSetControlBox1 = new MetroSet_UI.Controls.MetroSetControlBox();
-            this.HeliumWorker = new System.ComponentModel.BackgroundWorker();
+            this.SiliconWorker = new System.ComponentModel.BackgroundWorker();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.Information = new System.Windows.Forms.TabPage();
             this.Status = new MetroSet_UI.Controls.MetroSetLabel();
@@ -91,9 +91,9 @@ namespace Silicon
             this.metroSetControlBox1.ThemeAuthor = "Narwin";
             this.metroSetControlBox1.ThemeName = "MetroDark";
             // 
-            // HeliumWorker
+            // SiliconWorker
             // 
-            this.HeliumWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.HeliumWorker_DoWork);
+            this.SiliconWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.SiliconWorker_DoWork);
             // 
             // Information
             // 
@@ -610,7 +610,7 @@ namespace Silicon
 
         #endregion
         private MetroSet_UI.Controls.MetroSetControlBox metroSetControlBox1;
-        private System.ComponentModel.BackgroundWorker HeliumWorker;
+        private System.ComponentModel.BackgroundWorker SiliconWorker;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.TabPage Information;
         private MetroSet_UI.Controls.MetroSetLabel Status;

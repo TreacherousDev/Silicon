@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# CS0168: La variable 'ex' se ha declarado pero nunca se usa
+dotnet_diagnostic.CS0168.severity = silent

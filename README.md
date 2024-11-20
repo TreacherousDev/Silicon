@@ -14,5 +14,6 @@ If the program does not work, closing and reopening it should fix it.
 
 Enabling Freecam disables camera control from the main game itself. You must use the hotkeys included in the tooltip below to move around. Make sure that Silicon is the active window while you are pressing the hotkeys or it wouldn't work.
 ___
+To Do: The rest of the documentation, tutorials, and save / load animation features
 
 

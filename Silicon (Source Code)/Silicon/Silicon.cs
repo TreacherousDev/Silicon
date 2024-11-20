@@ -339,14 +339,23 @@ namespace Silicon
             if (FreecamSwitch.Switched == true)
             {
                 //Overwrite camera position, pitch and yaw using Silicon as the ew controller
-                m.WriteMemory(pitchAddress, "float", currentCameraPitch.ToString());
-                m.WriteMemory(yawAddress, "float", currentCameraYaw.ToString());
-                m.WriteMemory("Cubic.exe+E29032", "float", currentCameraLookAtX.ToString());
-                m.WriteMemory("Cubic.exe+E29036", "float", currentCameraLookAtY.ToString());
-                m.WriteMemory("Cubic.exe+E2903A", "float", currentCameraLookAtZ.ToString());
+                m.WriteMemory(pitchAddress, "bytes", ConvertDoubleToFloatBytes(currentCameraPitch));
+                m.WriteMemory(yawAddress, "bytes", ConvertDoubleToFloatBytes(currentCameraYaw));
+                m.WriteMemory("Cubic.exe+E29032", "bytes", ConvertDoubleToFloatBytes(currentCameraLookAtX));
+                m.WriteMemory("Cubic.exe+E29036", "bytes", ConvertDoubleToFloatBytes(currentCameraLookAtY));
+                m.WriteMemory("Cubic.exe+E2903A", "bytes", ConvertDoubleToFloatBytes(currentCameraLookAtZ));
+            }
+
+            string ConvertDoubleToFloatBytes(double num)
+            {
+                float floatValue = (float)num;
+                byte[] byteArray = BitConverter.GetBytes(floatValue);
+                string byteString = BitConverter.ToString(byteArray).Replace("-", " ");
+
+                return byteString;
             }
                 
-            //Console.WriteLine(currentCameraLookAtX + " " + currentCameraLookAtY + " " + currentCameraLookAtZ);
+            Console.WriteLine(currentCameraLookAtX + " " + currentCameraLookAtY + " " + currentCameraLookAtZ);
             //UpdateLabel(CameraPositionDataLabel, $"X: {currentCameraLookAtX:F2} Y: {currentCameraLookAtY:F2} Z: {currentCameraLookAtZ:F2} Pitch: {currentCameraPitch:F2} Yaw: {currentCameraYaw:F2}", Color.Red);
             UpdateLabel(CameraLookAtInfoLabel, $"X: {currentCameraLookAtX:F2}     Y: {currentCameraLookAtY:F2}     Z: {currentCameraLookAtZ:F2}", Color.White);
             UpdateLabel(CameraRotationInfoLabel, $"Pitch: {currentCameraPitch:F2}        Yaw: {currentCameraYaw:F2}", Color.White);

@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // La información general de un ensamblado se controla mediante el siguiente 
 // conjunto de atributos. Cambie estos valores de atributo para modificar la información
 // asociada con un ensamblado.
-[assembly: AssemblyTitle("Helium")]
+[assembly: AssemblyTitle("Silicon")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Helium")]
-[assembly: AssemblyCopyright("Copyright ©  2024 by Hispano")]
+[assembly: AssemblyProduct("Silicon")]
+[assembly: AssemblyCopyright("Copyright © 2024 by TreacherousDev")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

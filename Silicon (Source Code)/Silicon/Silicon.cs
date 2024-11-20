@@ -25,9 +25,6 @@ namespace Silicon
     {
         public Mem m = new Mem();
         private System.Timers.Timer processCheckTimer;
-        private readonly Dictionary<String, int> _hotkeyMap;
-        private readonly Dictionary<int, ToggleAction> _scriptActions;
-        public delegate void ToggleAction();
 
         public SiliconForm()
         {
@@ -35,21 +32,6 @@ namespace Silicon
             this.KeyDown += Game_KeyDown;
             this.KeyUp += Game_KeyUp;
             this.KeyPreview = true;
-
-            _hotkeyMap = new Dictionary<string, int>
-            {
-                { "F1", 1 },
-                { "F2", 2 },
-                { "F3", 3 },
-                { "F4", 4 },
-                { "F5", 5 },
-            };
-
-
-            foreach (var kvp in _hotkeyMap)
-            {
-                HotkeyManager.Current.AddOrReplace(kvp.Key, (Keys)Enum.Parse(typeof(Keys), kvp.Key), HotKeyshandler);
-            }
 
             // Some color overrides since the TabControl seems to be bugged and sets by default the ForeColor to Black even when the default color has been changed.
             Hispano.ForeColor = Color.Gray;
@@ -68,29 +50,12 @@ namespace Silicon
 
         }
 
-        private void HotKeyshandler(object sender, HotkeyEventArgs e)
-        {
-            if (_hotkeyMap.TryGetValue(e.Name, out int scriptNumber))
-            {
-                ScriptHandler(scriptNumber);
-            }
-            e.Handled = true;
-        }
-
-        private void ScriptHandler(int scriptNumber)
-        {
-            if (_scriptActions.TryGetValue(scriptNumber, out ToggleAction action))
-            {
-                action();
-            }
-        }
-
         private void Form1_Load(object sender, EventArgs e)
         {
             StartProcessCheckTimer();
 
-            if (!HeliumWorker.IsBusy)
-                HeliumWorker.RunWorkerAsync();
+            if (!SiliconWorker.IsBusy)
+                SiliconWorker.RunWorkerAsync();
         }
 
         private void StartProcessCheckTimer()
@@ -142,7 +107,6 @@ namespace Silicon
             processCheckTimer.Enabled = true;
         }
 
-
         private void UpdateLabel(Label label, string text, Color color)
         {
 
@@ -161,25 +125,7 @@ namespace Silicon
             }
         }
 
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            if (processCheckTimer != null)
-            {
-                processCheckTimer.Stop();
-                processCheckTimer.Dispose();
-            }
-
-            HotkeyManager.Current.Remove("F1");
-            HotkeyManager.Current.Remove("F2");
-            HotkeyManager.Current.Remove("F3");
-            HotkeyManager.Current.Remove("F4");
-            HotkeyManager.Current.Remove("F5");
-            base.OnFormClosing(e);
-        }
-
-
         // From this point to the bottom is the main mod menu code
-
         private double currentCameraLookAtX;
         private double currentCameraLookAtY;
         private double currentCameraLookAtZ;
@@ -202,7 +148,7 @@ namespace Silicon
         bool scriptInjected = false;
         private Timer _updateTimer;
 
-        private void HeliumWorker_DoWork(object sender, DoWorkEventArgs e)
+        private void SiliconWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             _updateTimer = new Timer(10);
             _updateTimer.Elapsed += UpdateMemoryOnTimerTick;
@@ -214,8 +160,6 @@ namespace Silicon
         {
             CheckAndUpdateMemory();
         }
-
-        
 
         // Persistent Functions (Required for the engine to function)
         readonly string cameraCoordinatesFunction = "90 90 90 90 90 90 90 90 90 90 90 90";
@@ -363,7 +307,6 @@ namespace Silicon
 
 
        
-       
         List<List<double>> animationFrames = new List<List<double>>();
         private async void PlayAnimationButton_Click(object sender, EventArgs e)
         {
@@ -421,7 +364,6 @@ namespace Silicon
             }
         }
 
-        
         private void AddAnimationFrameButton_Click(object sender, EventArgs e)
         {
             List<double> frame = new List<double>();
@@ -599,5 +541,6 @@ namespace Silicon
         {
             cameraRotateSpeed = (double)CameraRotateSpeedSlider.Value / 60;
         }
+
     }
 }

@@ -10,13 +10,11 @@ using System.Threading.Tasks;
 using System.Timers;
 using Sunny.UI;
 using Timer = System.Timers.Timer;
-using NHotkey;
-using NHotkey.WindowsForms;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using System.Linq;
 using System.Data.SqlTypes;
 using System.Threading;
+using System.Runtime.InteropServices;
 
 
 namespace Silicon
@@ -27,15 +25,16 @@ namespace Silicon
     {
         public Mem m = new Mem();
         private System.Timers.Timer processCheckTimer;
+        private HashSet<Keys> pressedKeys = new HashSet<Keys>();
+        private Thread keyPollingThread;
+        private bool isRunning = true;
+        [DllImport("user32.dll")]
+        private static extern short GetAsyncKeyState(Keys key);
 
         public SiliconForm()
         {
             InitializeComponent();
-            this.KeyDown += Game_KeyDown;
-            this.KeyUp += Game_KeyUp;
-            this.KeyPreview = true;
-
-
+            StartKeyPolling();
 
             listViewFrames.View = View.Details;
             //listViewFrames.Columns.Add("#", 40);
@@ -431,65 +430,101 @@ namespace Silicon
             UpdateListView();
         }
 
-        private HashSet<Keys> pressedKeys = new HashSet<Keys>();
 
         // This function gets called in the main update loop
         // It handles the movement and rotation of the camera when freecam is activated
+        // Here starts the code edited by Hispano
+        private void StartKeyPolling()
+        {
+            keyPollingThread = new Thread(() =>
+            {
+                while (isRunning)
+                {
+                    UpdateKeyStates();
+                    Thread.Sleep(10);
+                }
+            })
+            {
+                IsBackground = true
+            };
+            keyPollingThread.Start();
+        }
+
+        private void UpdateKeyStates()
+        {
+            // List of keys to monitor
+            Keys[] keysToMonitor = new Keys[]
+            {
+                Keys.W, Keys.S, Keys.A, Keys.D,
+                Keys.Space, Keys.ShiftKey,
+                Keys.I, Keys.K, Keys.J, Keys.L
+            };
+
+            foreach (var key in keysToMonitor)
+            {
+                // Check if the key is currently pressed
+                bool isPressed = (GetAsyncKeyState(key) & 0x8000) != 0;
+
+                if (isPressed)
+                {
+                    // Add the key if is pressed
+                    if (!pressedKeys.Contains(key))
+                    {
+                        pressedKeys.Add(key);
+                    }
+                }
+                else
+                {
+                    // Remove the key if is released
+                    if (pressedKeys.Contains(key))
+                    {
+                        pressedKeys.Remove(key);
+                        if (pressedKeys.Count == 0)
+                        {
+                            Thread.Sleep(10);
+                        }
+                    }
+                }
+            }
+        }
+
         private void HandleCameraController(double yawRotation)
         {
             double moveX = 0, moveY = 0, moveZ = 0;
             double rotatePitch = 0, rotateYaw = 0;
 
-            // Check pressed keys and calculate movement direction
-            if (pressedKeys.Contains(Keys.W)) // Forward
+            if (pressedKeys.Contains(Keys.W) & isFreecamEnabled)
             {
                 double radians = (yawRotation - 90) * Math.PI / 180;
                 moveX += Math.Cos(radians);
                 moveY += Math.Sin(radians);
             }
-            if (pressedKeys.Contains(Keys.S)) // Backward
+            if (pressedKeys.Contains(Keys.S) & isFreecamEnabled)
             {
                 double radians = (yawRotation + 90) * Math.PI / 180;
                 moveX += Math.Cos(radians);
                 moveY += Math.Sin(radians);
             }
-            if (pressedKeys.Contains(Keys.A)) // Left
+            if (pressedKeys.Contains(Keys.A) & isFreecamEnabled)
             {
                 double radians = yawRotation * Math.PI / 180;
                 moveX -= Math.Cos(radians);
                 moveY -= Math.Sin(radians);
             }
-            if (pressedKeys.Contains(Keys.D)) // Right
+            if (pressedKeys.Contains(Keys.D) & isFreecamEnabled)
             {
                 double radians = yawRotation * Math.PI / 180;
                 moveX += Math.Cos(radians);
                 moveY += Math.Sin(radians);
             }
-            if (pressedKeys.Contains(Keys.Space)) // Up
-            {
-                moveZ -= 1;
-            }
-            if (pressedKeys.Contains(Keys.ShiftKey)) // Down
-            {
-                moveZ += 1;
-            }
-            if (pressedKeys.Contains(Keys.I))
-            {
-                rotatePitch -= 1;
-            }
-            if (pressedKeys.Contains(Keys.K))
-            {
-                rotatePitch += 1;
-            }
-            if (pressedKeys.Contains(Keys.J))
-            {
-                rotateYaw -= 1;
-            }
-            if (pressedKeys.Contains(Keys.L))
-            {
-                rotateYaw += 1;
-            }
+            if (pressedKeys.Contains(Keys.Space) & isFreecamEnabled) moveZ -= 1;
+            if (pressedKeys.Contains(Keys.ShiftKey) & isFreecamEnabled) moveZ += 1;
+            if (pressedKeys.Contains(Keys.I) & isFreecamEnabled) rotatePitch -= 1;
+            if (pressedKeys.Contains(Keys.K) & isFreecamEnabled) rotatePitch += 1;
+            if (pressedKeys.Contains(Keys.J) & isFreecamEnabled) rotateYaw -= 1;
+            if (pressedKeys.Contains(Keys.L) & isFreecamEnabled) rotateYaw += 1;
 
+            
             double moveMagnitude = Math.Sqrt(moveX * moveX + moveY * moveY + moveZ * moveZ);
             if (moveMagnitude > 0.05)
             {
@@ -497,40 +532,43 @@ namespace Silicon
                 moveY /= moveMagnitude;
                 moveZ /= moveMagnitude;
             }
+
             targetCameraLookAtX += moveX * cameraMoveSpeed;
             targetCameraLookAtY += moveY * cameraMoveSpeed;
             targetCameraLookAtZ += moveZ * cameraMoveSpeed;
-            if (targetCameraLookAtZ > 100)
-            {
-                targetCameraLookAtZ = 100;
-            }
 
+            
+            if (targetCameraLookAtZ > 100) targetCameraLookAtZ = 100;
+
+            
             double rotateMagnitude = Math.Sqrt(rotatePitch * rotatePitch + rotateYaw * rotateYaw);
             if (rotateMagnitude > 0.05)
             {
                 rotatePitch /= rotateMagnitude;
                 rotateYaw /= rotateMagnitude;
             }
+
             targetCameraPitch += rotatePitch * cameraRotateSpeed;
             targetCameraYaw += rotateYaw * cameraRotateSpeed;
-            if (targetCameraPitch > 89) 
-            {
-                targetCameraPitch = 89;
-            }
-            if (targetCameraPitch < -89)
-            {
-                targetCameraPitch = -89;
-            }
 
+            // Limit pitch angle using the custom Clamp
+            targetCameraPitch = Clamp(targetCameraPitch, -89, 89);
         }
-        private void Game_KeyDown(object sender, KeyEventArgs e)
+
+        public static double Clamp(double value, double min, double max)
         {
-            pressedKeys.Add(e.KeyCode);
+            if (value < min) return min;
+            if (value > max) return max;
+            return value;
         }
-        private void Game_KeyUp(object sender, KeyEventArgs e)
+
+        private void Silicon_OnFormClosing(object sender, FormClosingEventArgs e)
         {
-            pressedKeys.Remove(e.KeyCode);
+            isRunning = false;
+            keyPollingThread.Join();
         }
+        // Here ends the code edited by Hispano
+
         private void InterpolateCameraMovement(string lookAtXAddress,string lookAtYAddress, string lookAtZAddress)
         {
             currentCameraLookAtX = m.ReadFloat(lookAtXAddress);

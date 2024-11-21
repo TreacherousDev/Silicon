@@ -1,6 +1,7 @@
 ﻿using Memory;
 using MetroSet_UI.Forms;
 using System;
+using System.IO;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
@@ -15,6 +16,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Linq;
 using System.Data.SqlTypes;
+using System.Threading;
 
 
 namespace Silicon
@@ -272,6 +274,7 @@ namespace Silicon
                 else
                 {
                     m.WriteMemory("Cubic.exe+1B8A80", "bytes", cameraLookAtEditorFunctionOriginal);
+                    StopAnimation();
                 }
             }
 
@@ -319,7 +322,6 @@ namespace Silicon
                 return byteString;
             }
                 
-            Console.WriteLine(currentCameraLookAtX + " " + currentCameraLookAtY + " " + currentCameraLookAtZ);
             //UpdateLabel(CameraPositionDataLabel, $"X: {currentCameraLookAtX:F2} Y: {currentCameraLookAtY:F2} Z: {currentCameraLookAtZ:F2} Pitch: {currentCameraPitch:F2} Yaw: {currentCameraYaw:F2}", Color.Red);
             UpdateLabel(CameraLookAtInfoLabel, $"X: {currentCameraLookAtX:F2}     Y: {currentCameraLookAtY:F2}     Z: {currentCameraLookAtZ:F2}", Color.White);
             UpdateLabel(CameraRotationInfoLabel, $"Pitch: {currentCameraPitch:F2}        Yaw: {currentCameraYaw:F2}", Color.White);
@@ -349,19 +351,26 @@ namespace Silicon
 
             // Calculate new rotation speed
             double timeToTarget = moveDistance / cameraMoveSpeed;
-            double delay = 10;
-            return rotateDistance / (timeToTarget + delay);
+            //double delay = 100;
+            Console.WriteLine(rotateDistance + " " + timeToTarget);
+            return rotateDistance / (timeToTarget); 
         }
-        
 
+        private CancellationTokenSource animationCancellationTokenSource;
         List<List<double>> animationFrames = new List<List<double>>();
         private async void PlayAnimationButton_Click(object sender, EventArgs e)
         {
+            animationCancellationTokenSource = new CancellationTokenSource();
+            CancellationToken token = animationCancellationTokenSource.Token;
+
             int frameIndex = 0;
-            Console.WriteLine(animationFrames.Count);
             foreach (List<double> frame in animationFrames)
             {
-                Console.WriteLine("a");
+                if (token.IsCancellationRequested)
+                {
+                    Console.WriteLine("Animation cancelled.");
+                    break;
+                }
                 targetCameraLookAtX = frame[0];
                 targetCameraLookAtY = frame[1];
                 targetCameraLookAtZ = frame[2];
@@ -378,6 +387,10 @@ namespace Silicon
                     cameraRotateSpeed = 5;
                     while (cameraMoveDistance > 0.05)
                     {
+                        if (token.IsCancellationRequested)
+                        {
+                            return;
+                        }
                         await Task.Delay(100);
                     }
                     await Task.Delay(1000);
@@ -387,8 +400,20 @@ namespace Silicon
                 await Task.Delay(100);
                 while (cameraMoveDistance > 2)
                 {
+                    if (token.IsCancellationRequested)
+                    {
+                        return;
+                    }
                     await Task.Delay(100);
                 }
+            }
+        }
+
+        private void StopAnimation()
+        {
+            if (animationCancellationTokenSource != null)
+            {
+                animationCancellationTokenSource.Cancel();
             }
         }
 
@@ -628,39 +653,34 @@ namespace Silicon
         {
             if (listViewFrames.SelectedItems.Count == 0)
             {
-                // Show a message if no item is selected
                 MessageBox.Show("Please select a frame to delete.", "Delete Frame", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             foreach (ListViewItem frame in listViewFrames.SelectedItems.Cast<ListViewItem>().ToList())
             {
-                int selectedIndex = frame.Index; // Get the index of the selected item
-
-                // Remove the frame from both the data list and the ListView
+                int selectedIndex = frame.Index;
                 animationFrames.RemoveAt(selectedIndex);
                 listViewFrames.Items.RemoveAt(selectedIndex);
             }
+
+            UpdateListView();
         }
 
         private void GoToAnnimationFrameButton_Click(object sender, EventArgs e)
         {
             if (listViewFrames.SelectedItems.Count == 0)
             {
-                // Show a message if no item is selected
                 MessageBox.Show("Please select a frame to view.", "Delete Frame", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             if (listViewFrames.SelectedItems.Count > 1)
             {
-                // Show a message if no item is selected
                 MessageBox.Show("multiple frames selected. Please select only one.", "Delete Frame", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // Get the selected item's index
             int selectedIndex = listViewFrames.SelectedItems[0].Index;
-            // Remove the frame from the underlying list
             List<double> goToFrame = animationFrames[selectedIndex];
             targetCameraLookAtX = goToFrame[0];
             targetCameraLookAtY = goToFrame[1];
@@ -668,7 +688,78 @@ namespace Silicon
             targetCameraPitch = goToFrame[3];
             targetCameraYaw = goToFrame[4];
             cameraRotateSpeed = GetDynamicRotationSpeed();
-            // Remove the selected item from the ListView
+        }
+
+        private void SaveAnimationButton_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = "JSON Files (*.json)|*.json|All Files (*.*)|*.*",
+                DefaultExt = "json",
+                AddExtension = true,
+                Title = "Save Animation Frames"
+            };
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    // Serialize the animationFrames list to JSON
+                    string json = System.Text.Json.JsonSerializer.Serialize(animationFrames);
+
+                    // Write to the selected file
+                    File.WriteAllText(saveFileDialog.FileName, json);
+
+                    MessageBox.Show("Animation frames saved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error saving file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void LoadAnimationButton_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = "JSON Files (*.json)|*.json|All Files (*.*)|*.*",
+                Title = "Load Animation Frames"
+            };
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    // Read the file content
+                    string json = File.ReadAllText(openFileDialog.FileName);
+
+                    // Deserialize JSON to List<List<double>>
+                    animationFrames = System.Text.Json.JsonSerializer.Deserialize<List<List<double>>>(json);
+
+                    // Refresh the ListView to reflect loaded data
+                    listViewFrames.Items.Clear();
+                    int i = 1;
+                    foreach (var frame in animationFrames)
+                    {
+                        ListViewItem item = new ListViewItem(i.ToString()); // LookAtX
+                        item.SubItems.Add(frame[0].ToString("F1"));                   // LookAtX
+                        item.SubItems.Add(frame[1].ToString("F1"));                   // LookAtY
+                        item.SubItems.Add(frame[2].ToString("F1"));                   // LookAtZ
+                        item.SubItems.Add(frame[3].ToString("F1"));                   // Pitch
+                        item.SubItems.Add(frame[4].ToString("F1"));                   // Yaw
+                        item.SubItems.Add((frame[5] * 100).ToString("F1"));                   // MoveSpeed
+                        listViewFrames.Items.Add(item);
+                        i++;
+                    }
+
+                    MessageBox.Show("Animation frames loaded successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error loading file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
     }
 }

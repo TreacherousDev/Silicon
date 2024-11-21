@@ -351,41 +351,58 @@ namespace Silicon
 
             // Calculate new rotation speed
             double timeToTarget = moveDistance / cameraMoveSpeed;
-            //double delay = 100;
-            Console.WriteLine(rotateDistance + " " + timeToTarget);
+            //Console.WriteLine(rotateDistance + " " + timeToTarget);
             return rotateDistance / (timeToTarget); 
         }
-
+        private enum PlayButtonState { Play,  Stop }
+        private PlayButtonState playButtonState = PlayButtonState.Play;
+        
         private CancellationTokenSource animationCancellationTokenSource;
         List<List<double>> animationFrames = new List<List<double>>();
         private async void PlayAnimationButton_Click(object sender, EventArgs e)
         {
-            animationCancellationTokenSource = new CancellationTokenSource();
-            CancellationToken token = animationCancellationTokenSource.Token;
-
-            int frameIndex = 0;
-            foreach (List<double> frame in animationFrames)
+            if (playButtonState == PlayButtonState.Play)
             {
-                if (token.IsCancellationRequested)
-                {
-                    Console.WriteLine("Animation cancelled.");
-                    break;
-                }
-                targetCameraLookAtX = frame[0];
-                targetCameraLookAtY = frame[1];
-                targetCameraLookAtZ = frame[2];
-                targetCameraPitch = frame[3];
-                targetCameraYaw = frame[4];
-                cameraMoveSpeed = frame[5];
+                playButtonState = PlayButtonState.Stop;
+                PlayAnimationButton.Text = "◼";
+                animationCancellationTokenSource = new CancellationTokenSource();
+                CancellationToken token = animationCancellationTokenSource.Token;
 
-                cameraRotateSpeed = GetDynamicRotationSpeed();
-
-                //warp to the first frame quickly and wait for some time
-                if (frameIndex == 0)
+                int frameIndex = 0;
+                foreach (List<double> frame in animationFrames)
                 {
-                    cameraMoveSpeed = 1;
-                    cameraRotateSpeed = 5;
-                    while (cameraMoveDistance > 0.05)
+                    if (token.IsCancellationRequested)
+                    {
+                        break;
+                    }
+                    targetCameraLookAtX = frame[0];
+                    targetCameraLookAtY = frame[1];
+                    targetCameraLookAtZ = frame[2];
+                    targetCameraPitch = frame[3];
+                    targetCameraYaw = frame[4];
+                    cameraMoveSpeed = frame[5];
+
+                    cameraRotateSpeed = GetDynamicRotationSpeed();
+
+                    //warp to the first frame quickly and wait for some time
+                    if (frameIndex == 0)
+                    {
+                        cameraMoveSpeed = 1;
+                        cameraRotateSpeed = 5;
+                        while (cameraMoveDistance > 0.05)
+                        {
+                            if (token.IsCancellationRequested)
+                            {
+                                return;
+                            }
+                            await Task.Delay(100);
+                        }
+                        await Task.Delay(1000);
+                    }
+                    frameIndex++;
+
+                    await Task.Delay(100);
+                    while (cameraMoveDistance > 2)
                     {
                         if (token.IsCancellationRequested)
                         {
@@ -393,29 +410,31 @@ namespace Silicon
                         }
                         await Task.Delay(100);
                     }
-                    await Task.Delay(1000);
                 }
-                frameIndex++;
 
-                await Task.Delay(100);
-                while (cameraMoveDistance > 2)
-                {
-                    if (token.IsCancellationRequested)
-                    {
-                        return;
-                    }
-                    await Task.Delay(100);
-                }
+                playButtonState = PlayButtonState.Play;
+                PlayAnimationButton.Text = " ►";
+            }
+            
+            else if (playButtonState == PlayButtonState.Stop)
+            {
+                playButtonState = PlayButtonState.Play;
+                PlayAnimationButton.Text = " ►";
+                StopAnimation();
             }
         }
 
         private void StopAnimation()
         {
-            if (animationCancellationTokenSource != null)
-            {
-                animationCancellationTokenSource.Cancel();
-            }
+            animationCancellationTokenSource?.Cancel();
+            targetCameraLookAtX = currentCameraLookAtX;
+            targetCameraLookAtY = currentCameraLookAtY;
+            targetCameraLookAtZ = currentCameraLookAtZ;
+            targetCameraPitch = currentCameraPitch;
+            targetCameraYaw = currentCameraYaw;
         }
+
+
 
         private void AddAnimationFrameButton_Click(object sender, EventArgs e)
         {
@@ -651,6 +670,12 @@ namespace Silicon
 
         private void DeleteAnimationFrameButton_Click(object sender, EventArgs e)
         {
+            if (playButtonState == PlayButtonState.Stop)
+            {
+                MessageBox.Show("Cannot delete while animation is in progress", "Delete Frame", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             if (listViewFrames.SelectedItems.Count == 0)
             {
                 MessageBox.Show("Please select a frame to delete.", "Delete Frame", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -742,13 +767,13 @@ namespace Silicon
                     int i = 1;
                     foreach (var frame in animationFrames)
                     {
-                        ListViewItem item = new ListViewItem(i.ToString()); // LookAtX
+                        ListViewItem item = new ListViewItem(i.ToString());
                         item.SubItems.Add(frame[0].ToString("F1"));                   // LookAtX
                         item.SubItems.Add(frame[1].ToString("F1"));                   // LookAtY
                         item.SubItems.Add(frame[2].ToString("F1"));                   // LookAtZ
                         item.SubItems.Add(frame[3].ToString("F1"));                   // Pitch
                         item.SubItems.Add(frame[4].ToString("F1"));                   // Yaw
-                        item.SubItems.Add((frame[5] * 100).ToString("F1"));                   // MoveSpeed
+                        item.SubItems.Add((frame[5] * 100).ToString("F1"));           // Speed      
                         listViewFrames.Items.Add(item);
                         i++;
                     }

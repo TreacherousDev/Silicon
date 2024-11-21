@@ -588,9 +588,9 @@ namespace Silicon
             this.tabPage1.Controls.Add(this.PlayAnimationButton);
             this.tabPage1.Controls.Add(this.listViewFrames);
             this.tabPage1.Controls.Add(this.AddAnimationFrameButton);
-            this.tabPage1.Location = new System.Drawing.Point(0, 30);
+            this.tabPage1.Location = new System.Drawing.Point(0, 40);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(482, 215);
+            this.tabPage1.Size = new System.Drawing.Size(200, 60);
             this.tabPage1.TabIndex = 2;
             this.tabPage1.Text = "Cinematic";
             // 
@@ -838,6 +838,7 @@ namespace Silicon
             this.ThemeAuthor = "Hispano";
             this.ThemeName = "Helium-Red";
             this.UseSlideAnimation = true;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Silicon_OnFormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Information.ResumeLayout(false);
             this.Utility.ResumeLayout(false);

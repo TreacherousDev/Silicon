@@ -33,6 +33,26 @@ namespace Silicon
             this.KeyUp += Game_KeyUp;
             this.KeyPreview = true;
 
+
+
+            listViewFrames.View = View.Details;
+            //listViewFrames.Columns.Add("#", 40);
+            //listViewFrames.Columns.Add("X", 40);
+            //listViewFrames.Columns.Add("Y", 40);
+            //listViewFrames.Columns.Add("Z", 40);
+            //listViewFrames.Columns.Add("Pitch", 60);
+            //listViewFrames.Columns.Add("Yaw", 60);
+            //listViewFrames.Columns.Add("Speed", 60);
+
+            listViewFrames.FullRowSelect = true;
+            listViewFrames.AllowDrop = true;
+
+            // Drag-and-Drop event handlers
+            listViewFrames.ItemDrag += ListViewFrames_ItemDrag;
+            listViewFrames.DragEnter += ListViewFrames_DragEnter;
+            listViewFrames.DragDrop += ListViewFrames_DragDrop;
+
+
             // Some color overrides since the TabControl seems to be bugged and sets by default the ForeColor to Black even when the default color has been changed.
             Hispano.ForeColor = Color.Gray;
             proID.ForeColor = Color.White;
@@ -303,10 +323,37 @@ namespace Silicon
             //UpdateLabel(CameraPositionDataLabel, $"X: {currentCameraLookAtX:F2} Y: {currentCameraLookAtY:F2} Z: {currentCameraLookAtZ:F2} Pitch: {currentCameraPitch:F2} Yaw: {currentCameraYaw:F2}", Color.Red);
             UpdateLabel(CameraLookAtInfoLabel, $"X: {currentCameraLookAtX:F2}     Y: {currentCameraLookAtY:F2}     Z: {currentCameraLookAtZ:F2}", Color.White);
             UpdateLabel(CameraRotationInfoLabel, $"Pitch: {currentCameraPitch:F2}        Yaw: {currentCameraYaw:F2}", Color.White);
+            UpdateLabel(CameraLookAtInfoLabel2, $"X: {currentCameraLookAtX:F2}     Y: {currentCameraLookAtY:F2}     Z: {currentCameraLookAtZ:F2}", Color.White);
+            UpdateLabel(CameraRotationInfoLabel2, $"Pitch: {currentCameraPitch:F2}        Yaw: {currentCameraYaw:F2}", Color.White);
+
         }
 
+        double GetDynamicRotationSpeed()
+        {
+            // Calculate rotation speed dynamically based on distance
+            // This allows us to haave smoother transitions as rotations will end on hte exact keyframe
+            // that the camera arrives to its destination
 
-       
+            // Distance to target formula for 3D vector
+            double moveDistance = Math.Sqrt(
+                Math.Pow(targetCameraLookAtX - currentCameraLookAtX, 2) +
+                Math.Pow(targetCameraLookAtY - currentCameraLookAtY, 2) +
+                Math.Pow(targetCameraLookAtZ - currentCameraLookAtZ, 2)
+            );
+
+            // Distance to target formula for 2D vector
+            double rotateDistance = Math.Sqrt(
+                Math.Pow(targetCameraPitch - currentCameraPitch, 2) +
+                Math.Pow(targetCameraYaw - currentCameraYaw, 2)
+            );
+
+            // Calculate new rotation speed
+            double timeToTarget = moveDistance / cameraMoveSpeed;
+            double delay = 10;
+            return rotateDistance / (timeToTarget + delay);
+        }
+        
+
         List<List<double>> animationFrames = new List<List<double>>();
         private async void PlayAnimationButton_Click(object sender, EventArgs e)
         {
@@ -322,26 +369,7 @@ namespace Silicon
                 targetCameraYaw = frame[4];
                 cameraMoveSpeed = frame[5];
 
-                // Calculate rotation speed dynamically based on distance
-                // This allows us to haave smoother transitions as rotations will end on hte exact keyframe
-                // that the camera arrives to its destination
-
-                // Distance to target formula for 3D vector
-                double moveDistance = Math.Sqrt(
-                    Math.Pow(targetCameraLookAtX - currentCameraLookAtX, 2) +
-                    Math.Pow(targetCameraLookAtY - currentCameraLookAtY, 2) +
-                    Math.Pow(targetCameraLookAtZ - currentCameraLookAtZ, 2)
-                );
-
-                // Distance to target formula for 2D vector
-                double rotateDistance = Math.Sqrt(
-                    Math.Pow(targetCameraPitch - currentCameraPitch, 2) +
-                    Math.Pow(targetCameraYaw - currentCameraYaw, 2)
-                );
-
-                // Calculate new rotation speed
-                double timeToTarget = moveDistance / cameraMoveSpeed;
-                cameraRotateSpeed = rotateDistance / timeToTarget;
+                cameraRotateSpeed = GetDynamicRotationSpeed();
 
                 //warp to the first frame quickly and wait for some time
                 if (frameIndex == 0)
@@ -357,7 +385,7 @@ namespace Silicon
                 frameIndex++;
 
                 await Task.Delay(100);
-                while (cameraMoveDistance > 0.5)
+                while (cameraMoveDistance > 2)
                 {
                     await Task.Delay(100);
                 }
@@ -375,6 +403,7 @@ namespace Silicon
             frame.Add(cameraMoveSpeed);
 
             animationFrames.Add(frame);
+            UpdateListView();
         }
 
         private HashSet<Keys> pressedKeys = new HashSet<Keys>();
@@ -542,5 +571,104 @@ namespace Silicon
             cameraRotateSpeed = (double)CameraRotateSpeedSlider.Value / 60;
         }
 
+
+        private void UpdateListView()
+        {
+            // Update the ListView with the current animationFrames
+            listViewFrames.Items.Clear();
+            int i = 1;
+            foreach (var frame in animationFrames)
+            {
+                ListViewItem item = new ListViewItem(i.ToString()); // LookAtX
+                item.SubItems.Add(frame[0].ToString("F1"));                   // LookAtX
+                item.SubItems.Add(frame[1].ToString("F1"));                   // LookAtY
+                item.SubItems.Add(frame[2].ToString("F1"));                   // LookAtZ
+                item.SubItems.Add(frame[3].ToString("F1"));                   // Pitch
+                item.SubItems.Add(frame[4].ToString("F1"));                   // Yaw
+                item.SubItems.Add((frame[5] * 100).ToString("F1"));                   // MoveSpeed
+                listViewFrames.Items.Add(item);
+                i++;
+            }
+        }
+
+        private void ListViewFrames_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            // Start dragging the selected item
+            DoDragDrop(e.Item, DragDropEffects.Move);
+        }
+
+        private void ListViewFrames_DragEnter(object sender, DragEventArgs e)
+        {
+            // Allow dragging into the ListView
+            e.Effect = DragDropEffects.Move;
+        }
+
+        private void ListViewFrames_DragDrop(object sender, DragEventArgs e)
+        {
+            // Handle reordering of frames
+            Point cp = listViewFrames.PointToClient(new Point(e.X, e.Y));
+            ListViewItem dragToItem = listViewFrames.GetItemAt(cp.X, cp.Y);
+
+            if (dragToItem != null)
+            {
+                int dragToIndex = dragToItem.Index;
+                ListViewItem dragItem = (ListViewItem)e.Data.GetData(typeof(ListViewItem));
+                int dragFromIndex = dragItem.Index;
+
+                // Reorder animationFrames
+                var frame = animationFrames[dragFromIndex];
+                animationFrames.RemoveAt(dragFromIndex);
+                animationFrames.Insert(dragToIndex, frame);
+
+                UpdateListView();
+            }
+        }
+
+        private void DeleteAnimationFrameButton_Click(object sender, EventArgs e)
+        {
+            if (listViewFrames.SelectedItems.Count == 0)
+            {
+                // Show a message if no item is selected
+                MessageBox.Show("Please select a frame to delete.", "Delete Frame", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            foreach (ListViewItem frame in listViewFrames.SelectedItems.Cast<ListViewItem>().ToList())
+            {
+                int selectedIndex = frame.Index; // Get the index of the selected item
+
+                // Remove the frame from both the data list and the ListView
+                animationFrames.RemoveAt(selectedIndex);
+                listViewFrames.Items.RemoveAt(selectedIndex);
+            }
+        }
+
+        private void GoToAnnimationFrameButton_Click(object sender, EventArgs e)
+        {
+            if (listViewFrames.SelectedItems.Count == 0)
+            {
+                // Show a message if no item is selected
+                MessageBox.Show("Please select a frame to view.", "Delete Frame", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (listViewFrames.SelectedItems.Count > 1)
+            {
+                // Show a message if no item is selected
+                MessageBox.Show("multiple frames selected. Please select only one.", "Delete Frame", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Get the selected item's index
+            int selectedIndex = listViewFrames.SelectedItems[0].Index;
+            // Remove the frame from the underlying list
+            List<double> goToFrame = animationFrames[selectedIndex];
+            targetCameraLookAtX = goToFrame[0];
+            targetCameraLookAtY = goToFrame[1];
+            targetCameraLookAtZ = goToFrame[2];
+            targetCameraPitch = goToFrame[3];
+            targetCameraYaw = goToFrame[4];
+            cameraRotateSpeed = GetDynamicRotationSpeed();
+            // Remove the selected item from the ListView
+        }
     }
 }

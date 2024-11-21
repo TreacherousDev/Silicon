@@ -37,14 +37,6 @@ namespace Silicon
             StartKeyPolling();
 
             listViewFrames.View = View.Details;
-            //listViewFrames.Columns.Add("#", 40);
-            //listViewFrames.Columns.Add("X", 40);
-            //listViewFrames.Columns.Add("Y", 40);
-            //listViewFrames.Columns.Add("Z", 40);
-            //listViewFrames.Columns.Add("Pitch", 60);
-            //listViewFrames.Columns.Add("Yaw", 60);
-            //listViewFrames.Columns.Add("Speed", 60);
-
             listViewFrames.FullRowSelect = true;
             listViewFrames.AllowDrop = true;
 
@@ -60,14 +52,22 @@ namespace Silicon
             Status.ForeColor = Color.White;
             FreecamSwitch.CheckColor = Color.Silver;
             HidePlayerModelSwitch.CheckColor = Color.Silver;
-            AddAnimationFrameButton.NormalBorderColor = Color.FromArgb(80, 160, 255);
-            AddAnimationFrameButton.NormalColor = Color.FromArgb(80, 160, 255);
-            AddAnimationFrameButton.PressBorderColor = Color.FromArgb(64, 128, 204);
-            AddAnimationFrameButton.PressColor = Color.FromArgb(64, 128, 204);
-            PlayAnimationButton.NormalBorderColor = Color.FromArgb(80, 160, 255);
-            PlayAnimationButton.NormalColor = Color.FromArgb(80, 160, 255);
-            PlayAnimationButton.PressBorderColor = Color.FromArgb(64, 128, 204);
-            PlayAnimationButton.PressColor = Color.FromArgb(64, 128, 204);
+            List<MetroSet_UI.Controls.MetroSetButton> cinematicButtons = new List<MetroSet_UI.Controls.MetroSetButton>
+            {
+                AddAnimationFrameButton,
+                PlayAnimationButton,
+                DeleteAnimationFrameButton,
+                GoToAnnimationFrameButton,
+                SaveAnimationButton,
+                LoadAnimationButton
+            };
+            foreach (MetroSet_UI.Controls.MetroSetButton button in cinematicButtons) 
+            {
+                button.NormalBorderColor = Color.FromArgb(80, 160, 255);
+                button.NormalColor = Color.FromArgb(80, 160, 255);
+                button.PressBorderColor = Color.FromArgb(64, 128, 204);
+                button.PressColor = Color.FromArgb(64, 128, 204);
+            }
 
         }
 
@@ -394,31 +394,33 @@ namespace Silicon
                             {
                                 return;
                             }
-                            await Task.Delay(100);
+                            await Task.Delay(10);
                         }
                         await Task.Delay(1000);
                     }
                     frameIndex++;
 
-                    await Task.Delay(100);
-                    while (cameraMoveDistance > 2)
+                    await Task.Delay(20);
+                    while (cameraMoveDistance > 1)
                     {
                         if (token.IsCancellationRequested)
                         {
                             return;
                         }
-                        await Task.Delay(100);
+                        await Task.Delay(10);
                     }
                 }
 
                 playButtonState = PlayButtonState.Play;
                 PlayAnimationButton.Text = " ►";
+                PlayAnimationButton.Refresh();
             }
             
             else if (playButtonState == PlayButtonState.Stop)
             {
                 playButtonState = PlayButtonState.Play;
                 PlayAnimationButton.Text = " ►";
+                PlayAnimationButton.Refresh();
                 StopAnimation();
             }
         }
@@ -509,6 +511,7 @@ namespace Silicon
 
         private void HandleCameraController(double yawRotation)
         {
+
             double moveX = 0, moveY = 0, moveZ = 0;
             double rotatePitch = 0, rotateYaw = 0;
 

@@ -122,9 +122,9 @@ namespace Silicon
             this.Information.Controls.Add(this.proID);
             this.Information.Controls.Add(this.procIDLabel);
             this.Information.ForeColor = System.Drawing.Color.White;
-            this.Information.Location = new System.Drawing.Point(0, 40);
+            this.Information.Location = new System.Drawing.Point(0, 30);
             this.Information.Name = "Information";
-            this.Information.Size = new System.Drawing.Size(200, 60);
+            this.Information.Size = new System.Drawing.Size(482, 215);
             this.Information.TabIndex = 1;
             this.Information.Text = "Information";
             // 
@@ -284,7 +284,7 @@ namespace Silicon
             this.uiLabel5.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.uiLabel5.Font = new System.Drawing.Font("Impact", 12F);
             this.uiLabel5.ForeColor = System.Drawing.Color.White;
-            this.uiLabel5.Location = new System.Drawing.Point(334, 105);
+            this.uiLabel5.Location = new System.Drawing.Point(374, 100);
             this.uiLabel5.Name = "uiLabel5";
             this.uiLabel5.Size = new System.Drawing.Size(101, 23);
             this.uiLabel5.TabIndex = 36;
@@ -302,7 +302,7 @@ namespace Silicon
             this.HidePlayerModelSwitch.DisabledCheckColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.HidePlayerModelSwitch.DisabledUnCheckColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))));
             this.HidePlayerModelSwitch.IsDerivedStyle = true;
-            this.HidePlayerModelSwitch.Location = new System.Drawing.Point(270, 105);
+            this.HidePlayerModelSwitch.Location = new System.Drawing.Point(310, 99);
             this.HidePlayerModelSwitch.Name = "HidePlayerModelSwitch";
             this.HidePlayerModelSwitch.Size = new System.Drawing.Size(58, 22);
             this.HidePlayerModelSwitch.Style = MetroSet_UI.Enums.Style.Light;
@@ -324,11 +324,11 @@ namespace Silicon
             this.CameraFOVSlider.DisabledValueColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))));
             this.CameraFOVSlider.HandlerColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.CameraFOVSlider.IsDerivedStyle = true;
-            this.CameraFOVSlider.Location = new System.Drawing.Point(270, 82);
+            this.CameraFOVSlider.Location = new System.Drawing.Point(310, 76);
             this.CameraFOVSlider.Maximum = 135;
             this.CameraFOVSlider.Minimum = 10;
             this.CameraFOVSlider.Name = "CameraFOVSlider";
-            this.CameraFOVSlider.Size = new System.Drawing.Size(165, 16);
+            this.CameraFOVSlider.Size = new System.Drawing.Size(153, 16);
             this.CameraFOVSlider.Style = MetroSet_UI.Enums.Style.Light;
             this.CameraFOVSlider.StyleManager = null;
             this.CameraFOVSlider.TabIndex = 33;
@@ -342,9 +342,9 @@ namespace Silicon
             // 
             this.uiLabel4.BackColor = System.Drawing.Color.Transparent;
             this.uiLabel4.Cursor = System.Windows.Forms.Cursors.Arrow;
-            this.uiLabel4.Font = new System.Drawing.Font("Impact", 12F);
+            this.uiLabel4.Font = new System.Drawing.Font("Impact", 11F);
             this.uiLabel4.ForeColor = System.Drawing.Color.White;
-            this.uiLabel4.Location = new System.Drawing.Point(266, 58);
+            this.uiLabel4.Location = new System.Drawing.Point(306, 54);
             this.uiLabel4.Name = "uiLabel4";
             this.uiLabel4.Size = new System.Drawing.Size(150, 34);
             this.uiLabel4.TabIndex = 34;
@@ -360,11 +360,11 @@ namespace Silicon
             this.CameraDistanceSlider.DisabledValueColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))));
             this.CameraDistanceSlider.HandlerColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.CameraDistanceSlider.IsDerivedStyle = true;
-            this.CameraDistanceSlider.Location = new System.Drawing.Point(270, 38);
+            this.CameraDistanceSlider.Location = new System.Drawing.Point(310, 36);
             this.CameraDistanceSlider.Maximum = 100;
             this.CameraDistanceSlider.Minimum = 1;
             this.CameraDistanceSlider.Name = "CameraDistanceSlider";
-            this.CameraDistanceSlider.Size = new System.Drawing.Size(164, 16);
+            this.CameraDistanceSlider.Size = new System.Drawing.Size(153, 16);
             this.CameraDistanceSlider.Style = MetroSet_UI.Enums.Style.Light;
             this.CameraDistanceSlider.StyleManager = null;
             this.CameraDistanceSlider.TabIndex = 31;
@@ -378,9 +378,9 @@ namespace Silicon
             // 
             this.uiLabel3.BackColor = System.Drawing.Color.Transparent;
             this.uiLabel3.Cursor = System.Windows.Forms.Cursors.Arrow;
-            this.uiLabel3.Font = new System.Drawing.Font("Impact", 12F);
+            this.uiLabel3.Font = new System.Drawing.Font("Impact", 11F);
             this.uiLabel3.ForeColor = System.Drawing.Color.White;
-            this.uiLabel3.Location = new System.Drawing.Point(266, 13);
+            this.uiLabel3.Location = new System.Drawing.Point(306, 13);
             this.uiLabel3.Name = "uiLabel3";
             this.uiLabel3.Size = new System.Drawing.Size(169, 34);
             this.uiLabel3.TabIndex = 32;
@@ -588,9 +588,9 @@ namespace Silicon
             this.tabPage1.Controls.Add(this.PlayAnimationButton);
             this.tabPage1.Controls.Add(this.listViewFrames);
             this.tabPage1.Controls.Add(this.AddAnimationFrameButton);
-            this.tabPage1.Location = new System.Drawing.Point(0, 40);
+            this.tabPage1.Location = new System.Drawing.Point(0, 30);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(200, 60);
+            this.tabPage1.Size = new System.Drawing.Size(482, 215);
             this.tabPage1.TabIndex = 2;
             this.tabPage1.Text = "Cinematic";
             // 
@@ -706,7 +706,7 @@ namespace Silicon
             this.GoToAnnimationFrameButton.Style = MetroSet_UI.Enums.Style.Light;
             this.GoToAnnimationFrameButton.StyleManager = null;
             this.GoToAnnimationFrameButton.TabIndex = 43;
-            this.GoToAnnimationFrameButton.Text = "Go To";
+            this.GoToAnnimationFrameButton.Text = "GO TO";
             this.GoToAnnimationFrameButton.ThemeAuthor = "Narwin";
             this.GoToAnnimationFrameButton.ThemeName = "MetroLite";
             this.GoToAnnimationFrameButton.Click += new System.EventHandler(this.GoToAnnimationFrameButton_Click);

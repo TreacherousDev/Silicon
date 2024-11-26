@@ -1,5 +1,5 @@
 # What is Silicon?
-Silicon is a camera mod for Cuic Castles that allows for greater control of the in-game camera.
+Silicon is a camera mod for Cubic Castles that allows for greater control of the in-game camera.
 ___
 ## Available Tools:
 

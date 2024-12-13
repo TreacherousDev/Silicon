@@ -122,9 +122,9 @@ namespace Silicon
             this.Information.Controls.Add(this.proID);
             this.Information.Controls.Add(this.procIDLabel);
             this.Information.ForeColor = System.Drawing.Color.White;
-            this.Information.Location = new System.Drawing.Point(0, 30);
+            this.Information.Location = new System.Drawing.Point(0, 40);
             this.Information.Name = "Information";
-            this.Information.Size = new System.Drawing.Size(482, 215);
+            this.Information.Size = new System.Drawing.Size(200, 60);
             this.Information.TabIndex = 1;
             this.Information.Text = "Information";
             // 
@@ -240,7 +240,7 @@ namespace Silicon
             this.ToolTipLabel.Name = "ToolTipLabel";
             this.ToolTipLabel.Size = new System.Drawing.Size(351, 23);
             this.ToolTipLabel.TabIndex = 26;
-            this.ToolTipLabel.Text = "Freecam: W A S D + Shift + Space to move, I J K L to look around";
+            this.ToolTipLabel.Text = "Freecam: W A S D + Ctrl + Space to move, I J K L to look around";
             this.ToolTipLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // CameraRotationInfoLabel
@@ -643,7 +643,7 @@ namespace Silicon
             this.SaveAnimationButton.Style = MetroSet_UI.Enums.Style.Light;
             this.SaveAnimationButton.StyleManager = null;
             this.SaveAnimationButton.TabIndex = 47;
-            this.SaveAnimationButton.Text = "SAVE  ";
+            this.SaveAnimationButton.Text = "SAVE";
             this.SaveAnimationButton.ThemeAuthor = "Narwin";
             this.SaveAnimationButton.ThemeName = "MetroLite";
             this.SaveAnimationButton.Click += new System.EventHandler(this.SaveAnimationButton_Click);
@@ -689,7 +689,7 @@ namespace Silicon
             this.GoToAnnimationFrameButton.DisabledBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.GoToAnnimationFrameButton.DisabledBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.GoToAnnimationFrameButton.DisabledForeColor = System.Drawing.Color.Gray;
-            this.GoToAnnimationFrameButton.Font = new System.Drawing.Font("Impact", 12F);
+            this.GoToAnnimationFrameButton.Font = new System.Drawing.Font("Impact", 13F);
             this.GoToAnnimationFrameButton.HoverBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
             this.GoToAnnimationFrameButton.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
             this.GoToAnnimationFrameButton.HoverTextColor = System.Drawing.Color.White;

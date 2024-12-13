@@ -2,9 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\Silicon (Source Code)",
+    "\\Silicon (Source Code)\\Config",
     "\\Silicon (Source Code)\\Silicon",
     "\\Silicon(Already Compiled)"
   ],
-  "SelectedNode": "\\Silicon (Source Code)\\Silicon\\Silicon.cs",
+  "SelectedNode": "\\Silicon (Source Code)\\Silicon.sln",
   "PreviewInSolutionExplorer": false
 }

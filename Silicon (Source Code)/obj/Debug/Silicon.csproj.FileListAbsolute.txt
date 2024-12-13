@@ -1,4 +1,6 @@
 C:\Users\adant\OneDrive\Documents\GitHub\Silicon\Silicon (Source Code)\bin\Debug\Silicon.exe.config
+C:\Users\adant\OneDrive\Documents\GitHub\Silicon\Silicon (Source Code)\bin\Debug\Silicon.exe.manifest
+C:\Users\adant\OneDrive\Documents\GitHub\Silicon\Silicon (Source Code)\bin\Debug\Silicon.application
 C:\Users\adant\OneDrive\Documents\GitHub\Silicon\Silicon (Source Code)\bin\Debug\Silicon.exe
 C:\Users\adant\OneDrive\Documents\GitHub\Silicon\Silicon (Source Code)\bin\Debug\Silicon.pdb
 C:\Users\adant\OneDrive\Documents\GitHub\Silicon\Silicon (Source Code)\bin\Debug\Memory.dll
@@ -31,11 +33,9 @@ C:\Users\adant\OneDrive\Documents\GitHub\Silicon\Silicon (Source Code)\obj\Debug
 C:\Users\adant\OneDrive\Documents\GitHub\Silicon\Silicon (Source Code)\obj\Debug\Silicon.Properties.Resources.resources
 C:\Users\adant\OneDrive\Documents\GitHub\Silicon\Silicon (Source Code)\obj\Debug\Silicon.csproj.GenerateResource.cache
 C:\Users\adant\OneDrive\Documents\GitHub\Silicon\Silicon (Source Code)\obj\Debug\Silicon.csproj.CoreCompileInputs.cache
-C:\Users\adant\OneDrive\Documents\GitHub\Silicon\Silicon (Source Code)\obj\Debug\Silicon.csproj.Up2Date
-C:\Users\adant\OneDrive\Documents\GitHub\Silicon\Silicon (Source Code)\obj\Debug\Silicon.exe
-C:\Users\adant\OneDrive\Documents\GitHub\Silicon\Silicon (Source Code)\obj\Debug\Silicon.pdb
-C:\Users\adant\OneDrive\Documents\GitHub\Silicon\Silicon (Source Code)\bin\Debug\Silicon.exe.manifest
-C:\Users\adant\OneDrive\Documents\GitHub\Silicon\Silicon (Source Code)\bin\Debug\Silicon.application
 C:\Users\adant\OneDrive\Documents\GitHub\Silicon\Silicon (Source Code)\obj\Debug\Silicon.TrustInfo.xml
 C:\Users\adant\OneDrive\Documents\GitHub\Silicon\Silicon (Source Code)\obj\Debug\Silicon.exe.manifest
 C:\Users\adant\OneDrive\Documents\GitHub\Silicon\Silicon (Source Code)\obj\Debug\Silicon.application
+C:\Users\adant\OneDrive\Documents\GitHub\Silicon\Silicon (Source Code)\obj\Debug\Silicon.csproj.Up2Date
+C:\Users\adant\OneDrive\Documents\GitHub\Silicon\Silicon (Source Code)\obj\Debug\Silicon.exe
+C:\Users\adant\OneDrive\Documents\GitHub\Silicon\Silicon (Source Code)\obj\Debug\Silicon.pdb

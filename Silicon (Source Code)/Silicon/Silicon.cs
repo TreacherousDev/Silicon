@@ -29,6 +29,12 @@ namespace Silicon
         private HashSet<Keys> pressedKeys = new HashSet<Keys>();
         private Thread keyPollingThread;
         private bool isRunning = true;
+
+        private DateTime recordingStartTime;
+        private int frameCounter = 0;
+        private bool isRecording = false;
+        private List<List<double>> recordedFrames = new List<List<double>>();
+
         [DllImport("user32.dll")]
         private static extern short GetAsyncKeyState(Keys key);
 
@@ -180,7 +186,24 @@ namespace Silicon
         private void UpdateMemoryOnTimerTick(object sender, ElapsedEventArgs e)
         {
             CheckAndUpdateMemory();
+
+            // If recording, store the current frame data
+            if (isRecording)
+            {
+                double elapsedTime = (DateTime.Now - recordingStartTime).TotalSeconds;
+                recordedFrames.Add(new List<double>
+                {
+                    frameCounter++,
+                    elapsedTime,
+                    currentCameraLookAtX,
+                    currentCameraLookAtY,
+                    currentCameraLookAtZ,
+                    currentCameraPitch,
+                    currentCameraYaw
+                });
+            }
         }
+
 
         // Persistent Functions (Required for the engine to function)
         readonly string cameraCoordinatesFunction = "90 90 90 90 90 90 90 90 90 90 90 90";
@@ -230,6 +253,10 @@ namespace Silicon
             string lookAtYAddress = (intRotationAddress - 12).ToString("X");
             string lookAtZAddress = (intRotationAddress - 8).ToString("X");
 
+            uint intCameraPositionAddress = m.ReadUInt("Cubic.exe+E29296");
+
+
+
             InterpolateCameraMovement(lookAtXAddress, lookAtYAddress, lookAtZAddress);
             InterpolateCameraRotation(pitchAddress, yawAddress);
 
@@ -275,6 +302,7 @@ namespace Silicon
             if (CameraDistanceSlider.Value != cameraDistanceSliderValue)
             {
                 cameraDistanceSliderValue = CameraDistanceSlider.Value;
+                Console.WriteLine(m.ReadFloat("Cubic.exe+E20FAC"));
                 m.WriteMemory("Cubic.exe+E20FAC", "float", CameraDistanceSlider.Value.ToString());
             }
 
@@ -300,9 +328,9 @@ namespace Silicon
                 
             //UpdateLabel(CameraPositionDataLabel, $"X: {currentCameraLookAtX:F2} Y: {currentCameraLookAtY:F2} Z: {currentCameraLookAtZ:F2} Pitch: {currentCameraPitch:F2} Yaw: {currentCameraYaw:F2}", Color.Red);
             UpdateLabel(CameraLookAtInfoLabel, $"X: {currentCameraLookAtX:F2}     Y: {currentCameraLookAtY:F2}     Z: {currentCameraLookAtZ:F2}", Color.White);
-            UpdateLabel(CameraRotationInfoLabel, $"Pitch: {currentCameraPitch:F2}        Yaw: {currentCameraYaw:F2}", Color.White);
             UpdateLabel(CameraLookAtInfoLabel2, $"X: {currentCameraLookAtX:F2}     Y: {currentCameraLookAtY:F2}     Z: {currentCameraLookAtZ:F2}", Color.White);
-            UpdateLabel(CameraRotationInfoLabel2, $"Pitch: {currentCameraPitch:F2}        Yaw: {currentCameraYaw:F2}", Color.White);
+            UpdateLabel(CameraRotationInfoLabel, $"Pitch: {currentCameraPitch:F2}    Yaw: {currentCameraYaw:F2}     FOV: {cameraFOVSliderValue} Dist: {cameraDistanceSliderValue}", Color.White);
+            UpdateLabel(CameraRotationInfoLabel2, $"Pitch: {currentCameraPitch:F2}    Yaw: {currentCameraYaw:F2}     FOV: {cameraFOVSliderValue} Dist: {cameraDistanceSliderValue}", Color.White);
 
         }
 
@@ -483,8 +511,8 @@ namespace Silicon
             // List of keys to monitor
             Keys[] keysToMonitor = new Keys[]
             {
-                Keys.W, Keys.S, Keys.A, Keys.D,
-                Keys.Space, Keys.LControlKey,
+                Keys.Up, Keys.Down, Keys.Left, Keys.Right,
+                Keys.LShiftKey, Keys.LControlKey,
                 Keys.I, Keys.K, Keys.J, Keys.L
             };
 
@@ -521,31 +549,31 @@ namespace Silicon
             double moveX = 0, moveY = 0, moveZ = 0;
             double rotatePitch = 0, rotateYaw = 0;
 
-            if (pressedKeys.Contains(Keys.W))
+            if (pressedKeys.Contains(Keys.Up))
             {
                 double radians = (yawRotation - 90) * Math.PI / 180;
                 moveX += Math.Cos(radians);
                 moveY += Math.Sin(radians);
             }
-            if (pressedKeys.Contains(Keys.S))
+            if (pressedKeys.Contains(Keys.Down))
             {
                 double radians = (yawRotation + 90) * Math.PI / 180;
                 moveX += Math.Cos(radians);
                 moveY += Math.Sin(radians);
             }
-            if (pressedKeys.Contains(Keys.A))
+            if (pressedKeys.Contains(Keys.Left))
             {
                 double radians = yawRotation * Math.PI / 180;
                 moveX -= Math.Cos(radians);
                 moveY -= Math.Sin(radians);
             }
-            if (pressedKeys.Contains(Keys.D))
+            if (pressedKeys.Contains(Keys.Right))
             {
                 double radians = yawRotation * Math.PI / 180;
                 moveX += Math.Cos(radians);
                 moveY += Math.Sin(radians);
             }
-            if (pressedKeys.Contains(Keys.Space)) moveZ -= 1;
+            if (pressedKeys.Contains(Keys.LShiftKey)) moveZ -= 1;
             if (pressedKeys.Contains(Keys.LControlKey)) moveZ += 1;
             if (pressedKeys.Contains(Keys.I)) rotatePitch -= 1;
             if (pressedKeys.Contains(Keys.K)) rotatePitch += 1;
@@ -836,6 +864,79 @@ namespace Silicon
             }
         }
 
+        private void RecordButton_Click(object sender, EventArgs e)
+        {
+            isRecording = !isRecording;
+
+            if (isRecording)
+            {
+                frameCounter = 0; // Reset the frame counter
+                recordedFrames.Clear(); // Clear any previous data
+                recordingStartTime = DateTime.Now; // Set the recording start time
+                (sender as MetroSet_UI.Controls.MetroSetButton).Text = "STOP";
+            }
+            else
+            {
+                (sender as MetroSet_UI.Controls.MetroSetButton).Text = "RECORD";
+                ExportRecordedFrames();
+            }
+        }
+
+
+        private void ExportRecordedFrames()
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = "CSV Files (*.csv)|*.csv|All Files (*.*)|*.*",
+                DefaultExt = "csv",
+                AddExtension = true,
+                Title = "Save Recorded Frames"
+            };
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    using (StreamWriter writer = new StreamWriter(saveFileDialog.FileName))
+                    {
+                        writer.WriteLine("frame,time,x,y,z,pitch,azimuth");
+                        foreach (var frame in recordedFrames)
+                        {
+                            writer.WriteLine($"{frame[0]},{frame[1]:F4},{frame[2]},{frame[3]},{frame[4]},{frame[5]},{frame[6]}");
+                        }
+                    }
+                    MessageBox.Show("Recorded frames exported successfully", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error saving file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+
+        private void ResetButton_Click(object sender, EventArgs e)
+        {
+            if (cameraFOVSliderValue == 30 && cameraDistanceSliderValue == 30) {
+                cameraFOVSliderValue = 48;
+                CameraFOVSlider.Value = cameraFOVSliderValue;
+                m.WriteMemory("Cubic.exe+E20E1D", "float", cameraFOVSliderValue.ToString());
+
+                cameraDistanceSliderValue = 40;
+                CameraDistanceSlider.Value = cameraDistanceSliderValue;
+                m.WriteMemory("Cubic.exe+E20FAC", "float", cameraDistanceSliderValue.ToString());
+            } else {
+                cameraFOVSliderValue = 30;
+                CameraFOVSlider.Value = cameraFOVSliderValue;
+                m.WriteMemory("Cubic.exe+E20E1D", "float", cameraFOVSliderValue.ToString());
+
+                cameraDistanceSliderValue = 30;
+                CameraDistanceSlider.Value = cameraDistanceSliderValue;
+                m.WriteMemory("Cubic.exe+E20FAC", "float", cameraDistanceSliderValue.ToString());
+            }
+        }
+
+
     //    int[] realmBlockData;
     //    int realmSizeX = 1;
     //    int realmSizeY = 1;
@@ -996,5 +1097,7 @@ namespace Silicon
     //            counter++;
     //        }
     //    }
+
+
     }
 }

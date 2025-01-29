@@ -395,48 +395,48 @@ namespace Silicon
                 animationCancellationTokenSource = new CancellationTokenSource();
                 CancellationToken token = animationCancellationTokenSource.Token;
 
-                // Iterate over each frame, moving only to the next target once the distance is small enough
-                int frameIndex = 0;
-                foreach (List<double> frame in animationFrames)
+                for (int i = 0; i < animationFrames.Count - 1; i++)
                 {
                     if (token.IsCancellationRequested)
-                    {
                         break;
-                    }
-                    targetCameraLookAtX = frame[0];
-                    targetCameraLookAtY = frame[1];
-                    targetCameraLookAtZ = frame[2];
-                    targetCameraPitch = frame[3];
-                    targetCameraYaw = frame[4];
-                    cameraMoveSpeed = frame[5];
 
-                    cameraRotateSpeed = GetDynamicRotationSpeed();
+                    List<double> startFrame = animationFrames[i];
+                    List<double> endFrame = animationFrames[i + 1];
 
-                    // Triggered on the first animation frame
-                    // Warp to the first frame quickly and wait for some time before playing the rest at normal speed
-                    if (frameIndex == 0)
-                    {
-                        cameraMoveSpeed = 1;
-                        cameraRotateSpeed = 5;
-                        while (cameraMoveDistance > 0.05)
-                        {
-                            if (token.IsCancellationRequested)
-                            {
-                                return;
-                            }
-                            await Task.Delay(10);
-                        }
-                        await Task.Delay(1000);
-                    }
-                    frameIndex++;
+                    double startX = startFrame[0], startY = startFrame[1], startZ = startFrame[2];
+                    double startPitch = startFrame[3], startYaw = startFrame[4];
+                    double moveSpeed = startFrame[5];
 
-                    await Task.Delay(20);
-                    while (cameraMoveDistance > 1)
+                    double endX = endFrame[0], endY = endFrame[1], endZ = endFrame[2];
+                    double endPitch = endFrame[3], endYaw = endFrame[4];
+
+                    double distance = Math.Sqrt(
+                        Math.Pow(endX - startX, 2) +
+                        Math.Pow(endY - startY, 2) +
+                        Math.Pow(endZ - startZ, 2));
+
+                    double duration = distance / moveSpeed;
+                    double startTime = Environment.TickCount;
+
+                    while (true)
                     {
                         if (token.IsCancellationRequested)
-                        {
                             return;
-                        }
+
+                        double elapsedTime = (Environment.TickCount - startTime) / 1000.0;
+                        double alpha = elapsedTime / duration;
+                        alpha = Clamp(alpha, 0.0, 1.0);
+
+                        // Use selected interpolation method
+                        currentCameraLookAtX = _interpolator(startX, endX, alpha);
+                        currentCameraLookAtY = _interpolator(startY, endY, alpha);
+                        currentCameraLookAtZ = _interpolator(startZ, endZ, alpha);
+                        (currentCameraPitch, currentCameraYaw) = Interpolator.LerpRotation(startYaw, startPitch, endYaw, endPitch, alpha);
+
+                        // Stop interpolating if alpha reaches 1
+                        if (alpha >= 1.0)
+                            break;
+
                         await Task.Delay(10);
                     }
                 }
@@ -454,6 +454,7 @@ namespace Silicon
                 PlayAnimationButton.Refresh();
             }
         }
+
 
 
         private void StopAnimation()
@@ -523,6 +524,7 @@ namespace Silicon
                     if (!pressedKeys.Contains(key))
                     {
                         pressedKeys.Add(key);
+                        HandleKeyDown(key);
                     }
                 }
                 else
@@ -688,7 +690,7 @@ namespace Silicon
 
         private void CameraRotateSpeedSlider_Scroll(object sender)
         {
-            cameraRotateSpeed = (double)CameraRotateSpeedSlider.Value / 5000;
+            cameraRotateSpeed = (double)CameraRotateSpeedSlider.Value / 100;
         }
 
 
@@ -769,10 +771,13 @@ namespace Silicon
         }
 
 
-        private void ActivateGoToFrame(int selectedIndex) {
+        private async void ActivateGoToFrame(int selectedIndex) {
             if (selectedIndex >= animationFrames.Count) return;
 
             FreecamSwitch.Switched = true;
+
+            await Task.Delay(20);
+
             List<double> goToFrame = animationFrames[selectedIndex];
 
             // Set new target
@@ -789,6 +794,12 @@ namespace Silicon
                 Math.Pow(targetCameraLookAtY - currentCameraLookAtY, 2) +
                 Math.Pow(targetCameraLookAtZ - currentCameraLookAtZ, 2)
             );
+
+            if (distance < equalityTolerance) {
+                currentCameraLookAtX = targetCameraLookAtX;
+                currentCameraLookAtY = targetCameraLookAtY;
+                currentCameraLookAtZ = targetCameraLookAtZ;
+            }
 
             animationDuration = distance / cameraMoveSpeed;
             animationStartTime = (Environment.TickCount / 100.0);

@@ -140,7 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Silicon\Animation\Interpolation\CubicBezierInterpolator.cs" />
-    <Compile Include="Silicon\Animation\Interpolation\Interpolation.cs" />
+    <Compile Include="Silicon\Animation\Interpolation\Interpolator.cs" />
     <Compile Include="Silicon\Silicon.cs">
       <SubType>Form</SubType>
     </Compile>

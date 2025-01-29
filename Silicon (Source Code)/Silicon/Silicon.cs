@@ -32,6 +32,8 @@ namespace Silicon
 
         private const float equalityTolerance = 1e-6f;
 
+        private Interpolator.MethodDelegate _interpolator = Interpolator.GetMethodWithIndex(0);
+
         private DateTime recordingStartTime;
         private int frameCounter = 0;
         private bool isRecording = false;
@@ -949,7 +951,7 @@ namespace Silicon
         }
 
         private void interpComboBox_SelectedIndexChanged(object sender, EventArgs e) {
-
+            _interpolator = Interpolator.GetMethodWithIndex(interpComboBox.SelectedIndex);
         }
     }
 }

@@ -30,6 +30,8 @@ namespace Silicon
         private Thread keyPollingThread;
         private bool isRunning = true;
 
+        private const float equalityTolerance = 1e-6f;
+
         private DateTime recordingStartTime;
         private int frameCounter = 0;
         private bool isRecording = false;
@@ -241,6 +243,12 @@ namespace Silicon
         private double cameraRotateSpeed = 0.5;
         private void CheckAndUpdateMemory()
         {
+            if (pressedKeys.Contains(Keys.F1)) FreecamSwitch.Switched = !isFreecamEnabled;
+            if (pressedKeys.Contains(Keys.C)) ActivateGoToFrame(0);
+            if (pressedKeys.Contains(Keys.V)) ActivateGoToFrame(1);
+            if (pressedKeys.Contains(Keys.B)) ActivateGoToFrame(2);
+            if (pressedKeys.Contains(Keys.N)) ActivateGoToFrame(3);
+            if (pressedKeys.Contains(Keys.M)) ActivateGoToFrame(4);
             if (isFreecamEnabled) 
             {
                 HandleCameraController(currentCameraYaw);
@@ -253,17 +261,13 @@ namespace Silicon
             string lookAtYAddress = (intRotationAddress - 12).ToString("X");
             string lookAtZAddress = (intRotationAddress - 8).ToString("X");
 
-            uint intCameraPositionAddress = m.ReadUInt("Cubic.exe+E29296");
-
-
-
             InterpolateCameraMovement(lookAtXAddress, lookAtYAddress, lookAtZAddress);
             InterpolateCameraRotation(pitchAddress, yawAddress);
 
             if (FreecamSwitch.Switched != isFreecamEnabled)
             {
                 isFreecamEnabled = FreecamSwitch.Switched;
-                if (isFreecamEnabled == true)
+                if (isFreecamEnabled)
                 {
                     // Start Freecam camera position and rotation at the current camera position and rotation
                     m.WriteMemory("Cubic.exe+1B8E00", "bytes", cameraLookAtEditorFunctionEntry);
@@ -302,7 +306,6 @@ namespace Silicon
             if (CameraDistanceSlider.Value != cameraDistanceSliderValue)
             {
                 cameraDistanceSliderValue = CameraDistanceSlider.Value;
-                Console.WriteLine(m.ReadFloat("Cubic.exe+E20FAC"));
                 m.WriteMemory("Cubic.exe+E20FAC", "float", CameraDistanceSlider.Value.ToString());
             }
 
@@ -354,7 +357,8 @@ namespace Silicon
 
             // Calculate new rotation speed
             double timeToTarget = moveDistance / cameraMoveSpeed;
-            return rotateDistance / (timeToTarget); 
+            if (timeToTarget < equalityTolerance) return 0;
+            return rotateDistance / timeToTarget;
         }
 
         // Base injection code caves and function jumps to allow Silicon to modify game behaviour
@@ -513,7 +517,8 @@ namespace Silicon
             {
                 Keys.Up, Keys.Down, Keys.Left, Keys.Right,
                 Keys.LShiftKey, Keys.LControlKey,
-                Keys.I, Keys.K, Keys.J, Keys.L
+                Keys.I, Keys.K, Keys.J, Keys.L,
+                Keys.F1, Keys.C, Keys.V, Keys.B, Keys.N, Keys.M
             };
 
             foreach (var key in keysToMonitor)
@@ -579,6 +584,7 @@ namespace Silicon
             if (pressedKeys.Contains(Keys.K)) rotatePitch += 1;
             if (pressedKeys.Contains(Keys.J)) rotateYaw -= 1;
             if (pressedKeys.Contains(Keys.L)) rotateYaw += 1;
+
 
             
             double moveMagnitude = Math.Sqrt(moveX * moveX + moveY * moveY + moveZ * moveZ);
@@ -668,7 +674,7 @@ namespace Silicon
 
             //Interpolate and move to target location
             //Snap to target if close enough
-            if (cameraRotateDistance < cameraRotateSpeed)
+            if (cameraRotateDistance < cameraRotateSpeed || cameraRotateDistance < equalityTolerance)
             {
                 currentCameraPitch = targetCameraPitch;
                 currentCameraYaw = targetCameraYaw;
@@ -768,6 +774,18 @@ namespace Silicon
             UpdateListView();
         }
 
+        private void ActivateGoToFrame(int selectedIndex) {
+            if (selectedIndex >= animationFrames.Count) return;
+            FreecamSwitch.Switched = true;
+            List<double> goToFrame = animationFrames[selectedIndex];
+            targetCameraLookAtX = goToFrame[0];
+            targetCameraLookAtY = goToFrame[1];
+            targetCameraLookAtZ = goToFrame[2];
+            targetCameraPitch = goToFrame[3];
+            targetCameraYaw = goToFrame[4];
+            cameraRotateSpeed = GetDynamicRotationSpeed();
+        }
+
         private void GoToAnnimationFrameButton_Click(object sender, EventArgs e)
         {
             if (listViewFrames.SelectedItems.Count == 0)
@@ -783,13 +801,7 @@ namespace Silicon
             }
 
             int selectedIndex = listViewFrames.SelectedItems[0].Index;
-            List<double> goToFrame = animationFrames[selectedIndex];
-            targetCameraLookAtX = goToFrame[0];
-            targetCameraLookAtY = goToFrame[1];
-            targetCameraLookAtZ = goToFrame[2];
-            targetCameraPitch = goToFrame[3];
-            targetCameraYaw = goToFrame[4];
-            cameraRotateSpeed = GetDynamicRotationSpeed();
+            ActivateGoToFrame(selectedIndex);
         }
 
         private void SaveAnimationButton_Click(object sender, EventArgs e)
@@ -935,169 +947,5 @@ namespace Silicon
                 m.WriteMemory("Cubic.exe+E20FAC", "float", cameraDistanceSliderValue.ToString());
             }
         }
-
-
-    //    int[] realmBlockData;
-    //    int realmSizeX = 1;
-    //    int realmSizeY = 1;
-    //    int realmSizeZ = 1;
-    //    string startCoordinatesAddress;
-    //    private void GetRealmSizeButton_Click(object sender, EventArgs e)
-    //    {
-    //        uint intInitialAddress = m.ReadUInt("Cubic.exe+E29296");
-    //        string initialAddress = (intInitialAddress).ToString("X");
-
-    //        int[] startCoordinates = new int[] { 0, 0, 0 };
-    //        int[] coordinates = new int[3];
-    //        coordinates[0] = m.ReadByte((intInitialAddress + 2).ToString("X"));
-    //        coordinates[1] = m.ReadByte((intInitialAddress + 4).ToString("X"));
-    //        coordinates[2] = m.ReadByte((intInitialAddress + 6).ToString("X"));
-    //        int[] currentStartCoordinates = coordinates;
-
-
-    //        int counter = 0;
-    //        while (!currentStartCoordinates.SequenceEqual(startCoordinates))
-    //        {
-    //            counter++;
-    //            currentStartCoordinates[0] = m.ReadByte((intInitialAddress + 2 - (counter * 28)).ToString("X"));
-    //            currentStartCoordinates[1] = m.ReadByte((intInitialAddress + 4 - (counter * 28)).ToString("X"));
-    //            currentStartCoordinates[2] = m.ReadByte((intInitialAddress + 6 - (counter * 28)).ToString("X"));
-    //        }
-
-    //        startCoordinatesAddress = (intInitialAddress - (counter * 28)).ToString("X");
-    //        Console.WriteLine(startCoordinatesAddress);
-
-
-    //        while (true)
-    //        {
-    //            int next_z = m.ReadByte(startCoordinatesAddress + "+" + (6 + (28 * realmSizeZ)).ToString("X"));
-    //            //Console.WriteLine(next_z + " " + startCoordinatesAddress + "+" + (6 + (28 * z)).ToString("X"));
-    //            if (next_z == 0)
-    //            {
-    //                break; // Exit the loop when next_z is 0
-    //            }
-    //            realmSizeZ++;
-    //        }
-
-    //        while (true)
-    //        {
-    //            int next_y = m.ReadByte(startCoordinatesAddress + "+" + (4 + (28 * realmSizeZ * realmSizeY)).ToString("X"));
-    //            if (next_y == 0)
-    //            {
-    //                break; // Exit the loop when next_z is 0
-    //            }
-    //            realmSizeY++;
-    //        }
-
-    //        while (true)
-    //        {
-    //            int next_x = m.ReadByte(startCoordinatesAddress + "+" + (2 + (28 * realmSizeZ * realmSizeY * realmSizeX)).ToString("X"));
-    //            if (next_x == 0)
-    //            {
-    //                break; // Exit the loop when next_z is 0
-    //            }
-    //            realmSizeX++;
-    //        }
-            
-    //        //Console.WriteLine(realmSizeX + " " + y + " " + z);
-
-    //        realmBlockData = new int[realmSizeX * realmSizeZ * realmSizeY];
-
-    //        int realmBlockDataCounter = 0;
-    //        for (int i = 0; i < realmBlockData.Length; i++)
-    //        {
-    //            int block = m.Read2Byte(startCoordinatesAddress + "+" + (realmBlockDataCounter * 28).ToString("X"));
-    //            //block = (block & 0x0FFF);
-    //            realmBlockData[i] = block;
-    //            realmBlockDataCounter++;
-    //        }
-
-
-    //        //Console.WriteLine(realmBlockData.Length);
-    //        int [] slicedRealmBlockData = FilterBlocksByRange(realmBlockData, realmSizeX - 1, realmSizeY - 1, realmSizeZ - 1, 99, true, 'z');
-    //        for (int i = 0; i <slicedRealmBlockData.Length; i++)
-    //        {
-    //        if (slicedRealmBlockData[i] != 0)
-    //        {
-    //            Console.WriteLine($"Element at index {i}: {slicedRealmBlockData[i]}");
-    //        }
-    //        }
-
-    //}
-    //    int[] FilterBlocksByRange(int[] realmBlockData, int maxX, int maxY, int maxZ, int target, bool includeAbove, char axis)
-    //    {
-    //        int[] filteredRealmBlockData = new int[realmBlockData.Length]; // Create a new array with the same length
-
-    //        // Loop over the coordinates based on the chosen axis
-    //        for (int x = 0; x <= maxX; x++)
-    //        {
-    //            for (int y = 0; y <= maxY; y++)
-    //            {
-    //                for (int z = 0; z <= maxZ; z++)
-    //                {
-    //                    // Calculate the 1D array index for the (x, y, z) coordinates
-    //                    int index = z + (maxZ + 1) * y + (maxZ + 1) * (maxY + 1) * x;
-
-    //                    // Check if we should include the block based on the chosen axis
-    //                    bool shouldInclude = false;
-    //                    if (axis == 'x') // Filtering by X
-    //                    {
-    //                        int xStart = includeAbove ? target : 0;
-    //                        int xEnd = includeAbove ? maxX : target - 1;
-    //                        shouldInclude = x >= xStart && x <= xEnd;
-    //                    }
-    //                    else if (axis == 'v') // Filtering by Y
-    //                    {
-    //                        int yStart = includeAbove ? target : 0;
-    //                        int yEnd = includeAbove ? maxY : target - 1;
-    //                        shouldInclude = y >= yStart && y <= yEnd;
-    //                    }
-    //                    else if (axis == 'z') // Filtering by Z
-    //                    {
-    //                        int zStart = includeAbove ? target : 0;
-    //                        int zEnd = includeAbove ? maxZ : target - 1;
-    //                        shouldInclude = z >= zStart && z <= zEnd;
-    //                    }
-
-    //                    // Set the value to 0 if the block is outside the range, otherwise keep the original value
-    //                    filteredRealmBlockData[index] = shouldInclude ? realmBlockData[index] : 0;
-    //                }
-    //            }
-    //        }
-
-    //        return filteredRealmBlockData; // Return the new array
-    //    }
-
-    //    private void SliceXButton_Click(object sender, EventArgs e)
-    //    {
-    //        int[] slicedRealmBlockData = FilterBlocksByRange(realmBlockData, realmSizeX - 1, realmSizeY - 1, realmSizeZ - 1, 13, false, 'x');
-
-    //        int counter = 0;
-    //        foreach (int block in slicedRealmBlockData)
-    //        {
-    //            Console.WriteLine(block);
-    //            byte byte1 = (byte)(block & 0xFF); // Low byte
-    //            byte byte2 = (byte)((block >> 8) & 0xFF); // High byte
-    //            string blockBytes = $"{byte1:X2} {byte2:X2}";
-    //            m.WriteMemory(startCoordinatesAddress + "+" + (counter * 28).ToString("X"), "bytes", blockBytes);
-    //            counter++;
-    //        }
-    //    }
-
-    //    private void metroSetButton1_Click(object sender, EventArgs e)
-    //    {
-    //        int counter = 0;
-    //        foreach (int block in realmBlockData)
-    //        {
-    //            Console.WriteLine(block);
-    //            byte byte1 = (byte)(block & 0xFF); // Low byte
-    //            byte byte2 = (byte)((block >> 8) & 0xFF); // High byte
-    //            string blockBytes = $"{byte1:X2} {byte2:X2}";
-    //            m.WriteMemory(startCoordinatesAddress + "+" + (counter * 28).ToString("X"), "bytes", blockBytes);
-    //            counter++;
-    //        }
-    //    }
-
-
     }
 }

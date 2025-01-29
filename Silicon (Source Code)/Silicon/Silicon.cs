@@ -947,5 +947,9 @@ namespace Silicon
                 m.WriteMemory("Cubic.exe+E20FAC", "float", cameraDistanceSliderValue.ToString());
             }
         }
+
+        private void interpComboBox_SelectedIndexChanged(object sender, EventArgs e) {
+
+        }
     }
 }

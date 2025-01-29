@@ -2,7 +2,7 @@ using System;
 
 namespace Silicon {
 
-    internal class CubicBezierInterpolator : IInterpolator {
+    internal class CubicBezierInterpolator {
         private readonly double _a, _b, _c, _d;
         private const double SolverEpsilon = 1e-4;
         private const int SolverMaxIters = 24;

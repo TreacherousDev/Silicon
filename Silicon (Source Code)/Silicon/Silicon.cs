@@ -646,16 +646,16 @@ namespace Silicon
             double alpha = elapsedTime / animationDuration;
             alpha = Clamp(alpha, 0.0, 1.0);
 
-            currentCameraLookAtX = _interpolator(m.ReadFloat(lookAtXAddress), targetCameraLookAtX, alpha);
-            currentCameraLookAtY = _interpolator(m.ReadFloat(lookAtYAddress), targetCameraLookAtY, alpha);
-            currentCameraLookAtZ = _interpolator(m.ReadFloat(lookAtZAddress), targetCameraLookAtZ, alpha);
-
             // Stop interpolation when alpha reaches 1
             if (alpha >= 1.0 - equalityTolerance)
             {
                 currentCameraLookAtX = targetCameraLookAtX;
                 currentCameraLookAtY = targetCameraLookAtY;
                 currentCameraLookAtZ = targetCameraLookAtZ;
+            } else {
+                currentCameraLookAtX = _interpolator(m.ReadFloat(lookAtXAddress), targetCameraLookAtX, alpha);
+                currentCameraLookAtY = _interpolator(m.ReadFloat(lookAtYAddress), targetCameraLookAtY, alpha);
+                currentCameraLookAtZ = _interpolator(m.ReadFloat(lookAtZAddress), targetCameraLookAtZ, alpha);
             }
         }
 
@@ -665,21 +665,18 @@ namespace Silicon
             double alpha = elapsedTime / animationDuration;
             alpha = Clamp(alpha, 0.0, 1.0);
 
-            // Read current values
-            double startYaw = m.ReadFloat(yawAddress);
-            double startPitch = m.ReadFloat(pitchAddress);
-
-            // Apply Slerp interpolation
-            (double newYaw, double newPitch) = Interpolator.SlerpCamera(startYaw, startPitch, targetCameraYaw, targetCameraPitch, alpha);
-
-            currentCameraYaw = newYaw;
-            currentCameraPitch = newPitch;
-
             // Stop interpolation when alpha reaches 1
             if (alpha >= 1.0 - equalityTolerance)
             {
                 currentCameraPitch = targetCameraPitch;
                 currentCameraYaw = targetCameraYaw;
+            } else {
+                double startYaw = m.ReadFloat(yawAddress);
+                double startPitch = m.ReadFloat(pitchAddress);
+                (double newYaw, double newPitch) = Interpolator.LerpRotation(startYaw, startPitch, targetCameraYaw, targetCameraPitch, alpha);
+                currentCameraYaw = newYaw;
+                currentCameraPitch = newPitch;
+
             }
         }
 

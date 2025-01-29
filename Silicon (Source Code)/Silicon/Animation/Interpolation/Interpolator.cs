@@ -65,38 +65,42 @@ namespace Silicon {
             return start + (end - start) * (1 - 0.5 * Math.Pow(2, -20 * alpha + 10));
         }
 
-        internal static (double, double) SlerpCamera(
+        internal static (double, double) SlerpRotation(
             double startYaw, double startPitch,
             double endYaw, double endPitch, double alpha)
         {
-            // Convert degrees to radians
-            double startYawRad = Math.PI * startYaw / 180.0;
-            double startPitchRad = Math.PI * startPitch / 180.0;
-            double endYawRad = Math.PI * endYaw / 180.0;
-            double endPitchRad = Math.PI * endPitch / 180.0;
+            double phi1 = Math.PI * startYaw / 180.0;
+            double theta1 = Math.PI * startPitch / 180.0;
+            double phi2 = Math.PI * endYaw / 180.0;
+            double theta2 = Math.PI * endPitch / 180.0;
 
-            // Convert Yaw and Pitch to Quaternions
-            Quaternion startQuat = Quaternion.CreateFromYawPitchRoll((float)startYawRad, (float)startPitchRad, 0);
-            Quaternion endQuat = Quaternion.CreateFromYawPitchRoll((float)endYawRad, (float)endPitchRad, 0);
+            Quaternion q1 = Quaternion.CreateFromYawPitchRoll((float)phi1, (float)theta1, 0);
+            Quaternion q2 = Quaternion.CreateFromYawPitchRoll((float)phi2, (float)theta2, 0);
+            Quaternion q = Quaternion.Slerp(q1, q2, (float)alpha);
 
-            // Perform Spherical Linear Interpolation (SLERP)
-            Quaternion resultQuat = Quaternion.Slerp(startQuat, endQuat, (float)alpha);
+            double yaw = Math.Atan2(2.0 * (q.W * q.Y + q.X * q.Z), 1.0 - 2.0 * (q.Y * q.Y + q.Z * q.Z));
+            double pitch = Math.Asin(2.0 * (q.W * q.X - q.Y * q.Z));
 
-            // Extract interpolated Yaw and Pitch
-            Vector3 QuaternionToYawPitchRoll(Quaternion q)
-            {
-                double yaw = Math.Atan2(2.0 * (q.W * q.Y + q.X * q.Z), 1.0 - 2.0 * (q.Y * q.Y + q.Z * q.Z));
-                double pitch = Math.Asin(2.0 * (q.W * q.X - q.Y * q.Z));
-                return new Vector3((float)pitch, (float)yaw, 0);
-            }
+            return (yaw * 180.0 / Math.PI, pitch * 180.0 / Math.PI);
+        }
 
-            Vector3 euler = QuaternionToYawPitchRoll(resultQuat);
+        internal static (double, double) LerpRotation(
+            double startYaw, double startPitch,
+            double endYaw, double endPitch, double alpha)
+        {
+            double yaw = LerpDegrees(startYaw, endYaw, alpha);
+            double pitch = LerpDegrees(startPitch, endPitch, alpha);
+            return (yaw, pitch);
+        }
 
-            // Convert radians back to degrees
-            double interpolatedYaw = euler.Y * 180.0 / Math.PI;
-            double interpolatedPitch = euler.X * 180.0 / Math.PI;
+        private static double LerpDegrees(double start, double end, double alpha)
+        {
+            double delta = (end - start) % 360.0;
 
-            return (interpolatedYaw, interpolatedPitch);
+            if (delta > 180.0) delta -= 360.0;
+            if (delta < -180.0) delta += 360.0;
+
+            return (start + alpha * delta) % 360.0;
         }
     }
 }

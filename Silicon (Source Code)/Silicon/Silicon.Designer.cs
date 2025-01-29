@@ -465,7 +465,7 @@ namespace Silicon
             this.CameraRotateSpeedSlider.Text = "metroSetTrackBar6";
             this.CameraRotateSpeedSlider.ThemeAuthor = "Narwin";
             this.CameraRotateSpeedSlider.ThemeName = "MetroLite";
-            this.CameraRotateSpeedSlider.Value = 40;
+            this.CameraRotateSpeedSlider.Value = 50;
             this.CameraRotateSpeedSlider.ValueColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.CameraRotateSpeedSlider.Scroll += new MetroSet_UI.Controls.MetroSetTrackBar.ScrollEventHandler(this.CameraRotateSpeedSlider_Scroll);
             // 
@@ -490,7 +490,7 @@ namespace Silicon
             this.CameraMoveSpeedSlider.Text = "metroSetTrackBar6";
             this.CameraMoveSpeedSlider.ThemeAuthor = "Narwin";
             this.CameraMoveSpeedSlider.ThemeName = "MetroLite";
-            this.CameraMoveSpeedSlider.Value = 40;
+            this.CameraMoveSpeedSlider.Value = 50;
             this.CameraMoveSpeedSlider.ValueColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.CameraMoveSpeedSlider.Scroll += new MetroSet_UI.Controls.MetroSetTrackBar.ScrollEventHandler(this.CameraMoveSpeedSlider_Scroll);
             // 

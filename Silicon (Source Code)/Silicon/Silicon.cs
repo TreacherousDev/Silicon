@@ -30,9 +30,11 @@ namespace Silicon
         private Thread keyPollingThread;
         private bool isRunning = true;
 
-        private const float equalityTolerance = 1e-6f;
+        private const float equalityTolerance = 5e-5f;
 
         private Interpolator.MethodDelegate _interpolator = Interpolator.GetMethodWithIndex(0);
+        private double animationStartTime;
+        private double animationDuration;
 
         private DateTime recordingStartTime;
         private int frameCounter = 0;
@@ -92,7 +94,7 @@ namespace Silicon
 
         private void StartProcessCheckTimer()
         {
-            processCheckTimer = new System.Timers.Timer(1000);
+            processCheckTimer = new Timer(1000);
             processCheckTimer.Elapsed += ProcessCheckTimer_Elapsed;
             processCheckTimer.AutoReset = true;
             processCheckTimer.Enabled = true;
@@ -169,19 +171,13 @@ namespace Silicon
         private double targetCameraPitch;
         private double targetCameraYaw;
 
-        private double cameraMoveDirectionX;
-        private double cameraMoveDirectionY;
-        private double cameraMoveDirectionZ;
-        private double cameraMoveDistance;
-        private double cameraRotateDirectionPitch;
-        private double cameraRotateDirectionYaw;
-        private double cameraRotateDistance;
+        private double cameraMoveDistance = 0.0; // TODO: Fix
 
         private Timer _updateTimer;
 
         private void SiliconWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            _updateTimer = new Timer(10);
+            _updateTimer = new Timer(5);
             _updateTimer.Elapsed += UpdateMemoryOnTimerTick;
             _updateTimer.AutoReset = true;
             _updateTimer.Start();
@@ -245,12 +241,6 @@ namespace Silicon
         private double cameraRotateSpeed = 0.5;
         private void CheckAndUpdateMemory()
         {
-            if (pressedKeys.Contains(Keys.F1)) FreecamSwitch.Switched = !isFreecamEnabled;
-            if (pressedKeys.Contains(Keys.C)) ActivateGoToFrame(0);
-            if (pressedKeys.Contains(Keys.V)) ActivateGoToFrame(1);
-            if (pressedKeys.Contains(Keys.B)) ActivateGoToFrame(2);
-            if (pressedKeys.Contains(Keys.N)) ActivateGoToFrame(3);
-            if (pressedKeys.Contains(Keys.M)) ActivateGoToFrame(4);
             if (isFreecamEnabled) 
             {
                 HandleCameraController(currentCameraYaw);
@@ -451,21 +441,20 @@ namespace Silicon
                     }
                 }
 
-                // Change the button state to play after animation is done
+                // Reset button state after animation completes
                 playButtonState = PlayButtonState.Play;
                 PlayAnimationButton.Text = " ►";
                 PlayAnimationButton.Refresh();
             }
-            
             else if (playButtonState == PlayButtonState.Stop)
             {
-                // Stop animation once stop button is pressed
+                StopAnimation();
                 playButtonState = PlayButtonState.Play;
                 PlayAnimationButton.Text = " ►";
                 PlayAnimationButton.Refresh();
-                StopAnimation();
             }
         }
+
 
         private void StopAnimation()
         {
@@ -548,6 +537,23 @@ namespace Silicon
                         }
                     }
                 }
+            }
+        }
+
+        private void HandleKeyDown(Keys key) {
+            switch (key) {
+                case Keys.F1: FreecamSwitch.Switched = !isFreecamEnabled;
+                    break;
+                case Keys.C:  ActivateGoToFrame(0);
+                    break;
+                case Keys.V:  ActivateGoToFrame(1);
+                    break;
+                case Keys.B:  ActivateGoToFrame(2);
+                    break;
+                case Keys.N:  ActivateGoToFrame(3);
+                    break;
+                case Keys.M:  ActivateGoToFrame(4);
+                    break;
             }
         }
 
@@ -634,69 +640,58 @@ namespace Silicon
         // Here ends the code edited by Hispano
 
 
-        private void InterpolateCameraMovement(string lookAtXAddress,string lookAtYAddress, string lookAtZAddress)
+        private void InterpolateCameraMovement(string lookAtXAddress, string lookAtYAddress, string lookAtZAddress)
         {
-            currentCameraLookAtX = m.ReadFloat(lookAtXAddress);
-            currentCameraLookAtY = m.ReadFloat(lookAtYAddress);
-            currentCameraLookAtZ = m.ReadFloat(lookAtZAddress);
+            double elapsedTime = (Environment.TickCount / 100.0) - animationStartTime;
+            double alpha = elapsedTime / animationDuration;
+            alpha = Clamp(alpha, 0.0, 1.0);
 
-            // Calculate the direction vector towards the target
-            cameraMoveDirectionX = targetCameraLookAtX - currentCameraLookAtX;
-            cameraMoveDirectionY = targetCameraLookAtY - currentCameraLookAtY;
-            cameraMoveDirectionZ = targetCameraLookAtZ - currentCameraLookAtZ;
-            // Normalize distance
-            cameraMoveDistance = Math.Sqrt(cameraMoveDirectionX * cameraMoveDirectionX + cameraMoveDirectionY * cameraMoveDirectionY + cameraMoveDirectionZ * cameraMoveDirectionZ);
+            currentCameraLookAtX = _interpolator(m.ReadFloat(lookAtXAddress), targetCameraLookAtX, alpha);
+            currentCameraLookAtY = _interpolator(m.ReadFloat(lookAtYAddress), targetCameraLookAtY, alpha);
+            currentCameraLookAtZ = _interpolator(m.ReadFloat(lookAtZAddress), targetCameraLookAtZ, alpha);
 
-            // Interpolate and move to target location
-            // Snap to target if close enough
-            if (cameraMoveDistance < cameraMoveSpeed)
+            // Stop interpolation when alpha reaches 1
+            if (alpha >= 1.0 - equalityTolerance)
             {
                 currentCameraLookAtX = targetCameraLookAtX;
                 currentCameraLookAtY = targetCameraLookAtY;
                 currentCameraLookAtZ = targetCameraLookAtZ;
             }
-            else
-            {
-                // Normalize the direction vector and move towards the target
-                currentCameraLookAtX += cameraMoveDirectionX / cameraMoveDistance * cameraMoveSpeed;
-                currentCameraLookAtY += cameraMoveDirectionY / cameraMoveDistance * cameraMoveSpeed;
-                currentCameraLookAtZ += cameraMoveDirectionZ / cameraMoveDistance * cameraMoveSpeed;
-            }           
         }
+
         private void InterpolateCameraRotation(string pitchAddress, string yawAddress)
         {
-            currentCameraPitch = m.ReadFloat(pitchAddress);
-            currentCameraYaw = m.ReadFloat(yawAddress);
+            double elapsedTime = (Environment.TickCount / 100.0) - animationStartTime;
+            double alpha = elapsedTime / animationDuration;
+            alpha = Clamp(alpha, 0.0, 1.0);
 
-            // Calculate the direction vector towards the target
-            cameraRotateDirectionPitch = targetCameraPitch - currentCameraPitch;
-            cameraRotateDirectionYaw = targetCameraYaw - currentCameraYaw;
-            //Normalize distance
-            cameraRotateDistance = Math.Sqrt(cameraRotateDirectionPitch * cameraRotateDirectionPitch + cameraRotateDirectionYaw * cameraRotateDirectionYaw);
+            // Read current values
+            double startYaw = m.ReadFloat(yawAddress);
+            double startPitch = m.ReadFloat(pitchAddress);
 
-            //Interpolate and move to target location
-            //Snap to target if close enough
-            if (cameraRotateDistance < cameraRotateSpeed || cameraRotateDistance < equalityTolerance)
+            // Apply Slerp interpolation
+            (double newYaw, double newPitch) = Interpolator.SlerpCamera(startYaw, startPitch, targetCameraYaw, targetCameraPitch, alpha);
+
+            currentCameraYaw = newYaw;
+            currentCameraPitch = newPitch;
+
+            // Stop interpolation when alpha reaches 1
+            if (alpha >= 1.0 - equalityTolerance)
             {
                 currentCameraPitch = targetCameraPitch;
                 currentCameraYaw = targetCameraYaw;
             }
-            else
-            {
-                // Normalize the direction vector and move towards the target
-                currentCameraPitch += cameraRotateDirectionPitch / cameraRotateDistance * cameraRotateSpeed;
-                currentCameraYaw += cameraRotateDirectionYaw / cameraRotateDistance * cameraRotateSpeed;
-            }
         }
+
 
         private void CameraMoveSpeedSlider_Scroll(object sender)
         {
-            cameraMoveSpeed = (double)CameraMoveSpeedSlider.Value / 300;
+            cameraMoveSpeed = (double)CameraMoveSpeedSlider.Value / 500;
         }
 
         private void CameraRotateSpeedSlider_Scroll(object sender)
         {
-            cameraRotateSpeed = (double)CameraRotateSpeedSlider.Value / 60;
+            cameraRotateSpeed = (double)CameraRotateSpeedSlider.Value / 5000;
         }
 
 
@@ -776,16 +771,30 @@ namespace Silicon
             UpdateListView();
         }
 
+
         private void ActivateGoToFrame(int selectedIndex) {
             if (selectedIndex >= animationFrames.Count) return;
+
             FreecamSwitch.Switched = true;
             List<double> goToFrame = animationFrames[selectedIndex];
+
+            // Set new target
             targetCameraLookAtX = goToFrame[0];
             targetCameraLookAtY = goToFrame[1];
             targetCameraLookAtZ = goToFrame[2];
             targetCameraPitch = goToFrame[3];
             targetCameraYaw = goToFrame[4];
-            cameraRotateSpeed = GetDynamicRotationSpeed();
+            cameraMoveSpeed = goToFrame[5];
+
+            // Compute animation duration based on distance
+            double distance = Math.Sqrt(
+                Math.Pow(targetCameraLookAtX - currentCameraLookAtX, 2) +
+                Math.Pow(targetCameraLookAtY - currentCameraLookAtY, 2) +
+                Math.Pow(targetCameraLookAtZ - currentCameraLookAtZ, 2)
+            );
+
+            animationDuration = distance / cameraMoveSpeed;
+            animationStartTime = (Environment.TickCount / 100.0);
         }
 
         private void GoToAnnimationFrameButton_Click(object sender, EventArgs e)

@@ -954,11 +954,11 @@ namespace Silicon
         {
             cameraFOVSliderValue = defaultCameraFov;
             CameraFOVSlider.Value = defaultCameraFov;
-            m.WriteMemory("Cubic.exe+E20E1D", "float", cameraFOVSliderValue.ToString());
+            m.WriteMemory("Cubic.exe+EF4E1D", "float", cameraFOVSliderValue.ToString());
 
             cameraDistanceSliderValue = defaultCameraDistance;
             CameraDistanceSlider.Value = defaultCameraDistance;
-            m.WriteMemory("Cubic.exe+E20FAC", "float", cameraDistanceSliderValue.ToString());
+            m.WriteMemory("Cubic.exe+EF4FAC", "float", cameraDistanceSliderValue.ToString());
         }
 
         private void interpComboBox_SelectedIndexChanged(object sender, EventArgs e) {

@@ -41,6 +41,9 @@ namespace Silicon
         private bool isRecording = false;
         private List<List<double>> recordedFrames = new List<List<double>>();
 
+        private const int defaultCameraFov = 33;
+        private const int defaultCameraDistance = 22;
+
         [DllImport("user32.dll")]
         private static extern short GetAsyncKeyState(Keys key);
 
@@ -776,6 +779,7 @@ namespace Silicon
 
             FreecamSwitch.Switched = true;
 
+
             await Task.Delay(20);
 
             List<double> goToFrame = animationFrames[selectedIndex];
@@ -948,23 +952,13 @@ namespace Silicon
 
         private void ResetButton_Click(object sender, EventArgs e)
         {
-            if (cameraFOVSliderValue == 30 && cameraDistanceSliderValue == 30) {
-                cameraFOVSliderValue = 48;
-                CameraFOVSlider.Value = cameraFOVSliderValue;
-                m.WriteMemory("Cubic.exe+E20E1D", "float", cameraFOVSliderValue.ToString());
+            cameraFOVSliderValue = defaultCameraFov;
+            CameraFOVSlider.Value = defaultCameraFov;
+            m.WriteMemory("Cubic.exe+E20E1D", "float", cameraFOVSliderValue.ToString());
 
-                cameraDistanceSliderValue = 40;
-                CameraDistanceSlider.Value = cameraDistanceSliderValue;
-                m.WriteMemory("Cubic.exe+E20FAC", "float", cameraDistanceSliderValue.ToString());
-            } else {
-                cameraFOVSliderValue = 30;
-                CameraFOVSlider.Value = cameraFOVSliderValue;
-                m.WriteMemory("Cubic.exe+E20E1D", "float", cameraFOVSliderValue.ToString());
-
-                cameraDistanceSliderValue = 30;
-                CameraDistanceSlider.Value = cameraDistanceSliderValue;
-                m.WriteMemory("Cubic.exe+E20FAC", "float", cameraDistanceSliderValue.ToString());
-            }
+            cameraDistanceSliderValue = defaultCameraDistance;
+            CameraDistanceSlider.Value = defaultCameraDistance;
+            m.WriteMemory("Cubic.exe+E20FAC", "float", cameraDistanceSliderValue.ToString());
         }
 
         private void interpComboBox_SelectedIndexChanged(object sender, EventArgs e) {

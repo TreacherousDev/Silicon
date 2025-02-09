@@ -29,6 +29,21 @@ namespace Silicon
         private HashSet<Keys> pressedKeys = new HashSet<Keys>();
         private Thread keyPollingThread;
         private bool isRunning = true;
+
+        private const float equalityTolerance = 5e-5f;
+
+        private Interpolator.MethodDelegate _interpolator = Interpolator.GetMethodWithIndex(0);
+        private double animationStartTime;
+        private double animationDuration;
+
+        private DateTime recordingStartTime;
+        private int frameCounter = 0;
+        private bool isRecording = false;
+        private List<List<double>> recordedFrames = new List<List<double>>();
+
+        private const int defaultCameraFov = 33;
+        private const int defaultCameraDistance = 22;
+
         [DllImport("user32.dll")]
         private static extern short GetAsyncKeyState(Keys key);
 
@@ -82,7 +97,7 @@ namespace Silicon
 
         private void StartProcessCheckTimer()
         {
-            processCheckTimer = new System.Timers.Timer(1000);
+            processCheckTimer = new Timer(1000);
             processCheckTimer.Elapsed += ProcessCheckTimer_Elapsed;
             processCheckTimer.AutoReset = true;
             processCheckTimer.Enabled = true;
@@ -159,19 +174,13 @@ namespace Silicon
         private double targetCameraPitch;
         private double targetCameraYaw;
 
-        private double cameraMoveDirectionX;
-        private double cameraMoveDirectionY;
-        private double cameraMoveDirectionZ;
-        private double cameraMoveDistance;
-        private double cameraRotateDirectionPitch;
-        private double cameraRotateDirectionYaw;
-        private double cameraRotateDistance;
+        private double cameraMoveDistance = 0.0; // TODO: Fix
 
         private Timer _updateTimer;
 
         private void SiliconWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            _updateTimer = new Timer(10);
+            _updateTimer = new Timer(5);
             _updateTimer.Elapsed += UpdateMemoryOnTimerTick;
             _updateTimer.AutoReset = true;
             _updateTimer.Start();
@@ -180,7 +189,24 @@ namespace Silicon
         private void UpdateMemoryOnTimerTick(object sender, ElapsedEventArgs e)
         {
             CheckAndUpdateMemory();
+
+            // If recording, store the current frame data
+            if (isRecording)
+            {
+                double elapsedTime = (DateTime.Now - recordingStartTime).TotalSeconds;
+                recordedFrames.Add(new List<double>
+                {
+                    frameCounter++,
+                    elapsedTime,
+                    currentCameraLookAtX,
+                    currentCameraLookAtY,
+                    currentCameraLookAtZ,
+                    currentCameraPitch,
+                    currentCameraYaw
+                });
+            }
         }
+
 
         // Persistent Functions (Required for the engine to function)
         readonly string cameraCoordinatesFunction = "90 90 90 90 90 90 90 90 90 90 90 90";
@@ -236,7 +262,7 @@ namespace Silicon
             if (FreecamSwitch.Switched != isFreecamEnabled)
             {
                 isFreecamEnabled = FreecamSwitch.Switched;
-                if (isFreecamEnabled == true)
+                if (isFreecamEnabled)
                 {
                     // Start Freecam camera position and rotation at the current camera position and rotation
                     m.WriteMemory("Cubic.exe+1B8E00", "bytes", cameraLookAtEditorFunctionEntry);
@@ -300,9 +326,9 @@ namespace Silicon
                 
             //UpdateLabel(CameraPositionDataLabel, $"X: {currentCameraLookAtX:F2} Y: {currentCameraLookAtY:F2} Z: {currentCameraLookAtZ:F2} Pitch: {currentCameraPitch:F2} Yaw: {currentCameraYaw:F2}", Color.Red);
             UpdateLabel(CameraLookAtInfoLabel, $"X: {currentCameraLookAtX:F2}     Y: {currentCameraLookAtY:F2}     Z: {currentCameraLookAtZ:F2}", Color.White);
-            UpdateLabel(CameraRotationInfoLabel, $"Pitch: {currentCameraPitch:F2}        Yaw: {currentCameraYaw:F2}", Color.White);
             UpdateLabel(CameraLookAtInfoLabel2, $"X: {currentCameraLookAtX:F2}     Y: {currentCameraLookAtY:F2}     Z: {currentCameraLookAtZ:F2}", Color.White);
-            UpdateLabel(CameraRotationInfoLabel2, $"Pitch: {currentCameraPitch:F2}        Yaw: {currentCameraYaw:F2}", Color.White);
+            UpdateLabel(CameraRotationInfoLabel, $"Pitch: {currentCameraPitch:F2}    Yaw: {currentCameraYaw:F2}     FOV: {cameraFOVSliderValue} Dist: {cameraDistanceSliderValue}", Color.White);
+            UpdateLabel(CameraRotationInfoLabel2, $"Pitch: {currentCameraPitch:F2}    Yaw: {currentCameraYaw:F2}     FOV: {cameraFOVSliderValue} Dist: {cameraDistanceSliderValue}", Color.White);
 
         }
 
@@ -326,7 +352,8 @@ namespace Silicon
 
             // Calculate new rotation speed
             double timeToTarget = moveDistance / cameraMoveSpeed;
-            return rotateDistance / (timeToTarget); 
+            if (timeToTarget < equalityTolerance) return 0;
+            return rotateDistance / timeToTarget;
         }
 
         // Base injection code caves and function jumps to allow Silicon to modify game behaviour
@@ -371,67 +398,67 @@ namespace Silicon
                 animationCancellationTokenSource = new CancellationTokenSource();
                 CancellationToken token = animationCancellationTokenSource.Token;
 
-                // Iterate over each frame, moving only to the next target once the distance is small enough
-                int frameIndex = 0;
-                foreach (List<double> frame in animationFrames)
+                for (int i = 0; i < animationFrames.Count - 1; i++)
                 {
                     if (token.IsCancellationRequested)
-                    {
                         break;
-                    }
-                    targetCameraLookAtX = frame[0];
-                    targetCameraLookAtY = frame[1];
-                    targetCameraLookAtZ = frame[2];
-                    targetCameraPitch = frame[3];
-                    targetCameraYaw = frame[4];
-                    cameraMoveSpeed = frame[5];
 
-                    cameraRotateSpeed = GetDynamicRotationSpeed();
+                    List<double> startFrame = animationFrames[i];
+                    List<double> endFrame = animationFrames[i + 1];
 
-                    // Triggered on the first animation frame
-                    // Warp to the first frame quickly and wait for some time before playing the rest at normal speed
-                    if (frameIndex == 0)
-                    {
-                        cameraMoveSpeed = 1;
-                        cameraRotateSpeed = 5;
-                        while (cameraMoveDistance > 0.05)
-                        {
-                            if (token.IsCancellationRequested)
-                            {
-                                return;
-                            }
-                            await Task.Delay(10);
-                        }
-                        await Task.Delay(1000);
-                    }
-                    frameIndex++;
+                    double startX = startFrame[0], startY = startFrame[1], startZ = startFrame[2];
+                    double startPitch = startFrame[3], startYaw = startFrame[4];
+                    double moveSpeed = startFrame[5];
 
-                    await Task.Delay(20);
-                    while (cameraMoveDistance > 1)
+                    double endX = endFrame[0], endY = endFrame[1], endZ = endFrame[2];
+                    double endPitch = endFrame[3], endYaw = endFrame[4];
+
+                    double distance = Math.Sqrt(
+                        Math.Pow(endX - startX, 2) +
+                        Math.Pow(endY - startY, 2) +
+                        Math.Pow(endZ - startZ, 2));
+
+                    double duration = distance / moveSpeed;
+                    double startTime = Environment.TickCount;
+
+                    while (true)
                     {
                         if (token.IsCancellationRequested)
-                        {
                             return;
-                        }
+
+                        double elapsedTime = (Environment.TickCount - startTime) / 1000.0;
+                        double alpha = elapsedTime / duration;
+                        alpha = Clamp(alpha, 0.0, 1.0);
+
+                        // Use selected interpolation method
+                        currentCameraLookAtX = _interpolator(startX, endX, alpha);
+                        currentCameraLookAtY = _interpolator(startY, endY, alpha);
+                        currentCameraLookAtZ = _interpolator(startZ, endZ, alpha);
+                        (currentCameraPitch, currentCameraYaw) = Interpolator.LerpRotation(startYaw, startPitch, endYaw, endPitch, alpha);
+
+                        // Stop interpolating if alpha reaches 1
+                        if (alpha >= 1.0)
+                            break;
+
                         await Task.Delay(10);
                     }
                 }
 
-                // Change the button state to play after animation is done
+                // Reset button state after animation completes
                 playButtonState = PlayButtonState.Play;
                 PlayAnimationButton.Text = " ►";
                 PlayAnimationButton.Refresh();
             }
-            
             else if (playButtonState == PlayButtonState.Stop)
             {
-                // Stop animation once stop button is pressed
+                StopAnimation();
                 playButtonState = PlayButtonState.Play;
                 PlayAnimationButton.Text = " ►";
                 PlayAnimationButton.Refresh();
-                StopAnimation();
             }
         }
+
+
 
         private void StopAnimation()
         {
@@ -483,9 +510,10 @@ namespace Silicon
             // List of keys to monitor
             Keys[] keysToMonitor = new Keys[]
             {
-                Keys.W, Keys.S, Keys.A, Keys.D,
-                Keys.Space, Keys.LControlKey,
-                Keys.I, Keys.K, Keys.J, Keys.L
+                Keys.Up, Keys.Down, Keys.Left, Keys.Right,
+                Keys.LShiftKey, Keys.LControlKey,
+                Keys.I, Keys.K, Keys.J, Keys.L,
+                Keys.F1, Keys.C, Keys.V, Keys.B, Keys.N, Keys.M
             };
 
             foreach (var key in keysToMonitor)
@@ -499,6 +527,7 @@ namespace Silicon
                     if (!pressedKeys.Contains(key))
                     {
                         pressedKeys.Add(key);
+                        HandleKeyDown(key);
                     }
                 }
                 else
@@ -516,41 +545,59 @@ namespace Silicon
             }
         }
 
+        private void HandleKeyDown(Keys key) {
+            switch (key) {
+                case Keys.F1: FreecamSwitch.Switched = !isFreecamEnabled;
+                    break;
+                case Keys.C:  ActivateGoToFrame(0);
+                    break;
+                case Keys.V:  ActivateGoToFrame(1);
+                    break;
+                case Keys.B:  ActivateGoToFrame(2);
+                    break;
+                case Keys.N:  ActivateGoToFrame(3);
+                    break;
+                case Keys.M:  ActivateGoToFrame(4);
+                    break;
+            }
+        }
+
         private void HandleCameraController(double yawRotation)
         {
             double moveX = 0, moveY = 0, moveZ = 0;
             double rotatePitch = 0, rotateYaw = 0;
 
-            if (pressedKeys.Contains(Keys.W))
+            if (pressedKeys.Contains(Keys.Up))
             {
                 double radians = (yawRotation - 90) * Math.PI / 180;
                 moveX += Math.Cos(radians);
                 moveY += Math.Sin(radians);
             }
-            if (pressedKeys.Contains(Keys.S))
+            if (pressedKeys.Contains(Keys.Down))
             {
                 double radians = (yawRotation + 90) * Math.PI / 180;
                 moveX += Math.Cos(radians);
                 moveY += Math.Sin(radians);
             }
-            if (pressedKeys.Contains(Keys.A))
+            if (pressedKeys.Contains(Keys.Left))
             {
                 double radians = yawRotation * Math.PI / 180;
                 moveX -= Math.Cos(radians);
                 moveY -= Math.Sin(radians);
             }
-            if (pressedKeys.Contains(Keys.D))
+            if (pressedKeys.Contains(Keys.Right))
             {
                 double radians = yawRotation * Math.PI / 180;
                 moveX += Math.Cos(radians);
                 moveY += Math.Sin(radians);
             }
-            if (pressedKeys.Contains(Keys.Space)) moveZ -= 1;
+            if (pressedKeys.Contains(Keys.LShiftKey)) moveZ -= 1;
             if (pressedKeys.Contains(Keys.LControlKey)) moveZ += 1;
             if (pressedKeys.Contains(Keys.I)) rotatePitch -= 1;
             if (pressedKeys.Contains(Keys.K)) rotatePitch += 1;
             if (pressedKeys.Contains(Keys.J)) rotateYaw -= 1;
             if (pressedKeys.Contains(Keys.L)) rotateYaw += 1;
+
 
             
             double moveMagnitude = Math.Sqrt(moveX * moveX + moveY * moveY + moveZ * moveZ);
@@ -598,69 +645,55 @@ namespace Silicon
         // Here ends the code edited by Hispano
 
 
-        private void InterpolateCameraMovement(string lookAtXAddress,string lookAtYAddress, string lookAtZAddress)
+        private void InterpolateCameraMovement(string lookAtXAddress, string lookAtYAddress, string lookAtZAddress)
         {
-            currentCameraLookAtX = m.ReadFloat(lookAtXAddress);
-            currentCameraLookAtY = m.ReadFloat(lookAtYAddress);
-            currentCameraLookAtZ = m.ReadFloat(lookAtZAddress);
+            double elapsedTime = (Environment.TickCount / 100.0) - animationStartTime;
+            double alpha = elapsedTime / animationDuration;
+            alpha = Clamp(alpha, 0.0, 1.0);
 
-            // Calculate the direction vector towards the target
-            cameraMoveDirectionX = targetCameraLookAtX - currentCameraLookAtX;
-            cameraMoveDirectionY = targetCameraLookAtY - currentCameraLookAtY;
-            cameraMoveDirectionZ = targetCameraLookAtZ - currentCameraLookAtZ;
-            // Normalize distance
-            cameraMoveDistance = Math.Sqrt(cameraMoveDirectionX * cameraMoveDirectionX + cameraMoveDirectionY * cameraMoveDirectionY + cameraMoveDirectionZ * cameraMoveDirectionZ);
-
-            // Interpolate and move to target location
-            // Snap to target if close enough
-            if (cameraMoveDistance < cameraMoveSpeed)
+            // Stop interpolation when alpha reaches 1
+            if (alpha >= 1.0 - equalityTolerance)
             {
                 currentCameraLookAtX = targetCameraLookAtX;
                 currentCameraLookAtY = targetCameraLookAtY;
                 currentCameraLookAtZ = targetCameraLookAtZ;
+            } else {
+                currentCameraLookAtX = _interpolator(m.ReadFloat(lookAtXAddress), targetCameraLookAtX, alpha);
+                currentCameraLookAtY = _interpolator(m.ReadFloat(lookAtYAddress), targetCameraLookAtY, alpha);
+                currentCameraLookAtZ = _interpolator(m.ReadFloat(lookAtZAddress), targetCameraLookAtZ, alpha);
             }
-            else
-            {
-                // Normalize the direction vector and move towards the target
-                currentCameraLookAtX += cameraMoveDirectionX / cameraMoveDistance * cameraMoveSpeed;
-                currentCameraLookAtY += cameraMoveDirectionY / cameraMoveDistance * cameraMoveSpeed;
-                currentCameraLookAtZ += cameraMoveDirectionZ / cameraMoveDistance * cameraMoveSpeed;
-            }           
         }
+
         private void InterpolateCameraRotation(string pitchAddress, string yawAddress)
         {
-            currentCameraPitch = m.ReadFloat(pitchAddress);
-            currentCameraYaw = m.ReadFloat(yawAddress);
+            double elapsedTime = (Environment.TickCount / 100.0) - animationStartTime;
+            double alpha = elapsedTime / animationDuration;
+            alpha = Clamp(alpha, 0.0, 1.0);
 
-            // Calculate the direction vector towards the target
-            cameraRotateDirectionPitch = targetCameraPitch - currentCameraPitch;
-            cameraRotateDirectionYaw = targetCameraYaw - currentCameraYaw;
-            //Normalize distance
-            cameraRotateDistance = Math.Sqrt(cameraRotateDirectionPitch * cameraRotateDirectionPitch + cameraRotateDirectionYaw * cameraRotateDirectionYaw);
-
-            //Interpolate and move to target location
-            //Snap to target if close enough
-            if (cameraRotateDistance < cameraRotateSpeed)
+            // Stop interpolation when alpha reaches 1
+            if (alpha >= 1.0 - equalityTolerance)
             {
                 currentCameraPitch = targetCameraPitch;
                 currentCameraYaw = targetCameraYaw;
-            }
-            else
-            {
-                // Normalize the direction vector and move towards the target
-                currentCameraPitch += cameraRotateDirectionPitch / cameraRotateDistance * cameraRotateSpeed;
-                currentCameraYaw += cameraRotateDirectionYaw / cameraRotateDistance * cameraRotateSpeed;
+            } else {
+                double startYaw = m.ReadFloat(yawAddress);
+                double startPitch = m.ReadFloat(pitchAddress);
+                (double newYaw, double newPitch) = Interpolator.LerpRotation(startYaw, startPitch, targetCameraYaw, targetCameraPitch, alpha);
+                currentCameraYaw = newYaw;
+                currentCameraPitch = newPitch;
+
             }
         }
 
+
         private void CameraMoveSpeedSlider_Scroll(object sender)
         {
-            cameraMoveSpeed = (double)CameraMoveSpeedSlider.Value / 300;
+            cameraMoveSpeed = (double)CameraMoveSpeedSlider.Value / 500;
         }
 
         private void CameraRotateSpeedSlider_Scroll(object sender)
         {
-            cameraRotateSpeed = (double)CameraRotateSpeedSlider.Value / 60;
+            cameraRotateSpeed = (double)CameraRotateSpeedSlider.Value / 100;
         }
 
 
@@ -740,6 +773,42 @@ namespace Silicon
             UpdateListView();
         }
 
+
+        private async void ActivateGoToFrame(int selectedIndex) {
+            if (selectedIndex >= animationFrames.Count) return;
+
+            FreecamSwitch.Switched = true;
+
+
+            await Task.Delay(20);
+
+            List<double> goToFrame = animationFrames[selectedIndex];
+
+            // Set new target
+            targetCameraLookAtX = goToFrame[0];
+            targetCameraLookAtY = goToFrame[1];
+            targetCameraLookAtZ = goToFrame[2];
+            targetCameraPitch = goToFrame[3];
+            targetCameraYaw = goToFrame[4];
+            cameraMoveSpeed = goToFrame[5];
+
+            // Compute animation duration based on distance
+            double distance = Math.Sqrt(
+                Math.Pow(targetCameraLookAtX - currentCameraLookAtX, 2) +
+                Math.Pow(targetCameraLookAtY - currentCameraLookAtY, 2) +
+                Math.Pow(targetCameraLookAtZ - currentCameraLookAtZ, 2)
+            );
+
+            if (distance < equalityTolerance) {
+                currentCameraLookAtX = targetCameraLookAtX;
+                currentCameraLookAtY = targetCameraLookAtY;
+                currentCameraLookAtZ = targetCameraLookAtZ;
+            }
+
+            animationDuration = distance / cameraMoveSpeed;
+            animationStartTime = (Environment.TickCount / 100.0);
+        }
+
         private void GoToAnnimationFrameButton_Click(object sender, EventArgs e)
         {
             if (listViewFrames.SelectedItems.Count == 0)
@@ -755,13 +824,7 @@ namespace Silicon
             }
 
             int selectedIndex = listViewFrames.SelectedItems[0].Index;
-            List<double> goToFrame = animationFrames[selectedIndex];
-            targetCameraLookAtX = goToFrame[0];
-            targetCameraLookAtY = goToFrame[1];
-            targetCameraLookAtZ = goToFrame[2];
-            targetCameraPitch = goToFrame[3];
-            targetCameraYaw = goToFrame[4];
-            cameraRotateSpeed = GetDynamicRotationSpeed();
+            ActivateGoToFrame(selectedIndex);
         }
 
         private void SaveAnimationButton_Click(object sender, EventArgs e)
@@ -836,165 +899,70 @@ namespace Silicon
             }
         }
 
-    //    int[] realmBlockData;
-    //    int realmSizeX = 1;
-    //    int realmSizeY = 1;
-    //    int realmSizeZ = 1;
-    //    string startCoordinatesAddress;
-    //    private void GetRealmSizeButton_Click(object sender, EventArgs e)
-    //    {
-    //        uint intInitialAddress = m.ReadUInt("Cubic.exe+E29296");
-    //        string initialAddress = (intInitialAddress).ToString("X");
+        private void RecordButton_Click(object sender, EventArgs e)
+        {
+            isRecording = !isRecording;
 
-    //        int[] startCoordinates = new int[] { 0, 0, 0 };
-    //        int[] coordinates = new int[3];
-    //        coordinates[0] = m.ReadByte((intInitialAddress + 2).ToString("X"));
-    //        coordinates[1] = m.ReadByte((intInitialAddress + 4).ToString("X"));
-    //        coordinates[2] = m.ReadByte((intInitialAddress + 6).ToString("X"));
-    //        int[] currentStartCoordinates = coordinates;
-
-
-    //        int counter = 0;
-    //        while (!currentStartCoordinates.SequenceEqual(startCoordinates))
-    //        {
-    //            counter++;
-    //            currentStartCoordinates[0] = m.ReadByte((intInitialAddress + 2 - (counter * 28)).ToString("X"));
-    //            currentStartCoordinates[1] = m.ReadByte((intInitialAddress + 4 - (counter * 28)).ToString("X"));
-    //            currentStartCoordinates[2] = m.ReadByte((intInitialAddress + 6 - (counter * 28)).ToString("X"));
-    //        }
-
-    //        startCoordinatesAddress = (intInitialAddress - (counter * 28)).ToString("X");
-    //        Console.WriteLine(startCoordinatesAddress);
+            if (isRecording)
+            {
+                frameCounter = 0; // Reset the frame counter
+                recordedFrames.Clear(); // Clear any previous data
+                recordingStartTime = DateTime.Now; // Set the recording start time
+                (sender as MetroSet_UI.Controls.MetroSetButton).Text = "STOP";
+            }
+            else
+            {
+                (sender as MetroSet_UI.Controls.MetroSetButton).Text = "RECORD";
+                ExportRecordedFrames();
+            }
+        }
 
 
-    //        while (true)
-    //        {
-    //            int next_z = m.ReadByte(startCoordinatesAddress + "+" + (6 + (28 * realmSizeZ)).ToString("X"));
-    //            //Console.WriteLine(next_z + " " + startCoordinatesAddress + "+" + (6 + (28 * z)).ToString("X"));
-    //            if (next_z == 0)
-    //            {
-    //                break; // Exit the loop when next_z is 0
-    //            }
-    //            realmSizeZ++;
-    //        }
+        private void ExportRecordedFrames()
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = "CSV Files (*.csv)|*.csv|All Files (*.*)|*.*",
+                DefaultExt = "csv",
+                AddExtension = true,
+                Title = "Save Recorded Frames"
+            };
 
-    //        while (true)
-    //        {
-    //            int next_y = m.ReadByte(startCoordinatesAddress + "+" + (4 + (28 * realmSizeZ * realmSizeY)).ToString("X"));
-    //            if (next_y == 0)
-    //            {
-    //                break; // Exit the loop when next_z is 0
-    //            }
-    //            realmSizeY++;
-    //        }
-
-    //        while (true)
-    //        {
-    //            int next_x = m.ReadByte(startCoordinatesAddress + "+" + (2 + (28 * realmSizeZ * realmSizeY * realmSizeX)).ToString("X"));
-    //            if (next_x == 0)
-    //            {
-    //                break; // Exit the loop when next_z is 0
-    //            }
-    //            realmSizeX++;
-    //        }
-            
-    //        //Console.WriteLine(realmSizeX + " " + y + " " + z);
-
-    //        realmBlockData = new int[realmSizeX * realmSizeZ * realmSizeY];
-
-    //        int realmBlockDataCounter = 0;
-    //        for (int i = 0; i < realmBlockData.Length; i++)
-    //        {
-    //            int block = m.Read2Byte(startCoordinatesAddress + "+" + (realmBlockDataCounter * 28).ToString("X"));
-    //            //block = (block & 0x0FFF);
-    //            realmBlockData[i] = block;
-    //            realmBlockDataCounter++;
-    //        }
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    using (StreamWriter writer = new StreamWriter(saveFileDialog.FileName))
+                    {
+                        writer.WriteLine("frame,time,x,y,z,pitch,azimuth");
+                        foreach (var frame in recordedFrames)
+                        {
+                            writer.WriteLine($"{frame[0]},{frame[1]:F4},{frame[2]},{frame[3]},{frame[4]},{frame[5]},{frame[6]}");
+                        }
+                    }
+                    MessageBox.Show("Recorded frames exported successfully", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error saving file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
 
 
-    //        //Console.WriteLine(realmBlockData.Length);
-    //        int [] slicedRealmBlockData = FilterBlocksByRange(realmBlockData, realmSizeX - 1, realmSizeY - 1, realmSizeZ - 1, 99, true, 'z');
-    //        for (int i = 0; i <slicedRealmBlockData.Length; i++)
-    //        {
-    //        if (slicedRealmBlockData[i] != 0)
-    //        {
-    //            Console.WriteLine($"Element at index {i}: {slicedRealmBlockData[i]}");
-    //        }
-    //        }
+        private void ResetButton_Click(object sender, EventArgs e)
+        {
+            cameraFOVSliderValue = defaultCameraFov;
+            CameraFOVSlider.Value = defaultCameraFov;
+            m.WriteMemory("Cubic.exe+EF4E1D", "float", cameraFOVSliderValue.ToString());
 
-    //}
-    //    int[] FilterBlocksByRange(int[] realmBlockData, int maxX, int maxY, int maxZ, int target, bool includeAbove, char axis)
-    //    {
-    //        int[] filteredRealmBlockData = new int[realmBlockData.Length]; // Create a new array with the same length
+            cameraDistanceSliderValue = defaultCameraDistance;
+            CameraDistanceSlider.Value = defaultCameraDistance;
+            m.WriteMemory("Cubic.exe+EF4FAC", "float", cameraDistanceSliderValue.ToString());
+        }
 
-    //        // Loop over the coordinates based on the chosen axis
-    //        for (int x = 0; x <= maxX; x++)
-    //        {
-    //            for (int y = 0; y <= maxY; y++)
-    //            {
-    //                for (int z = 0; z <= maxZ; z++)
-    //                {
-    //                    // Calculate the 1D array index for the (x, y, z) coordinates
-    //                    int index = z + (maxZ + 1) * y + (maxZ + 1) * (maxY + 1) * x;
-
-    //                    // Check if we should include the block based on the chosen axis
-    //                    bool shouldInclude = false;
-    //                    if (axis == 'x') // Filtering by X
-    //                    {
-    //                        int xStart = includeAbove ? target : 0;
-    //                        int xEnd = includeAbove ? maxX : target - 1;
-    //                        shouldInclude = x >= xStart && x <= xEnd;
-    //                    }
-    //                    else if (axis == 'v') // Filtering by Y
-    //                    {
-    //                        int yStart = includeAbove ? target : 0;
-    //                        int yEnd = includeAbove ? maxY : target - 1;
-    //                        shouldInclude = y >= yStart && y <= yEnd;
-    //                    }
-    //                    else if (axis == 'z') // Filtering by Z
-    //                    {
-    //                        int zStart = includeAbove ? target : 0;
-    //                        int zEnd = includeAbove ? maxZ : target - 1;
-    //                        shouldInclude = z >= zStart && z <= zEnd;
-    //                    }
-
-    //                    // Set the value to 0 if the block is outside the range, otherwise keep the original value
-    //                    filteredRealmBlockData[index] = shouldInclude ? realmBlockData[index] : 0;
-    //                }
-    //            }
-    //        }
-
-    //        return filteredRealmBlockData; // Return the new array
-    //    }
-
-    //    private void SliceXButton_Click(object sender, EventArgs e)
-    //    {
-    //        int[] slicedRealmBlockData = FilterBlocksByRange(realmBlockData, realmSizeX - 1, realmSizeY - 1, realmSizeZ - 1, 13, false, 'x');
-
-    //        int counter = 0;
-    //        foreach (int block in slicedRealmBlockData)
-    //        {
-    //            Console.WriteLine(block);
-    //            byte byte1 = (byte)(block & 0xFF); // Low byte
-    //            byte byte2 = (byte)((block >> 8) & 0xFF); // High byte
-    //            string blockBytes = $"{byte1:X2} {byte2:X2}";
-    //            m.WriteMemory(startCoordinatesAddress + "+" + (counter * 28).ToString("X"), "bytes", blockBytes);
-    //            counter++;
-    //        }
-    //    }
-
-    //    private void metroSetButton1_Click(object sender, EventArgs e)
-    //    {
-    //        int counter = 0;
-    //        foreach (int block in realmBlockData)
-    //        {
-    //            Console.WriteLine(block);
-    //            byte byte1 = (byte)(block & 0xFF); // Low byte
-    //            byte byte2 = (byte)((block >> 8) & 0xFF); // High byte
-    //            string blockBytes = $"{byte1:X2} {byte2:X2}";
-    //            m.WriteMemory(startCoordinatesAddress + "+" + (counter * 28).ToString("X"), "bytes", blockBytes);
-    //            counter++;
-    //        }
-    //    }
+        private void interpComboBox_SelectedIndexChanged(object sender, EventArgs e) {
+            _interpolator = Interpolator.GetMethodWithIndex(interpComboBox.SelectedIndex);
+        }
     }
 }

@@ -24,11 +24,10 @@ namespace Silicon
         #region Código generado por el Diseñador de Windows Forms
 
         /// <summary>
-        /// Método necesario para admitir el Diseñador. No se puede modificar
-        /// el contenido de este método con el editor de código.
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent()
-        {
+        private void InitializeComponent() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SiliconForm));
             this.metroSetControlBox1 = new MetroSet_UI.Controls.MetroSetControlBox();
             this.SiliconWorker = new System.ComponentModel.BackgroundWorker();
@@ -40,6 +39,8 @@ namespace Silicon
             this.proID = new MetroSet_UI.Controls.MetroSetLabel();
             this.procIDLabel = new MetroSet_UI.Controls.MetroSetLabel();
             this.Utility = new System.Windows.Forms.TabPage();
+            this.metroSetButton2 = new MetroSet_UI.Controls.MetroSetButton();
+            this.metroSetButton1 = new MetroSet_UI.Controls.MetroSetButton();
             this.ToolTipLabel = new Sunny.UI.UILabel();
             this.CameraRotationInfoLabel = new Sunny.UI.UILabel();
             this.CameraLookAtInfoLabel = new Sunny.UI.UILabel();
@@ -60,6 +61,7 @@ namespace Silicon
             this.AddAnimationFrameButton = new MetroSet_UI.Controls.MetroSetButton();
             this.TabControl = new Sunny.UI.UITabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.interpComboBox = new System.Windows.Forms.ComboBox();
             this.LoadAnimationButton = new MetroSet_UI.Controls.MetroSetButton();
             this.SaveAnimationButton = new MetroSet_UI.Controls.MetroSetButton();
             this.CameraRotationInfoLabel2 = new Sunny.UI.UILabel();
@@ -68,13 +70,13 @@ namespace Silicon
             this.GoToAnnimationFrameButton = new MetroSet_UI.Controls.MetroSetButton();
             this.DeleteAnimationFrameButton = new MetroSet_UI.Controls.MetroSetButton();
             this.listViewFrames = new System.Windows.Forms.ListView();
-            this.FrameNumber = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.X = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Y = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Z = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Pitch = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Yaw = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Speed = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.FrameNumber = new System.Windows.Forms.ColumnHeader();
+            this.X = new System.Windows.Forms.ColumnHeader();
+            this.Y = new System.Windows.Forms.ColumnHeader();
+            this.Z = new System.Windows.Forms.ColumnHeader();
+            this.Pitch = new System.Windows.Forms.ColumnHeader();
+            this.Yaw = new System.Windows.Forms.ColumnHeader();
+            this.Speed = new System.Windows.Forms.ColumnHeader();
             this.metroSetSetToolTip1 = new MetroSet_UI.Components.MetroSetSetToolTip();
             this.Information.SuspendLayout();
             this.Utility.SuspendLayout();
@@ -207,6 +209,8 @@ namespace Silicon
             // 
             this.Utility.BackColor = System.Drawing.Color.Transparent;
             this.Utility.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Utility.Controls.Add(this.metroSetButton2);
+            this.Utility.Controls.Add(this.metroSetButton1);
             this.Utility.Controls.Add(this.ToolTipLabel);
             this.Utility.Controls.Add(this.CameraRotationInfoLabel);
             this.Utility.Controls.Add(this.CameraLookAtInfoLabel);
@@ -230,17 +234,71 @@ namespace Silicon
             this.Utility.TabIndex = 0;
             this.Utility.Text = "Utility";
             // 
+            // metroSetButton2
+            // 
+            this.metroSetButton2.DisabledBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.metroSetButton2.DisabledBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.metroSetButton2.DisabledForeColor = System.Drawing.Color.Gray;
+            this.metroSetButton2.Font = new System.Drawing.Font("Impact", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.metroSetButton2.HoverBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
+            this.metroSetButton2.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
+            this.metroSetButton2.HoverTextColor = System.Drawing.Color.White;
+            this.metroSetButton2.IsDerivedStyle = true;
+            this.metroSetButton2.Location = new System.Drawing.Point(310, 149);
+            this.metroSetButton2.Name = "metroSetButton2";
+            this.metroSetButton2.NormalBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.metroSetButton2.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.metroSetButton2.NormalTextColor = System.Drawing.Color.White;
+            this.metroSetButton2.PressBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
+            this.metroSetButton2.PressColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
+            this.metroSetButton2.PressTextColor = System.Drawing.Color.White;
+            this.metroSetButton2.Size = new System.Drawing.Size(73, 26);
+            this.metroSetButton2.Style = MetroSet_UI.Enums.Style.Light;
+            this.metroSetButton2.StyleManager = null;
+            this.metroSetButton2.TabIndex = 42;
+            this.metroSetButton2.Text = "DEFAULT";
+            this.metroSetButton2.ThemeAuthor = "Narwin";
+            this.metroSetButton2.ThemeName = "MetroLite";
+            this.metroSetButton2.Click += new System.EventHandler(this.ResetButton_Click);
+            // 
+            // metroSetButton1
+            // 
+            this.metroSetButton1.DisabledBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.metroSetButton1.DisabledBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.metroSetButton1.DisabledForeColor = System.Drawing.Color.Gray;
+            this.metroSetButton1.Font = new System.Drawing.Font("Impact", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.metroSetButton1.HoverBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
+            this.metroSetButton1.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
+            this.metroSetButton1.HoverTextColor = System.Drawing.Color.White;
+            this.metroSetButton1.IsDerivedStyle = true;
+            this.metroSetButton1.Location = new System.Drawing.Point(390, 149);
+            this.metroSetButton1.Name = "metroSetButton1";
+            this.metroSetButton1.NormalBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.metroSetButton1.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.metroSetButton1.NormalTextColor = System.Drawing.Color.White;
+            this.metroSetButton1.PressBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
+            this.metroSetButton1.PressColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
+            this.metroSetButton1.PressTextColor = System.Drawing.Color.White;
+            this.metroSetButton1.Size = new System.Drawing.Size(73, 26);
+            this.metroSetButton1.Style = MetroSet_UI.Enums.Style.Light;
+            this.metroSetButton1.StyleManager = null;
+            this.metroSetButton1.TabIndex = 41;
+            this.metroSetButton1.Text = "RECORD";
+            this.metroSetButton1.ThemeAuthor = "Narwin";
+            this.metroSetButton1.ThemeName = "MetroLite";
+            this.metroSetButton1.Click += new System.EventHandler(this.RecordButton_Click);
+            // 
             // ToolTipLabel
             // 
             this.ToolTipLabel.BackColor = System.Drawing.Color.Transparent;
             this.ToolTipLabel.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.ToolTipLabel.Font = new System.Drawing.Font("Leelawadee UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ToolTipLabel.ForeColor = System.Drawing.Color.White;
-            this.ToolTipLabel.Location = new System.Drawing.Point(64, 190);
+            this.ToolTipLabel.Location = new System.Drawing.Point(62, 178);
             this.ToolTipLabel.Name = "ToolTipLabel";
-            this.ToolTipLabel.Size = new System.Drawing.Size(351, 23);
+            this.ToolTipLabel.Size = new System.Drawing.Size(351, 35);
             this.ToolTipLabel.TabIndex = 26;
-            this.ToolTipLabel.Text = "Freecam: W A S D + Ctrl + Space to move, I J K L to look around";
+            this.ToolTipLabel.Text = "Freecam: Arrows + Ctrl + Shift to move, I J K L to look around\r\nF1: Toggle Freeca" + "m; C V B N M: goto frames 1 2 3 4 5";
             this.ToolTipLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // CameraRotationInfoLabel
@@ -407,7 +465,7 @@ namespace Silicon
             this.CameraRotateSpeedSlider.Text = "metroSetTrackBar6";
             this.CameraRotateSpeedSlider.ThemeAuthor = "Narwin";
             this.CameraRotateSpeedSlider.ThemeName = "MetroLite";
-            this.CameraRotateSpeedSlider.Value = 40;
+            this.CameraRotateSpeedSlider.Value = 50;
             this.CameraRotateSpeedSlider.ValueColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.CameraRotateSpeedSlider.Scroll += new MetroSet_UI.Controls.MetroSetTrackBar.ScrollEventHandler(this.CameraRotateSpeedSlider_Scroll);
             // 
@@ -432,7 +490,7 @@ namespace Silicon
             this.CameraMoveSpeedSlider.Text = "metroSetTrackBar6";
             this.CameraMoveSpeedSlider.ThemeAuthor = "Narwin";
             this.CameraMoveSpeedSlider.ThemeName = "MetroLite";
-            this.CameraMoveSpeedSlider.Value = 40;
+            this.CameraMoveSpeedSlider.Value = 50;
             this.CameraMoveSpeedSlider.ValueColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.CameraMoveSpeedSlider.Scroll += new MetroSet_UI.Controls.MetroSetTrackBar.ScrollEventHandler(this.CameraMoveSpeedSlider_Scroll);
             // 
@@ -578,6 +636,7 @@ namespace Silicon
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.Color.Transparent;
+            this.tabPage1.Controls.Add(this.interpComboBox);
             this.tabPage1.Controls.Add(this.LoadAnimationButton);
             this.tabPage1.Controls.Add(this.SaveAnimationButton);
             this.tabPage1.Controls.Add(this.CameraRotationInfoLabel2);
@@ -593,6 +652,16 @@ namespace Silicon
             this.tabPage1.Size = new System.Drawing.Size(482, 215);
             this.tabPage1.TabIndex = 2;
             this.tabPage1.Text = "Cinematic";
+            // 
+            // interpComboBox
+            // 
+            this.interpComboBox.FormattingEnabled = true;
+            this.interpComboBox.Items.AddRange(new object[] { "Linear", "Ease", "Ease In", "Ease Out", "Ease In Out", "Exponential In", "Exponential Out", "Exponential In Out" });
+            this.interpComboBox.Location = new System.Drawing.Point(3, 182);
+            this.interpComboBox.Name = "interpComboBox";
+            this.interpComboBox.Size = new System.Drawing.Size(179, 25);
+            this.interpComboBox.TabIndex = 49;
+            this.interpComboBox.SelectedIndexChanged += new System.EventHandler(this.interpComboBox_SelectedIndexChanged);
             // 
             // LoadAnimationButton
             // 
@@ -741,21 +810,14 @@ namespace Silicon
             // listViewFrames
             // 
             this.listViewFrames.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.listViewFrames.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.FrameNumber,
-            this.X,
-            this.Y,
-            this.Z,
-            this.Pitch,
-            this.Yaw,
-            this.Speed});
+            this.listViewFrames.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] { this.FrameNumber, this.X, this.Y, this.Z, this.Pitch, this.Yaw, this.Speed });
             this.listViewFrames.Cursor = System.Windows.Forms.Cursors.Default;
             this.listViewFrames.Font = new System.Drawing.Font("Leelawadee UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listViewFrames.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
             this.listViewFrames.HideSelection = false;
             this.listViewFrames.Location = new System.Drawing.Point(3, 3);
             this.listViewFrames.Name = "listViewFrames";
-            this.listViewFrames.Size = new System.Drawing.Size(358, 209);
+            this.listViewFrames.Size = new System.Drawing.Size(358, 164);
             this.listViewFrames.TabIndex = 2;
             this.listViewFrames.UseCompatibleStateImageBehavior = false;
             // 
@@ -845,8 +907,13 @@ namespace Silicon
             this.TabControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.ResumeLayout(false);
-
         }
+
+        private System.Windows.Forms.ComboBox interpComboBox;
+
+        private MetroSet_UI.Controls.MetroSetButton metroSetButton2;
+
+        private MetroSet_UI.Controls.MetroSetButton metroSetButton1;
 
         #endregion
         private MetroSet_UI.Controls.MetroSetControlBox metroSetControlBox1;

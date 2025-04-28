@@ -18,6 +18,7 @@ using System.Runtime.InteropServices;
 using System.Reflection;
 
 
+
 namespace Silicon
 {
 
@@ -66,10 +67,12 @@ namespace Silicon
             Hispano.ForeColor = Color.Gray;
             proID.ForeColor = Color.White;
             Status.ForeColor = Color.White;
+   
             FreecamSwitch.CheckColor = Color.Silver;
             HidePlayerModelSwitch.CheckColor = Color.Silver;
-            List<MetroSet_UI.Controls.MetroSetButton> cinematicButtons = new List<MetroSet_UI.Controls.MetroSetButton>
+            List<MetroSet_UI.Controls.MetroSetButton> interfaceButtons = new List<MetroSet_UI.Controls.MetroSetButton>
             {
+                DefaultSettingsButton,
                 AddAnimationFrameButton,
                 PlayAnimationButton,
                 DeleteAnimationFrameButton,
@@ -77,7 +80,7 @@ namespace Silicon
                 SaveAnimationButton,
                 LoadAnimationButton
             };
-            foreach (MetroSet_UI.Controls.MetroSetButton button in cinematicButtons) 
+            foreach (MetroSet_UI.Controls.MetroSetButton button in interfaceButtons) 
             {
                 button.NormalBorderColor = Color.FromArgb(80, 160, 255);
                 button.NormalColor = Color.FromArgb(80, 160, 255);
@@ -211,29 +214,34 @@ namespace Silicon
         // Persistent Functions (Required for the engine to function)
         readonly string cameraCoordinatesFunction = "90 90 90 90 90 90 90 90 90 90 90 90";
 
-        readonly string cameraHeightInjection = "53 E8 00 00 00 00 5B F3 0F 5C 43 1B F3 0F 11 40 08 5B F3 0F 5C CB 8D 85 FC FE FF FF E9 F3 77 2C FF 66 66 A6 3F 00 00 00 00";
-        readonly string cameraHeightFunctionEntry = "E9 F1 87 D3 00 0F 1F 44 00 00";
+        readonly string cameraHeightInjection = "53 E8 00 00 00 00 5B F3 0F 5C 43 1B F3 0F 11 40 08 5B F3 0F 5C CB 8D 85 FC FE FF FF E9 CB BA 39 FF 66 66 A6 3F 00 00 00 00";
+        readonly string cameraHeightFunctionEntry = "E9 19 45 C6 00 0F 1F 44 00 00";
 
-        readonly string unlockCameraArrowsInjection = "50 E8 00 00 00 00 58 F3 0F 10 58 1F 0F 2F D8 58 0F 86 2A 3B 2C FF C7 86 EC 09 00 00 00 00 B2 C2 E9 1B 3B 2C FF 00 00 B2 C2 00 00 00 00";
-        readonly string unlockCameraArrowsFunctionEntry = "E9 C7 C4 D3 00";
+        readonly string unlockCameraArrowsInjection = "50 E8 00 00 00 00 58 F3 0F 10 58 1F 0F 2F D8 58 0F 86 04 7E 39 FF C7 86 EC 09 00 00 00 00 B2 C2 E9 F5 7D 39 FF 00 00 B2 C2 00 00 00";
+        readonly string unlockCameraArrowsFunctionEntry = "E9 ED 81 C6 00";
 
-        readonly string unlockCameraRMBInjection = "50 E8 00 00 00 00 58 F3 0F 10 70 1F 0F 2F F1 58 0F 86 D2 51 2D FF C7 80 EC 09 00 00 00 00 B2 C2 E9 C3 51 2D FF 00 00 B2 C2 00 00 00 00";
-        readonly string unlockCameraRMBFunctionEntry = "E9 1F AE D2 00";
+        readonly string unlockCameraRMBInjection = "50 E8 00 00 00 00 58 F3 0F 10 70 1F 0F 2F F1 58 0F 86 AA 94 3A FF C7 80 EC 09 00 00 00 00 B2 C2 E9 9B 94 3A FF 00 00 B2 C2 00 00 00";
+        readonly string unlockCameraRMBFunctionEntry = "E9 47 6B C5 00";
 
-        readonly string unlockCameraFOVInjection = "50 E8 00 00 00 00 58 F3 0F 10 40 12 58 8D 85 D8 FE FF FF E9 58 77 2C FF 00 00 96 42 FF FF FF FF";
-        readonly string unlockCameraFOVFunctionEntry = "E9 91 88 D3 00 90";
+        readonly string unlockCameraFOVInjection = "50 E8 00 00 00 00 58 F3 0F 10 40 12 58 8D 85 D8 FE FF FF E9 30 BA 39 FF 00 00 96 42 FF FF FF FF";
+        readonly string unlockCameraFOVFunctionEntry = "E9 B9 45 C6 00 90";
 
-        readonly string adjustCameraDistanceInjection = "50 E8 00 00 00 00 58 F3 0F 59 40 24 F3 0F 59 58 24 F3 0F 59 60 24 58 E9 00 00 00 00 F3 0F 5C D0 F3 0F 10 40 08 E9 8F 75 2C FF 00 00 C8 41 FF FF FF FF";
-        readonly string adjustCameraDistanceFunctionEntry = "E9 4B 8A D3 00 0F 1F 40 00";
+        readonly string adjustCameraDistanceInjection = "50 E8 00 00 00 00 58 F3 0F 59 40 24 F3 0F 59 58 24 F3 0F 59 60 24 58 E9 00 00 00 00 F3 0F 5C D0 F3 0F 10 40 08 E9 67 B8 39 FF 00 00 C8 41 FF FF FF FF";
+        readonly string adjustCameraDistanceFunctionEntry = "E9 73 47 C6 00 0F 1F 40 00";
 
         // Revertable functions (Optional switch states available)
-        readonly string cameraLookAtEditorInjection = "50 E8 00 00 00 00 58 F3 0F 11 58 5D F3 0F 11 48 61 F3 0F 11 40 65 F3 0F 10 58 4D F3 0F 10 48 51 F3 0F 10 40 55 58 50 E8 00 00 00 00 58 F3 0F 11 58 37 F3 0F 11 48 3B F3 0F 11 40 3F 53 8D 5E 10 89 58 33 5B 58 F3 0F 11 1E F3 0F 11 4E 04 E9 D7 3D 2C FF 00 00 00 00 00 00 00 00 00 00 8C 42 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 FF FF FF FF";
-        readonly string cameraLookAtEditorFunctionEntry = "E9 DA C1 D3 00 0F 1F 40 00";
-        readonly string cameraLookAtEditorFunctionOriginal = "E9 00 C2 D3 00 0F 1F 40 00";
+        readonly string cameraLookAtEditorInjection = "50 E8 00 00 00 00 58 F3 0F 11 58 5D F3 0F 11 48 61 F3 0F 11 40 65 F3 0F 10 58 4D F3 0F 10 48 51 F3 0F 10 40 55 58 50 E8 00 00 00 00 58 F3 0F 11 58 37 F3 0F 11 48 3B F3 0F 11 40 3F 53 8D 5E 10 89 58 33 5B 58 F3 0F 11 1E F3 0F 11 4E 04 E9 B1 80 39 FF 00 00 00 00 00 00 00 00 00 00 8C 42 40 D8 7D 10 00 00 00 00 00 00 00 00 00 00 8C 42 FF FF FF FF";
+        readonly string cameraLookAtEditorFunctionEntry = "E9 00 7F C6 00 0F 1F 40 00";
+        readonly string cameraLookAtEditorFunctionOriginal = "E9 26 7F C6 00 0F 1F 40 00";
 
-        readonly string hidePlayerAvatarInjection = "53 E8 00 00 00 00 5B F3 0F 10 7D 08 F3 0F 5C BB 65 01 00 00 50 F3 0F 11 7B 6B 8B 43 6B 23 43 63 66 0F 6E F8 58 0F 2E 7B 67 0F 83 2F 00 00 00 F3 0F 10 7D 0C F3 0F 5C BB 69 01 00 00 50 F3 0F 11 7B 6B 8B 43 6B 23 43 63 66 0F 6E F8 58 0F 2E 7B 67 0F 83 07 00 00 00 C7 45 10 00 00 C8 C2 5B F3 0F 10 45 10 E9 3D A8 2A FF FF FF FF 7F 9A 99 99 3E 00 00 00 00 AA AA AA AA";
-        readonly string hidePlayerAvatarFunctionEntry = "E9 5A 57 D5 00";
+        readonly string hidePlayerAvatarInjection = "53 E8 00 00 00 00 5B F3 0F 10 7D 08 F3 0F 5C BB 65 01 00 00 50 F3 0F 11 7B 6B 8B 43 6B 23 43 63 66 0F 6E F8 58 0F 2E 7B 67 0F 83 2F 00 00 00 F3 0F 10 7D 0C F3 0F 5C BB 69 01 00 00 50 F3 0F 11 7B 6B 8B 43 6B 23 43 63 66 0F 6E F8 58 0F 2E 7B 67 0F 83 07 00 00 00 C7 45 10 00 00 C8 C2 5B F3 0F 10 45 10 E9 18 EB 37 FF FF FF FF 7F 9A 99 99 3E 8C 10 C1 40 AA AA AA AA";
+        readonly string hidePlayerAvatarFunctionEntry = "E9 7F 14 C8 00";
         readonly string hidePlayerAvatarFunctionOriginal = "F3 0F 10 45 10";
+
+        readonly string disableMovement1Function = "90 90 90 90";
+        readonly string disableMovement1Original = "F3 0F 11 02";
+        readonly string disableMovement2Function = "90 90 90 90 90 90 90 90";
+        readonly string disableMovement2Original = "F3 0F 11 87 80 00 00 00";
 
         // Mod menu checker variables
         private bool isFreecamEnabled = false;
@@ -249,7 +257,7 @@ namespace Silicon
                 HandleCameraController(currentCameraYaw);
             }
             
-            uint intRotationAddress = m.ReadUInt("Cubic.exe+EF503E");
+            uint intRotationAddress = m.ReadUInt("Cubic.exe+E2103E");
             string pitchAddress = (intRotationAddress + 4).ToString("X");
             string yawAddress = (intRotationAddress).ToString("X");
             string lookAtXAddress = (intRotationAddress - 16).ToString("X");
@@ -265,16 +273,26 @@ namespace Silicon
                 if (isFreecamEnabled)
                 {
                     // Start Freecam camera position and rotation at the current camera position and rotation
-                    m.WriteMemory("Cubic.exe+1B8E00", "bytes", cameraLookAtEditorFunctionEntry);
-                    targetCameraLookAtX = m.ReadFloat("Cubic.exe+EF5042");
-                    targetCameraLookAtY = m.ReadFloat("Cubic.exe+EF5046");
-                    targetCameraLookAtZ = m.ReadFloat("Cubic.exe+EF504A");
+                    m.WriteMemory("Cubic.exe+1B90DA", "bytes", cameraLookAtEditorFunctionEntry);
+                    targetCameraLookAtX = m.ReadFloat("Cubic.exe+E21042");
+                    targetCameraLookAtY = m.ReadFloat("Cubic.exe+E21046");
+                    targetCameraLookAtZ = m.ReadFloat("Cubic.exe+E2104A");
                     targetCameraPitch = currentCameraPitch;
                     targetCameraYaw = currentCameraYaw;
+
+                    m.WriteMemory("Cubic.exe+21AE4B", "bytes", disableMovement1Function);
+                    m.WriteMemory("Cubic.exe+21AE7A", "bytes", disableMovement1Function);
+                    m.WriteMemory("Cubic.exe+21ADE1", "bytes", disableMovement2Function);
+                    m.WriteMemory("Cubic.exe+21AE18", "bytes", disableMovement2Function);
+
                 }
                 else
                 {
-                    m.WriteMemory("Cubic.exe+1B8E00", "bytes", cameraLookAtEditorFunctionOriginal);
+                    m.WriteMemory("Cubic.exe+1B90DA", "bytes", cameraLookAtEditorFunctionOriginal);
+                    m.WriteMemory("Cubic.exe+21AE4B", "bytes", disableMovement1Original);
+                    m.WriteMemory("Cubic.exe+21AE7A", "bytes", disableMovement1Original);
+                    m.WriteMemory("Cubic.exe+21ADE1", "bytes", disableMovement2Original);
+                    m.WriteMemory("Cubic.exe+21AE18", "bytes", disableMovement2Original);
                     StopAnimation();
                 }
             }
@@ -284,24 +302,24 @@ namespace Silicon
                 isHidePlayerModelEnabled = HidePlayerModelSwitch.Switched;
                 if (isHidePlayerModelEnabled == true)
                 {
-                    m.WriteMemory("Cubic.exe+19F778", "bytes", hidePlayerAvatarFunctionEntry);
+                    m.WriteMemory("Cubic.exe+19FA53", "bytes", hidePlayerAvatarFunctionEntry);
                 }
                 else
                 {
-                    m.WriteMemory("Cubic.exe+19F778", "bytes", hidePlayerAvatarFunctionOriginal);
+                    m.WriteMemory("Cubic.exe+19FA53", "bytes", hidePlayerAvatarFunctionOriginal);
                 }
             }
 
             if (CameraFOVSlider.Value != cameraFOVSliderValue)
             {
                 cameraFOVSliderValue = CameraFOVSlider.Value;
-                m.WriteMemory("Cubic.exe+EF4E1D", "float", CameraFOVSlider.Value.ToString());
+                m.WriteMemory("Cubic.exe+E20E1D", "float", CameraFOVSlider.Value.ToString());
             }
 
             if (CameraDistanceSlider.Value != cameraDistanceSliderValue)
             {
                 cameraDistanceSliderValue = CameraDistanceSlider.Value;
-                m.WriteMemory("Cubic.exe+EF4FAC", "float", CameraDistanceSlider.Value.ToString());
+                m.WriteMemory("Cubic.exe+E20FAC", "float", CameraDistanceSlider.Value.ToString());
             }
 
             if (FreecamSwitch.Switched == true)
@@ -309,9 +327,9 @@ namespace Silicon
                 // Overwrite camera position, pitch and yaw using Silicon as the new controller
                 m.WriteMemory(pitchAddress, "bytes", ConvertDoubleToFloatBytes(currentCameraPitch));
                 m.WriteMemory(yawAddress, "bytes", ConvertDoubleToFloatBytes(currentCameraYaw));
-                m.WriteMemory("Cubic.exe+EF5032", "bytes", ConvertDoubleToFloatBytes(currentCameraLookAtX));
-                m.WriteMemory("Cubic.exe+EF5036", "bytes", ConvertDoubleToFloatBytes(currentCameraLookAtY));
-                m.WriteMemory("Cubic.exe+EF503A", "bytes", ConvertDoubleToFloatBytes(currentCameraLookAtZ));
+                m.WriteMemory("Cubic.exe+E21032", "bytes", ConvertDoubleToFloatBytes(currentCameraLookAtX));
+                m.WriteMemory("Cubic.exe+E21036", "bytes", ConvertDoubleToFloatBytes(currentCameraLookAtY));
+                m.WriteMemory("Cubic.exe+E2103A", "bytes", ConvertDoubleToFloatBytes(currentCameraLookAtZ));
             }
 
             string ConvertDoubleToFloatBytes(double num)
@@ -327,8 +345,8 @@ namespace Silicon
             //UpdateLabel(CameraPositionDataLabel, $"X: {currentCameraLookAtX:F2} Y: {currentCameraLookAtY:F2} Z: {currentCameraLookAtZ:F2} Pitch: {currentCameraPitch:F2} Yaw: {currentCameraYaw:F2}", Color.Red);
             UpdateLabel(CameraLookAtInfoLabel, $"X: {currentCameraLookAtX:F2}     Y: {currentCameraLookAtY:F2}     Z: {currentCameraLookAtZ:F2}", Color.White);
             UpdateLabel(CameraLookAtInfoLabel2, $"X: {currentCameraLookAtX:F2}     Y: {currentCameraLookAtY:F2}     Z: {currentCameraLookAtZ:F2}", Color.White);
-            UpdateLabel(CameraRotationInfoLabel, $"Pitch: {currentCameraPitch:F2}    Yaw: {currentCameraYaw:F2}     FOV: {cameraFOVSliderValue} Dist: {cameraDistanceSliderValue}", Color.White);
-            UpdateLabel(CameraRotationInfoLabel2, $"Pitch: {currentCameraPitch:F2}    Yaw: {currentCameraYaw:F2}     FOV: {cameraFOVSliderValue} Dist: {cameraDistanceSliderValue}", Color.White);
+            UpdateLabel(CameraRotationInfoLabel, $"Pitch: {currentCameraPitch:F2}    Yaw: {currentCameraYaw:F2}      🔎:  {cameraDistanceSliderValue} | {cameraFOVSliderValue}", Color.White);
+            UpdateLabel(CameraRotationInfoLabel2, $"Pitch: {currentCameraPitch:F2}    Yaw: {currentCameraYaw:F2}      🔎:  {cameraDistanceSliderValue} | {cameraFOVSliderValue}", Color.White);
 
         }
 
@@ -359,33 +377,33 @@ namespace Silicon
         // Base injection code caves and function jumps to allow Silicon to modify game behaviour
         private void InjectBaseFunctions()
         {
-            m.WriteMemory("Cubic.exe+1BC526", "bytes", cameraCoordinatesFunction);
+            m.WriteMemory("Cubic.exe+1BC7FE", "bytes", cameraCoordinatesFunction);
 
             // Special case for cameraLookAtEditor
             // Always inject, but skip assignment if deactivated (inject to the adress after assignment)
-            m.WriteMemory("Cubic.exe+EF4FDF", "bytes", cameraLookAtEditorInjection);
-            m.WriteMemory("Cubic.exe+1B8E00", "bytes", cameraLookAtEditorFunctionOriginal);
+            m.WriteMemory("Cubic.exe+E20FDF", "bytes", cameraLookAtEditorInjection);
+            m.WriteMemory("Cubic.exe+1B90DA", "bytes", cameraLookAtEditorFunctionOriginal);
 
-            m.WriteMemory("Cubic.exe+EF4D31", "bytes", cameraHeightInjection);
-            m.WriteMemory("Cubic.exe+1BC53B", "bytes", cameraHeightFunctionEntry);
-            m.WriteMemory("Cubic.exe+EF4D7A", "bytes", unlockCameraArrowsInjection);
-            m.WriteMemory("Cubic.exe+1B88AE", "bytes", unlockCameraArrowsFunctionEntry);
-            m.WriteMemory("Cubic.exe+EF4DC8", "bytes", unlockCameraRMBInjection);
-            m.WriteMemory("Cubic.exe+1C9FA4", "bytes", unlockCameraRMBFunctionEntry);
-            m.WriteMemory("Cubic.exe+EF4E05", "bytes", unlockCameraFOVInjection);
-            m.WriteMemory("Cubic.exe+1BC56F", "bytes", unlockCameraFOVFunctionEntry);
-            m.WriteMemory("Cubic.exe+EF4F82", "bytes", adjustCameraDistanceInjection);
-            m.WriteMemory("Cubic.exe+1BC532", "bytes", adjustCameraDistanceFunctionEntry);
+            m.WriteMemory("Cubic.exe+E20D31", "bytes", cameraHeightInjection);
+            m.WriteMemory("Cubic.exe+1BC813", "bytes", cameraHeightFunctionEntry);
+            m.WriteMemory("Cubic.exe+E20D7A", "bytes", unlockCameraArrowsInjection);
+            m.WriteMemory("Cubic.exe+1B8B88", "bytes", unlockCameraArrowsFunctionEntry);
+            m.WriteMemory("Cubic.exe+E20DC8", "bytes", unlockCameraRMBInjection);
+            m.WriteMemory("Cubic.exe+1CA27C", "bytes", unlockCameraRMBFunctionEntry);
+            m.WriteMemory("Cubic.exe+E20E05", "bytes", unlockCameraFOVInjection);
+            m.WriteMemory("Cubic.exe+1BC847", "bytes", unlockCameraFOVFunctionEntry);
+            m.WriteMemory("Cubic.exe+E20F82", "bytes", adjustCameraDistanceInjection);
+            m.WriteMemory("Cubic.exe+1BC80A", "bytes", adjustCameraDistanceFunctionEntry);
 
             //Revertable, injections only as set to false by default
-            m.WriteMemory("Cubic.exe+EF4ED7", "bytes", hidePlayerAvatarInjection);
+            m.WriteMemory("Cubic.exe+E20ED7", "bytes", hidePlayerAvatarInjection);
 
         }
 
         // Play button state, alternates between play and stop when clicked
-        private enum PlayButtonState { Play,  Stop }
+        private enum PlayButtonState { Play, Stop }
         private PlayButtonState playButtonState = PlayButtonState.Play;
-        
+
         // Animation stopping mechanism for when stop button is pressed or freecam is disabled
         private CancellationTokenSource animationCancellationTokenSource;
         List<List<double>> animationFrames = new List<List<double>>();
@@ -407,11 +425,11 @@ namespace Silicon
                     List<double> endFrame = animationFrames[i + 1];
 
                     double startX = startFrame[0], startY = startFrame[1], startZ = startFrame[2];
-                    double startPitch = startFrame[3], startYaw = startFrame[4];
-                    double moveSpeed = startFrame[5];
+                    double startYaw = startFrame[3], startPitch = startFrame[4];
+                    double moveSpeed = startFrame[5] * 50;
 
                     double endX = endFrame[0], endY = endFrame[1], endZ = endFrame[2];
-                    double endPitch = endFrame[3], endYaw = endFrame[4];
+                    double endYaw = endFrame[3], endPitch = endFrame[4];
 
                     double distance = Math.Sqrt(
                         Math.Pow(endX - startX, 2) +
@@ -431,16 +449,17 @@ namespace Silicon
                         alpha = Clamp(alpha, 0.0, 1.0);
 
                         // Use selected interpolation method
-                        currentCameraLookAtX = _interpolator(startX, endX, alpha);
-                        currentCameraLookAtY = _interpolator(startY, endY, alpha);
-                        currentCameraLookAtZ = _interpolator(startZ, endZ, alpha);
-                        (currentCameraPitch, currentCameraYaw) = Interpolator.LerpRotation(startYaw, startPitch, endYaw, endPitch, alpha);
+                        targetCameraLookAtX = _interpolator(startX, endX, alpha);
+                        targetCameraLookAtY = _interpolator(startY, endY, alpha);
+                        targetCameraLookAtZ = _interpolator(startZ, endZ, alpha);
+                        (targetCameraPitch, targetCameraYaw) = Interpolator.LerpRotation(startYaw, startPitch, endYaw, endPitch, alpha);
+
 
                         // Stop interpolating if alpha reaches 1
                         if (alpha >= 1.0)
                             break;
 
-                        await Task.Delay(10);
+                        await Task.Delay(5);
                     }
                 }
 
@@ -457,8 +476,6 @@ namespace Silicon
                 PlayAnimationButton.Refresh();
             }
         }
-
-
 
         private void StopAnimation()
         {
@@ -510,8 +527,8 @@ namespace Silicon
             // List of keys to monitor
             Keys[] keysToMonitor = new Keys[]
             {
-                Keys.Up, Keys.Down, Keys.Left, Keys.Right,
-                Keys.LShiftKey, Keys.LControlKey,
+                Keys.W, Keys.S, Keys.A, Keys.D,
+                Keys.ShiftKey, Keys.ControlKey,
                 Keys.I, Keys.K, Keys.J, Keys.L,
                 Keys.F1, Keys.C, Keys.V, Keys.B, Keys.N, Keys.M
             };
@@ -545,54 +562,69 @@ namespace Silicon
             }
         }
 
-        private void HandleKeyDown(Keys key) {
-            switch (key) {
-                case Keys.F1: FreecamSwitch.Switched = !isFreecamEnabled;
+        private void HandleKeyDown(Keys key)
+        {
+            if (FreecamSwitch.InvokeRequired)
+            {
+                FreecamSwitch.Invoke(new Action(() => HandleKeyDown(key)));
+                return;
+            }
+
+            switch (key)
+            {
+                case Keys.F1:
+                    FreecamSwitch.Switched = !isFreecamEnabled;
                     break;
-                case Keys.C:  ActivateGoToFrame(0);
+                case Keys.C:
+                    ActivateGoToFrame(0);
                     break;
-                case Keys.V:  ActivateGoToFrame(1);
+                case Keys.V:
+                    ActivateGoToFrame(1);
                     break;
-                case Keys.B:  ActivateGoToFrame(2);
+                case Keys.B:
+                    ActivateGoToFrame(2);
                     break;
-                case Keys.N:  ActivateGoToFrame(3);
+                case Keys.N:
+                    ActivateGoToFrame(3);
                     break;
-                case Keys.M:  ActivateGoToFrame(4);
+                case Keys.M:
+                    ActivateGoToFrame(4);
                     break;
             }
         }
+
 
         private void HandleCameraController(double yawRotation)
         {
             double moveX = 0, moveY = 0, moveZ = 0;
             double rotatePitch = 0, rotateYaw = 0;
 
-            if (pressedKeys.Contains(Keys.Up))
+            if (pressedKeys.Contains(Keys.W))
             {
                 double radians = (yawRotation - 90) * Math.PI / 180;
                 moveX += Math.Cos(radians);
                 moveY += Math.Sin(radians);
             }
-            if (pressedKeys.Contains(Keys.Down))
+            if (pressedKeys.Contains(Keys.S))
             {
                 double radians = (yawRotation + 90) * Math.PI / 180;
                 moveX += Math.Cos(radians);
                 moveY += Math.Sin(radians);
             }
-            if (pressedKeys.Contains(Keys.Left))
+            if (pressedKeys.Contains(Keys.A))
             {
                 double radians = yawRotation * Math.PI / 180;
                 moveX -= Math.Cos(radians);
                 moveY -= Math.Sin(radians);
             }
-            if (pressedKeys.Contains(Keys.Right))
+            if (pressedKeys.Contains(Keys.D))
             {
                 double radians = yawRotation * Math.PI / 180;
                 moveX += Math.Cos(radians);
                 moveY += Math.Sin(radians);
             }
-            if (pressedKeys.Contains(Keys.LShiftKey)) moveZ -= 1;
-            if (pressedKeys.Contains(Keys.LControlKey)) moveZ += 1;
+            if (pressedKeys.Contains(Keys.ShiftKey)) moveZ -= 1;
+            if (pressedKeys.Contains(Keys.ControlKey)) moveZ += 1;
             if (pressedKeys.Contains(Keys.I)) rotatePitch -= 1;
             if (pressedKeys.Contains(Keys.K)) rotatePitch += 1;
             if (pressedKeys.Contains(Keys.J)) rotateYaw -= 1;
@@ -643,7 +675,6 @@ namespace Silicon
             keyPollingThread.Join();
         }
         // Here ends the code edited by Hispano
-
 
         private void InterpolateCameraMovement(string lookAtXAddress, string lookAtYAddress, string lookAtZAddress)
         {
@@ -954,11 +985,11 @@ namespace Silicon
         {
             cameraFOVSliderValue = defaultCameraFov;
             CameraFOVSlider.Value = defaultCameraFov;
-            m.WriteMemory("Cubic.exe+EF4E1D", "float", cameraFOVSliderValue.ToString());
+            m.WriteMemory("Cubic.exe+E20E1D", "float", cameraFOVSliderValue.ToString());
 
             cameraDistanceSliderValue = defaultCameraDistance;
             CameraDistanceSlider.Value = defaultCameraDistance;
-            m.WriteMemory("Cubic.exe+EF4FAC", "float", cameraDistanceSliderValue.ToString());
+            m.WriteMemory("Cubic.exe+E20FAC", "float", cameraDistanceSliderValue.ToString());
         }
 
         private void interpComboBox_SelectedIndexChanged(object sender, EventArgs e) {

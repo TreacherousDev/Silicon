@@ -40,6 +40,7 @@ Silicon is a camera modification tool for Cubic Castles that enhances the in-gam
 **System Requirements:**
 - Windows 7/8/10/11 with administrator privileges
 - Cubic Castles installed and updated to the latest version
+  
 ---
 ## Quick Start
 
@@ -50,6 +51,7 @@ Silicon is a camera modification tool for Cubic Castles that enhances the in-gam
 5. Toggle "Freecam" to detach the camera from your character
 6. Use WASD + Shift/Ctrl for movement and IJKL for rotation
 7. Adjust FOV and Camera Distance sliders as desired
+   
 ---
 ## Features
 
@@ -123,7 +125,9 @@ Silicon includes a robust cinematics system for creating smooth camera animation
 - **B**: Go to Frame 3
 - **N**: Go to Frame 4
 - **M**: Go to Frame 5
+  
 ---
+
 ## User Interface Guide
 
 Silicon's interface is divided into several sections:
@@ -154,6 +158,7 @@ Silicon's interface is divided into several sections:
 - **Camera Position**: Shows current X, Y, Z coordinates
 - **Camera Rotation**: Shows current Pitch and Yaw values
 - **Camera Settings**: Shows current FOV and Distance values
+  
 ---
 ## Creating Cinematics
 
@@ -225,6 +230,7 @@ To load a previously saved animation:
 **Game crashes when using Silicon:**
 - Ensure you're using the latest version of Silicon
 - Silicon may be out of date after the game updates. Contact the developer for a new patch
+  
 ---
 
 ## Frequently Asked Questions
@@ -237,6 +243,7 @@ A: By design, Silicon disables character movement when Freecam is active to prev
 
 **Q: Will Silicon work with future updates of Cubic Castles?**  
 A: Game updates might require Silicon updates if they change how the camera system works. Check for new Silicon releases after major game updates, or contact the developer if none are available.
+
 ---
 ## Contact
 - @treacherousdev on Discord

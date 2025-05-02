@@ -4,7 +4,7 @@
 ![Silicon Logo](https://github.com/user-attachments/assets/626ca9a7-2412-4e7e-9b4b-70ffc2c212ec)
 
 ## Table of Contents
-- [Overview](#overview)
+- [What is Silicon?](#what-is-silicon)
 - [Installation](#installation)
 - [Quick Start](#quick-start)
 - [Features](#features)
@@ -27,7 +27,7 @@
 
 ## What is Silicon?
 Silicon is a camera modification tool for Cubic Castles that enhances the in-game camera system with advanced features for both gameplay and cinematography.
-
+---
 ## Installation
 
 1. Download the latest version from the [releases page](https://github.com/TreacherousDev/Silicon/releases)
@@ -39,7 +39,7 @@ Silicon is a camera modification tool for Cubic Castles that enhances the in-gam
 **System Requirements:**
 - Windows 7/8/10/11 with administrator privileges
 - Cubic Castles installed and updated to the latest version
-
+---
 ## Quick Start
 
 1. Launch Cubic Castles and log in
@@ -49,7 +49,7 @@ Silicon is a camera modification tool for Cubic Castles that enhances the in-gam
 5. Toggle "Freecam" to detach the camera from your character
 6. Use WASD + Shift/Ctrl for movement and IJKL for rotation
 7. Adjust FOV and Camera Distance sliders as desired
-
+---
 ## Features
 
 ### Default Camera Enhancements
@@ -103,7 +103,7 @@ Silicon includes a robust cinematics system for creating smooth camera animation
 - Keyframe-based animation system
 - Multiple interpolation methods for different animation styles
 - Save and load animation data
-
+---
 ## Controls
 
 ### Freecam Navigation
@@ -122,7 +122,7 @@ Silicon includes a robust cinematics system for creating smooth camera animation
 - **B**: Go to Frame 3
 - **N**: Go to Frame 4
 - **M**: Go to Frame 5
-
+---
 ## User Interface Guide
 
 Silicon's interface is divided into several sections:
@@ -153,7 +153,7 @@ Silicon's interface is divided into several sections:
 - **Camera Position**: Shows current X, Y, Z coordinates
 - **Camera Rotation**: Shows current Pitch and Yaw values
 - **Camera Settings**: Shows current FOV and Distance values
-
+---
 ## Creating Cinematics
 
 ### Keyframe Animation
@@ -201,7 +201,7 @@ To load a previously saved animation:
 2. Select the JSON file
 3. The keyframes will be loaded into the Animation Frame List
 
-
+---
 ## Troubleshooting
 
 ### Common Issues and Solutions
@@ -224,22 +224,19 @@ To load a previously saved animation:
 **Game crashes when using Silicon:**
 - Ensure you're using the latest version of Silicon
 - Silicon may be out of date after the game updates. Contact the developer for a new patch
-
+---
 
 ## Frequently Asked Questions
 
-**Q: Is Silicon detectable by Cubic Castles anti-cheat systems?**
+**Q: Is Silicon detectable by Cubic Castles anti-cheat systems?**  
 A: Silicon only modifies client side camera-related memory and doesn't send additional packets to the server that can be used to detect modified gameplay. However, use any third-party tool at your own risk.
 
-**Q: Why does my character stop moving when Freecam is enabled?**
+**Q: Why does my character stop moving when Freecam is enabled?**  
 A: By design, Silicon disables character movement when Freecam is active to prevent control conflicts. This is normal behavior.
 
-**Q: Can I use Silicon for streaming or recording videos?**
-A: Yes! Silicon is designed with content creation in mind and works perfectly with OBS and other recording software.
-
-**Q: Will Silicon work with future updates of Cubic Castles?**
+**Q: Will Silicon work with future updates of Cubic Castles?**  
 A: Game updates might require Silicon updates if they change how the camera system works. Check for new Silicon releases after major game updates, or contact the developer if none are available.
-
+---
 ## Contact
 - @treacherousdev on Discord
 - GitHub issues page for any bugs or suggestions

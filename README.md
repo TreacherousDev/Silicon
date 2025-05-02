@@ -20,11 +20,10 @@
   - [Keyframe Animation](#keyframe-animation)
   - [Interpolation Types](#interpolation-types)
   - [Saving & Loading Animations](#saving--loading-animations)
-  - [Recording Camera Paths](#recording-camera-paths)
 - [Troubleshooting](#troubleshooting)
 - [Advanced Settings](#advanced-settings)
 - [Frequently Asked Questions](#frequently-asked-questions)
-- [Support & Community](#support--community)
+- [Contact](#contact)
 
 ## What is Silicon?
 Silicon is a camera modification tool for Cubic Castles that enhances the in-game camera system with advanced features for both gameplay and cinematography.
@@ -32,11 +31,10 @@ Silicon is a camera modification tool for Cubic Castles that enhances the in-gam
 ## Installation
 
 1. Download the latest version from the [releases page](https://github.com/TreacherousDev/Silicon/releases)
-2. Extract the ZIP file to a location of your choice
-3. Run the included batch file to set up the necessary environment
-4. Launch Cubic Castles
-5. Start Silicon.exe
-6. The status indicator will show "CONNECTED" in green when Silicon successfully connects to the game
+2. Run the setup wizard to install
+3. Launch Cubic Castles
+4. Start Silicon.exe
+5. The status indicator will show "CONNECTED" in green when Silicon successfully connects to the game
 
 **System Requirements:**
 - Windows 7/8/10/11 with administrator privileges

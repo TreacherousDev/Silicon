@@ -25,7 +25,8 @@
 - [Frequently Asked Questions](#frequently-asked-questions)
 - [Contact](#contact)
 
-## What is Silicon?
+## What is Silicon?  
+
 Silicon is a camera modification tool for Cubic Castles that enhances the in-game camera system with advanced features for both gameplay and cinematography.
 ---
 ## Installation

@@ -8,14 +8,6 @@
 - [Installation](#installation)
 - [Quick Start](#quick-start)
 - [Features](#features)
-  - [Default Camera Enhancements](#default-camera-enhancements)
-  - [Freecam Mode](#freecam-mode)
-  - [Field of View (FOV)](#field-of-view-fov)
-  - [Camera Distance](#camera-distance)
-  - [Hide Player Model](#hide-player-model)
-  - [Cinematics System](#cinematics-system)
-- [Controls](#controls)
-- [User Interface Guide](#user-interface-guide)
 - [Creating Cinematics](#creating-cinematics)
   - [Keyframe Animation](#keyframe-animation)
   - [Interpolation Types](#interpolation-types)
@@ -56,153 +48,110 @@ Silicon is a camera modification tool for Cubic Castles that enhances the in-gam
 ## Features
 
 ### Default Camera Enhancements
-
 Silicon provides several improvements to the default camera system that are active immediately upon connection:
-
-- Unlocked vertical rotation allowing full 360° viewing
+- Unlocked vertical rotation allowing you to see blocks from below
 - Improved camera height to center on the qbee's head instead of below its feet
-- FOV and camera distance adjustment capabilities
 
-### Freecam Mode
-
-Freecam detaches the camera from your player character, allowing independent camera movement:
-
-- **Toggle**: Use the Freecam switch or press F1
-- **Movement**: WASD for horizontal movement, Shift/Ctrl for vertical movement
-- **Rotation**: IJKL keys for pitch and yaw
-- **Speed Controls**: Adjustable movement and rotation speed sliders
-
-When Freecam is enabled, player character movement is disabled to prevent conflicts between camera and character control.
-
-### Field of View (FOV)
-
-Adjust the camera's field of view between 10° and 135°:
-
+### Distance to Focal Point
+Controls how far the camera is positioned from the focal point:
+- Default setting is 22 units
+- Setting to very low values (e.g, 1) creates a first-person-like perspective
+- Higher values (30+) provide a more distant, overhead view
+  
+### Field of View
+Controls the camera's field of view between 10° and 135°:
 - Default setting is 33°
 - Lower values create a telephoto effect with less peripheral vision
 - Higher values create a wide-angle effect with more peripheral vision
 
-### Camera Distance
+### Sight Range
+Controls the visibility of the in game fog:
+- Default setting is 110 blocks
+- Lower values bring the fog closer, limiting how much of the world is visible
+- Higher values push the fog farther away, revealing more of the environment
 
-Controls how far the camera is positioned from the focal point:
-
-- Default setting is 22 units
-- Setting to very low values (e.g, 1) creates a first-person-like perspective
-- Higher values (30+) provide a more distant, overhead view
-
-
-### Hide Player Model
-
+### Hide Player
 Toggle player character visibility:
-
 - Useful when using first-person-perspective
 - Prevents the player model from blocking the camera view
 
+### Hide UI
+Toggle the visibility of on-screen interface elements:
+- Hides HUD elements: health, chat, level, cubits and inventory
+- Useful for taking clean screenshots or recording cinematic scenes
+
+Hide Nametags
+Toggle the visibility of player and entity nametags:
+- Removes floating names above players
+- Recommended to have on when using 1st person POV
+
+### Freecam Mode
+Freecam detaches the camera from your player character, allowing independent camera movement:
+- **Toggle**: Use the Freecam switch or press F4
+- **Movement**: WASD for horizontal movement, Shift/Ctrl for vertical movement
+- **Rotation**: Arrow Keys or Right Click to look around
+- **Speed Sliders**: Controls how fast the camera moves or rotates while in Freecam mode
+When Freecam is enabled, player character movement is disabled to prevent conflicts between camera and character control.
+
 
 ### Cinematics System
-
 Silicon includes a robust cinematics system for creating smooth camera animations:
-
 - Keyframe-based animation system
-- Multiple interpolation methods for different animation styles
+- Multiple interpolation methods
 - Save and load animation data
 ---
-## Controls
 
-### Freecam Navigation
-- **W/A/S/D**: Move camera horizontally (relative to current view)
-- **Shift**: Move camera down
-- **Ctrl**: Move camera up
-- **I/K**: Rotate camera up/down (pitch)
-- **J/L**: Rotate camera left/right (yaw)
-
-### Function Keys
-- **F1**: Toggle Freecam mode
-
-### Cinematic Animation Hotkeys
-- **C**: Go to Frame 1
-- **V**: Go to Frame 2
-- **B**: Go to Frame 3
-- **N**: Go to Frame 4
-- **M**: Go to Frame 5
-  
----
-
-## User Interface Guide
-
-Silicon's interface is divided into several sections:
-
-### Status Bar
-- **Process ID**: Shows the Cubic Castles process ID when connected
-- **Status**: Shows connection status (CONNECTED or DISCONNECTED)
-
-### Camera Controls
-- **Freecam Switch**: Toggles camera detachment from player character
-- **Hide Player Model Switch**: Toggles player character visibility
-- **FOV Slider**: Adjusts field of view (10° - 135°)
-- **Camera Distance Slider**: Adjusts camera distance (1 - 100 blocks)
-- **Movement Speed Slider**: Controls camera movement speed in Freecam mode
-- **Rotation Speed Slider**: Controls camera rotation speed in Freecam mode
-
-### Cinematics Panel
-- **Animation Frame List**: Displays all keyframes with position and rotation data
-- **Add Frame Button**: Adds current camera position as a new keyframe
-- **Delete Frame Button**: Removes selected keyframe(s)
-- **Play Button**: Starts animation playback
-- **Go To Frame Button**: Moves camera to selected keyframe
-- **Save Animation Button**: Saves animation data to a JSON file
-- **Load Animation Button**: Loads animation data from a JSON file
-- **Interpolation Method**: Dropdown to select animation curve type
-
-### Information Display
-- **Camera Position**: Shows current X, Y, Z coordinates
-- **Camera Rotation**: Shows current Pitch and Yaw values
-- **Camera Settings**: Shows current FOV and Distance values
-  
----
 ## Creating Cinematics
 
 ### Keyframe Animation
 
-Silicon's cinematic system uses keyframes to create smooth camera animations:
-
+Silicon's cinematic system uses keyframes to create smooth camera animations. Here's a basic guide to get started:
 1. Enable Freecam mode
 2. Position the camera at the desired starting point
-3. Click "Add Frame" to create your first keyframe
-4. Move the camera to the next position
-5. Click "Add Frame" again to create another keyframe
-6. Continue adding keyframes as needed
-7. Click "Play" to preview the animation
-8. Use the Animation Frame List to select, reorder, or remove keyframes
+3. Set the desired movement speed and interpolation method
+4. Click "Add Frame" to create your first keyframe
+5. Move the camera to the next position
+6. Check and update the movement speed and interpolation method if needed
+7. Click "Add Frame" again to create another keyframe
+8. Repeat steps 5–7 to continue building your animation
+9. Once finished, click "Play" to preview the animation
+10. Use the Animation Frame List to select, reorder, or remove keyframes
 
 Each keyframe stores:
 - Camera position (X, Y, Z)
 - Camera rotation (Pitch, Yaw)
 - Movement speed
+- Interpolation type
 
 ### Interpolation Types
+Silicon provides several interpolation methods to define how the camera transitions between keyframes. These affect the speed curve of the movement:
+Linear (0)
+-Moves at a constant speed between keyframes.
+Ease (1)
+- Applies a subtle, smooth curve — a basic ease that feels more natural than linear.
+Ease In (2)
+- Starts slowly and accelerates toward the next keyframe.
+Ease Out (3)
+- Starts quickly and slows down near the end.
+Ease In Out (4)
+- Smooth acceleration at the beginning and deceleration at the end.
+Exponential In (5)
+- Begins extremely slow, then rapidly speeds up.
+Exponential Out (6)
+- Begins fast and quickly eases into a stop.
+Exponential In Out (7)
+- Starts very slowly, accelerates rapidly in the middle, and slows down again at the end.
 
-Silicon offers different interpolation methods to control how the camera moves between keyframes:
-
-- **Linear**: Constant speed between keyframes, no acceleration or deceleration
-- **Ease In**: Starts slow and accelerates toward the end
-- **Ease Out**: Starts fast and decelerates toward the end
-- **Ease In/Out**: Smooth acceleration at the start and deceleration at the end
-- **Cubic**: More pronounced curve than Ease In/Out
-
-Select the interpolation method from the dropdown menu before playing the animation.
+Each method is stored in the animation data as a numeric code from 0 to 7, matching the order above. You can assign different interpolation types to each segment for more cinematic and expressive camera paths.
 
 ### Saving & Loading Animations
-
 Save your animations to reuse them later:
-
 1. Create your animation by adding keyframes
 2. Click "Save Animation"
 3. Choose a filename and location
 4. Animation will be saved as a JSON file
 
 To load a previously saved animation:
-
 1. Click "Load Animation"
 2. Select the JSON file
 3. The keyframes will be loaded into the Animation Frame List

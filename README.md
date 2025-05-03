@@ -36,18 +36,25 @@ Silicon is a camera modification tool for Cubic Castles that enhances the in-gam
 ---
 ## Quick Start
 
-1. Launch Cubic Castles and log in
-2. Launch Silicon
-3. Check "CONNECTED" status to verify that the program is working successfully
-4. Basic camera enhancements are active by default (unlocked rotations RMB & Arrow keys)
-5. Toggle "Freecam" to detach the camera from your character
-6. Use WASD + Shift/Ctrl for movement and IJKL for rotation
-7. Adjust FOV and Camera Distance sliders as desired
-   
+Follow these steps to quickly set up and begin using Silicon with Cubic Castles:
+1. Launch Cubic Castles and log into your account
+2. Run the Silicon application after Cubic Castles is open.
+3. In the information tab, check that the "CONNECTED" indicator is active. This confirms Silicon is successfully linked to the game.
+4. Toggle the "Freecam" button to detach the camera from your character.  
+  Move with `W` `A` `S` `D` keys   
+  Ascend with `Shift`, descend with `Ctrl`   
+  Rotate the camera with `RMB` + mouse drag or `Arrow Keys`    
+5. Fine-tune your view using the sliders:  
+   **Distance to Focal Point:** Set to the lowest value to emulate 1st Person FOV    
+   **Field of View:** Vanilla zoom method, expanded to a wider range of 10° to 135°    
+   **Sight Range:** Game fog visibility   
+6. For clean screenshots or cinematics, use:  
+   **Hide UI:** to remove interface elements  
+   **Hide Player:** to make your character invisible (Recommended for 1st Person POV)  
+   **Hide Nametags:** to disable floating names above players (Recommended for 1st Person POV)  
+
 ---
 ## Features
-
-### Default Camera Enhancements
 Silicon provides several improvements to the default camera system that are active immediately upon connection:
 - Unlocked vertical rotation allowing you to see blocks from below
 - Improved camera height to center on the qbee's head instead of below its feet
@@ -93,7 +100,6 @@ Freecam detaches the camera from your player character, allowing independent cam
 - **Speed Sliders**: Controls how fast the camera moves or rotates while in Freecam mode
 When Freecam is enabled, player character movement is disabled to prevent conflicts between camera and character control.
 
-
 ### Cinematics System
 Silicon includes a robust cinematics system for creating smooth camera animations:
 - Keyframe-based animation system
@@ -102,7 +108,6 @@ Silicon includes a robust cinematics system for creating smooth camera animation
 ---
 
 ## Creating Cinematics
-
 ### Keyframe Animation
 
 Silicon's cinematic system uses keyframes to create smooth camera animations. Here's a basic guide to get started:

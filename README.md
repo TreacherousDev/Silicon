@@ -22,9 +22,6 @@ Silicon is an advanced camera mod for Cubic Castles that enhances the in-game ca
 
 1. Download the latest version from the [releases page](https://github.com/TreacherousDev/Silicon/releases)
 2. Run the setup wizard to install
-3. Launch Cubic Castles
-4. Start Silicon.exe
-5. The status indicator will show "CONNECTED" in green when Silicon successfully connects to the game
 
 **System Requirements:**
 - Windows 7/8/10/11 with administrator privileges
@@ -39,7 +36,7 @@ Follow these steps to quickly set up and begin using Silicon with Cubic Castles:
 3. In the information tab, check that the "CONNECTED" indicator is active. This confirms Silicon is successfully linked to the game.
 4. Toggle the "Freecam" button to detach the camera from your character.  
   Move with `W` `A` `S` `D` keys   
-  Ascend with `Shift`, descend with `Ctrl`   
+  Ascend with `Spacebar`, descend with `Ctrl`   
   Rotate the camera with `RMB` + mouse drag or `Arrow Keys`    
 5. Fine-tune your view using the sliders:  
    **Distance to Focal Point:** Set to the lowest value to emulate 1st Person FOV    
@@ -99,7 +96,7 @@ Toggle the visibility of player and entity nametags:
 ### Freecam Mode
 Freecam detaches the camera from your player character, allowing independent camera movement:
 - **Toggle**: Use the Freecam switch or press F4
-- **Movement**: WASD for horizontal movement, Shift/Ctrl for vertical movement
+- **Movement**: WASD for horizontal movement, Spacebar/Ctrl for vertical movement
 - **Rotation**: Arrow Keys or Right Click to look around
 - **Speed Sliders**: Controls how fast the camera moves or rotates while in Freecam mode
 When Freecam is enabled, player character movement is disabled to prevent conflicts between camera and character control.

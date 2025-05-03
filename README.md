@@ -1,5 +1,5 @@
-# Silicon
-## An Advanced Camera Mod for Cubic Castles
+# Silicon 
+An Advanced Camera Mod for Cubic Castles
 
 ![Silicon Logo](https://github.com/user-attachments/assets/626ca9a7-2412-4e7e-9b4b-70ffc2c212ec)
 

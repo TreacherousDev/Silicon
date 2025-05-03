@@ -59,46 +59,46 @@ Silicon provides several improvements to the default camera system that are acti
 - Unlocked vertical rotation allowing you to see blocks from below
 - Improved camera height to center on the qbee's head instead of below its feet
 
-
+---
 ### Distance to Focal Point
 Controls how far the camera is positioned from the focal point:
 - Default setting is 22 units
 - Setting to very low values (e.g, 1) creates a first-person-like perspective
 - Higher values (30+) provide a more distant, overhead view
 
-  
+---
 ### Field of View
 Controls the camera's field of view between 10° and 135°:
 - Default setting is 33°
 - Lower values create a telephoto effect with less peripheral vision
 - Higher values create a wide-angle effect with more peripheral vision
 
-
+---
 ### Sight Range
 Controls the visibility of the in game fog:
 - Default setting is 110 blocks
 - Lower values bring the fog closer, limiting how much of the world is visible
 - Higher values push the fog farther away, revealing more of the environment
 
-
+---
 ### Hide Player
 Toggle player character visibility:
 - Useful when using first-person-perspective
 - Prevents the player model from blocking the camera view
 
-
+---
 ### Hide UI
 Toggle the visibility of on-screen interface elements:
 - Hides HUD elements: health, chat, level, cubits and inventory
 - Useful for taking clean screenshots or recording cinematic scenes
 
-
-Hide Nametags
+---
+### Hide Nametags
 Toggle the visibility of player and entity nametags:
 - Removes floating names above players
 - Recommended to have on when using 1st person POV
 
-
+---
 ### Freecam Mode
 Freecam detaches the camera from your player character, allowing independent camera movement:
 - **Toggle**: Use the Freecam switch or press F4
@@ -107,7 +107,7 @@ Freecam detaches the camera from your player character, allowing independent cam
 - **Speed Sliders**: Controls how fast the camera moves or rotates while in Freecam mode
 When Freecam is enabled, player character movement is disabled to prevent conflicts between camera and character control.
 
-
+---
 ### Cinematics System
 Silicon includes a robust cinematics system for creating smooth camera animations:
 - Keyframe-based animation system

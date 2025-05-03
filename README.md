@@ -199,7 +199,7 @@ A: Silicon only modifies client side camera-related memory and doesn't send addi
 A: By design, Silicon disables character movement when Freecam is active to prevent control conflicts. This is normal behavior.
 
 **Q: Will Silicon work with future updates of Cubic Castles?**  
-A: Game updates might require Silicon updates if they change how the camera system works. Check for new Silicon releases after major game updates, or contact the developer if none are available.
+A: Game updates  require Silicon updates if they change the byte addresses of the camera functions (which is almost always). Check for new Silicon releases after major game updates, or contact the developer if none are available.
 
 ---
 ## Contact

@@ -123,6 +123,19 @@
   <metadata name="saveFileDialog1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>148, 17</value>
   </metadata>
+  <data name="ToolTipLabel.Text" xml:space="preserve">
+    <value>F1: Realm Camera Preset
+F2: Overworld Camera Preset
+F3: 1st Person POV Camera Preset
+F4: Toggle Freecam
+
+Freecam: 
+W A S D + Ctrl + Spacebar to move
+Arrow Keys or Right Click to look around
+
+Cinematic:
+C V B N M: Go to frames 1 2 3 4 5</value>
+  </data>
   <metadata name="metroSetSetToolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>283, 17</value>
   </metadata>

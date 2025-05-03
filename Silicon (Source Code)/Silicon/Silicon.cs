@@ -16,13 +16,12 @@ using System.Data.SqlTypes;
 using System.Threading;
 using System.Runtime.InteropServices;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 
 
 namespace Silicon
 {
-
-
     public partial class SiliconForm : MetroSetForm
     {
         public Mem m = new Mem();
@@ -42,12 +41,11 @@ namespace Silicon
         private bool isRecording = false;
         private List<List<double>> recordedFrames = new List<List<double>>();
 
-        private const int defaultCameraFov = 33;
-        private const int defaultCameraDistance = 22;
+        //private const int defaultCameraFov = 33;
+        //private const int defaultCameraDistance = 22;
 
         [DllImport("user32.dll")]
         private static extern short GetAsyncKeyState(Keys key);
-
         public SiliconForm()
         {
             InitializeComponent();
@@ -67,12 +65,12 @@ namespace Silicon
             Hispano.ForeColor = Color.Gray;
             proID.ForeColor = Color.White;
             Status.ForeColor = Color.White;
-   
-            FreecamSwitch.CheckColor = Color.Silver;
-            HidePlayerModelSwitch.CheckColor = Color.Silver;
+            HotkeysLabel.ForeColor = Color.White;
             List<MetroSet_UI.Controls.MetroSetButton> interfaceButtons = new List<MetroSet_UI.Controls.MetroSetButton>
             {
-                DefaultSettingsButton,
+                Preset1Button,
+                Preset2Button,
+                Preset3Button,
                 AddAnimationFrameButton,
                 PlayAnimationButton,
                 DeleteAnimationFrameButton,
@@ -177,8 +175,6 @@ namespace Silicon
         private double targetCameraPitch;
         private double targetCameraYaw;
 
-        private double cameraMoveDistance = 0.0; // TODO: Fix
-
         private Timer _updateTimer;
 
         private void SiliconWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -213,6 +209,7 @@ namespace Silicon
 
         // Persistent Functions (Required for the engine to function)
         readonly string cameraCoordinatesFunction = "90 90 90 90 90 90 90 90 90 90 90 90";
+        readonly string adjustFogFunction = "90 90 90 90 90 90 90 90";
 
         readonly string cameraHeightInjection = "53 E8 00 00 00 00 5B F3 0F 5C 43 1B F3 0F 11 40 08 5B F3 0F 5C CB 8D 85 FC FE FF FF E9 CB BA 39 FF 66 66 A6 3F 00 00 00 00";
         readonly string cameraHeightFunctionEntry = "E9 19 45 C6 00 0F 1F 44 00 00";
@@ -243,11 +240,16 @@ namespace Silicon
         readonly string disableMovement2Function = "90 90 90 90 90 90 90 90";
         readonly string disableMovement2Original = "F3 0F 11 87 80 00 00 00";
 
+
+
         // Mod menu checker variables
         private bool isFreecamEnabled = false;
         private bool isHidePlayerModelEnabled = false;
+        private bool isHideUserInterfaceEnabled = false;
+        private bool isHideNametagsEnabled = false;
         private int cameraFOVSliderValue = 0;
         private int cameraDistanceSliderValue = 0;
+        private int gameFogSliderValue = 110;
         private double cameraMoveSpeed = 0.1;
         private double cameraRotateSpeed = 0.5;
         private void CheckAndUpdateMemory()
@@ -274,11 +276,6 @@ namespace Silicon
                 {
                     // Start Freecam camera position and rotation at the current camera position and rotation
                     m.WriteMemory("Cubic.exe+1B90DA", "bytes", cameraLookAtEditorFunctionEntry);
-                    targetCameraLookAtX = m.ReadFloat("Cubic.exe+E21042");
-                    targetCameraLookAtY = m.ReadFloat("Cubic.exe+E21046");
-                    targetCameraLookAtZ = m.ReadFloat("Cubic.exe+E2104A");
-                    targetCameraPitch = currentCameraPitch;
-                    targetCameraYaw = currentCameraYaw;
 
                     m.WriteMemory("Cubic.exe+21AE4B", "bytes", disableMovement1Function);
                     m.WriteMemory("Cubic.exe+21AE7A", "bytes", disableMovement1Function);
@@ -310,6 +307,38 @@ namespace Silicon
                 }
             }
 
+
+            if (HideUserInterfaceSwitch.Switched != isHideUserInterfaceEnabled)
+            {
+                isHideUserInterfaceEnabled = HideUserInterfaceSwitch.Switched;
+                if (isHideUserInterfaceEnabled == true)
+                {
+                    m.WriteMemory("Cubic.exe+1BEB57", "bytes", "84");
+                    m.WriteMemory("Cubic.exe+230C0F", "bytes", "C7 82 38 02 00 00 00 00 7A C4 90 90 90 90 90 90");
+                }
+                else
+                {
+                    m.WriteMemory("Cubic.exe+1BEB57", "bytes", "85");
+                    m.WriteMemory("Cubic.exe+230C0F", "bytes", "F3 0F 11 82 38 02 00 00 F3 0F 58 8A 3C 02 00 00");      
+                }
+            }
+
+
+            if (HideNametagsSwitch.Switched != isHideNametagsEnabled)
+            {
+                isHideNametagsEnabled = HideNametagsSwitch.Switched;
+                if (isHideNametagsEnabled == true)
+                {
+                    m.WriteMemory("Cubic.exe+1A7AFD", "bytes", "01");
+                }
+                else
+                {
+                    m.WriteMemory("Cubic.exe+1A7AFD", "bytes", "00");
+                }
+            }
+
+
+
             if (CameraFOVSlider.Value != cameraFOVSliderValue)
             {
                 cameraFOVSliderValue = CameraFOVSlider.Value;
@@ -322,14 +351,38 @@ namespace Silicon
                 m.WriteMemory("Cubic.exe+E20FAC", "float", CameraDistanceSlider.Value.ToString());
             }
 
+            if (GameFogSlider.Value != gameFogSliderValue)
+            {
+                gameFogSliderValue = GameFogSlider.Value;
+                m.WriteMemory("Cubic.exe+2FFEC8", "float", GameFogSlider.Value.ToString());
+            }
+
+            // Code updates camera labels regardless of freecam toggle
             if (FreecamSwitch.Switched == true)
             {
                 // Overwrite camera position, pitch and yaw using Silicon as the new controller
-                m.WriteMemory(pitchAddress, "bytes", ConvertDoubleToFloatBytes(currentCameraPitch));
-                m.WriteMemory(yawAddress, "bytes", ConvertDoubleToFloatBytes(currentCameraYaw));
+                // Handle vanilla screen orbiting
+                if (IsRightMouseButtonDown())
+                {
+                    targetCameraPitch = m.ReadFloat(pitchAddress);
+                    targetCameraYaw = m.ReadFloat(yawAddress);
+                }
+                else
+                {
+                    m.WriteMemory(pitchAddress, "bytes", ConvertDoubleToFloatBytes(currentCameraPitch));
+                    m.WriteMemory(yawAddress, "bytes", ConvertDoubleToFloatBytes(currentCameraYaw));
+                }
                 m.WriteMemory("Cubic.exe+E21032", "bytes", ConvertDoubleToFloatBytes(currentCameraLookAtX));
                 m.WriteMemory("Cubic.exe+E21036", "bytes", ConvertDoubleToFloatBytes(currentCameraLookAtY));
                 m.WriteMemory("Cubic.exe+E2103A", "bytes", ConvertDoubleToFloatBytes(currentCameraLookAtZ));
+            }
+            else
+            {
+                targetCameraLookAtX = m.ReadFloat("Cubic.exe+E21042");
+                targetCameraLookAtY = m.ReadFloat("Cubic.exe+E21046");
+                targetCameraLookAtZ = m.ReadFloat("Cubic.exe+E2104A");
+                targetCameraPitch = m.ReadFloat(pitchAddress);
+                targetCameraYaw = m.ReadFloat(yawAddress);
             }
 
             string ConvertDoubleToFloatBytes(double num)
@@ -343,41 +396,19 @@ namespace Silicon
             }
                 
             //UpdateLabel(CameraPositionDataLabel, $"X: {currentCameraLookAtX:F2} Y: {currentCameraLookAtY:F2} Z: {currentCameraLookAtZ:F2} Pitch: {currentCameraPitch:F2} Yaw: {currentCameraYaw:F2}", Color.Red);
-            UpdateLabel(CameraLookAtInfoLabel, $"X: {currentCameraLookAtX:F2}     Y: {currentCameraLookAtY:F2}     Z: {currentCameraLookAtZ:F2}", Color.White);
-            UpdateLabel(CameraLookAtInfoLabel2, $"X: {currentCameraLookAtX:F2}     Y: {currentCameraLookAtY:F2}     Z: {currentCameraLookAtZ:F2}", Color.White);
-            UpdateLabel(CameraRotationInfoLabel, $"Pitch: {currentCameraPitch:F2}    Yaw: {currentCameraYaw:F2}      🔎:  {cameraDistanceSliderValue} | {cameraFOVSliderValue}", Color.White);
-            UpdateLabel(CameraRotationInfoLabel2, $"Pitch: {currentCameraPitch:F2}    Yaw: {currentCameraYaw:F2}      🔎:  {cameraDistanceSliderValue} | {cameraFOVSliderValue}", Color.White);
+            UpdateLabel(CameraLookAtInfoLabel, $"X: {currentCameraLookAtX:F2}\nY: {currentCameraLookAtY:F2}\nZ: {currentCameraLookAtZ:F2}", Color.White);
+            UpdateLabel(CameraLookAtInfoLabel2, $"X: {currentCameraLookAtX:F2}\nY: {currentCameraLookAtY:F2}\nZ: {currentCameraLookAtZ:F2}", Color.White);
+            UpdateLabel(CameraRotationInfoLabel, $"Pitch: {currentCameraPitch:F2}\nYaw: {currentCameraYaw:F2}\n🔎:  {cameraDistanceSliderValue} | {cameraFOVSliderValue}", Color.White);
+            UpdateLabel(CameraRotationInfoLabel2, $"Pitch: {currentCameraPitch:F2}\nYaw: {currentCameraYaw:F2}\n🔎:  {cameraDistanceSliderValue} | {cameraFOVSliderValue}", Color.White);
 
         }
 
-        // Calculate rotation speed dynamically based on distance
-        // This allows us to haave smoother transitions as rotations will end on hte exact keyframe
-        // that the camera arrives to its destination
-        double GetDynamicRotationSpeed()
-        {
-            // Distance to target formula for 3D vector
-            double moveDistance = Math.Sqrt(
-                Math.Pow(targetCameraLookAtX - currentCameraLookAtX, 2) +
-                Math.Pow(targetCameraLookAtY - currentCameraLookAtY, 2) +
-                Math.Pow(targetCameraLookAtZ - currentCameraLookAtZ, 2)
-            );
-
-            // Distance to target formula for 2D vector
-            double rotateDistance = Math.Sqrt(
-                Math.Pow(targetCameraPitch - currentCameraPitch, 2) +
-                Math.Pow(targetCameraYaw - currentCameraYaw, 2)
-            );
-
-            // Calculate new rotation speed
-            double timeToTarget = moveDistance / cameraMoveSpeed;
-            if (timeToTarget < equalityTolerance) return 0;
-            return rotateDistance / timeToTarget;
-        }
 
         // Base injection code caves and function jumps to allow Silicon to modify game behaviour
         private void InjectBaseFunctions()
         {
             m.WriteMemory("Cubic.exe+1BC7FE", "bytes", cameraCoordinatesFunction);
+            m.WriteMemory("Cubic.exe+1BC915", "bytes", adjustFogFunction);
 
             // Special case for cameraLookAtEditor
             // Always inject, but skip assignment if deactivated (inject to the adress after assignment)
@@ -397,7 +428,6 @@ namespace Silicon
 
             //Revertable, injections only as set to false by default
             m.WriteMemory("Cubic.exe+E20ED7", "bytes", hidePlayerAvatarInjection);
-
         }
 
         // Play button state, alternates between play and stop when clicked
@@ -409,12 +439,35 @@ namespace Silicon
         List<List<double>> animationFrames = new List<List<double>>();
         private async void PlayAnimationButton_Click(object sender, EventArgs e)
         {
+            if (animationFrames.Count == 0)
+            {
+                MessageBox.Show("No keyframes found. Please add at least one keyframe before playing the animation.",
+                                "Animation Error",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+                return;
+            }
+
             if (playButtonState == PlayButtonState.Play)
             {
                 playButtonState = PlayButtonState.Stop;
                 PlayAnimationButton.Text = "◼";
                 animationCancellationTokenSource = new CancellationTokenSource();
                 CancellationToken token = animationCancellationTokenSource.Token;
+
+                // Teleport immediately to first frame
+                List<double> firstFrame = animationFrames[0];
+                currentCameraLookAtX = firstFrame[0];
+                currentCameraLookAtY = firstFrame[1];
+                currentCameraLookAtZ = firstFrame[2];
+                currentCameraPitch = firstFrame[3];
+                currentCameraYaw = firstFrame[4];
+                targetCameraLookAtX = firstFrame[0];
+                targetCameraLookAtY = firstFrame[1];
+                targetCameraLookAtZ = firstFrame[2];
+                targetCameraPitch = firstFrame[3];
+                targetCameraYaw = firstFrame[4];
+                await Task.Delay(20);
 
                 for (int i = 0; i < animationFrames.Count - 1; i++)
                 {
@@ -425,11 +478,12 @@ namespace Silicon
                     List<double> endFrame = animationFrames[i + 1];
 
                     double startX = startFrame[0], startY = startFrame[1], startZ = startFrame[2];
-                    double startYaw = startFrame[3], startPitch = startFrame[4];
-                    double moveSpeed = startFrame[5] * 50;
+                    double startPitch = startFrame[3], startYaw = startFrame[4];
+                    double moveSpeed = startFrame[5];
 
                     double endX = endFrame[0], endY = endFrame[1], endZ = endFrame[2];
-                    double endYaw = endFrame[3], endPitch = endFrame[4];
+                    double endPitch = endFrame[3], endYaw = endFrame[4];
+                    Interpolator.MethodDelegate frameInterpolation = Interpolator.GetMethodWithIndex((int)startFrame[6]);
 
                     double distance = Math.Sqrt(
                         Math.Pow(endX - startX, 2) +
@@ -449,11 +503,11 @@ namespace Silicon
                         alpha = Clamp(alpha, 0.0, 1.0);
 
                         // Use selected interpolation method
-                        targetCameraLookAtX = _interpolator(startX, endX, alpha);
-                        targetCameraLookAtY = _interpolator(startY, endY, alpha);
-                        targetCameraLookAtZ = _interpolator(startZ, endZ, alpha);
-                        (targetCameraPitch, targetCameraYaw) = Interpolator.LerpRotation(startYaw, startPitch, endYaw, endPitch, alpha);
-
+                        targetCameraLookAtX = frameInterpolation(startX, endX, alpha);
+                        targetCameraLookAtY = frameInterpolation(startY, endY, alpha);
+                        targetCameraLookAtZ = frameInterpolation(startZ, endZ, alpha);
+                        targetCameraPitch = frameInterpolation(startPitch, endPitch, alpha);
+                        targetCameraYaw = frameInterpolation(startYaw, endYaw, alpha);
 
                         // Stop interpolating if alpha reaches 1
                         if (alpha >= 1.0)
@@ -496,12 +550,27 @@ namespace Silicon
             frame.Add(currentCameraLookAtZ);
             frame.Add(currentCameraPitch);
             frame.Add(currentCameraYaw);
-            frame.Add(cameraMoveSpeed);
+            double speed;
+            if (!double.TryParse(CinematicSpeedTextBox.Text, out speed))
+            {
+                speed = 10.0; // default value if parsing fails
+            }
+            frame.Add(speed);
+            frame.Add(interpComboBox.SelectedIndex);
 
             animationFrames.Add(frame);
             UpdateListView();
         }
 
+
+
+
+
+
+        private bool IsRightMouseButtonDown()
+        {
+            return (GetAsyncKeyState(Keys.RButton) & 0x8000) != 0;
+        }
 
         // This function gets called in the main update loop
         // It handles the movement and rotation of the camera when freecam is activated
@@ -528,9 +597,9 @@ namespace Silicon
             Keys[] keysToMonitor = new Keys[]
             {
                 Keys.W, Keys.S, Keys.A, Keys.D,
-                Keys.ShiftKey, Keys.ControlKey,
-                Keys.I, Keys.K, Keys.J, Keys.L,
-                Keys.F1, Keys.C, Keys.V, Keys.B, Keys.N, Keys.M
+                Keys.Space, Keys.ControlKey,
+                Keys.Up, Keys.Down, Keys.Left, Keys.Right,
+                Keys.F1, Keys.F2, Keys.F3, Keys.F4, Keys.C, Keys.V, Keys.B, Keys.N, Keys.M
             };
 
             foreach (var key in keysToMonitor)
@@ -573,7 +642,16 @@ namespace Silicon
             switch (key)
             {
                 case Keys.F1:
-                    FreecamSwitch.Switched = !isFreecamEnabled;
+                    Preset1Button_Click(null, EventArgs.Empty);
+                    break;
+                case Keys.F2:
+                    Preset2Button_Click(null, EventArgs.Empty);
+                    break;
+                case Keys.F3:
+                    Preset3Button_Click(null, EventArgs.Empty);
+                    break;
+                case Keys.F4:
+                    FreecamSwitch.Switched = !FreecamSwitch.Switched;
                     break;
                 case Keys.C:
                     ActivateGoToFrame(0);
@@ -623,12 +701,12 @@ namespace Silicon
                 moveX += Math.Cos(radians);
                 moveY += Math.Sin(radians);
             }
-            if (pressedKeys.Contains(Keys.ShiftKey)) moveZ -= 1;
+            if (pressedKeys.Contains(Keys.Space)) moveZ -= 1;
             if (pressedKeys.Contains(Keys.ControlKey)) moveZ += 1;
-            if (pressedKeys.Contains(Keys.I)) rotatePitch -= 1;
-            if (pressedKeys.Contains(Keys.K)) rotatePitch += 1;
-            if (pressedKeys.Contains(Keys.J)) rotateYaw -= 1;
-            if (pressedKeys.Contains(Keys.L)) rotateYaw += 1;
+            if (pressedKeys.Contains(Keys.Up)) rotatePitch -= 1;
+            if (pressedKeys.Contains(Keys.Down)) rotatePitch += 1;
+            if (pressedKeys.Contains(Keys.Left)) rotateYaw -= 1;
+            if (pressedKeys.Contains(Keys.Right)) rotateYaw += 1;
 
 
             
@@ -688,7 +766,8 @@ namespace Silicon
                 currentCameraLookAtX = targetCameraLookAtX;
                 currentCameraLookAtY = targetCameraLookAtY;
                 currentCameraLookAtZ = targetCameraLookAtZ;
-            } else {
+            } 
+            else {
                 currentCameraLookAtX = _interpolator(m.ReadFloat(lookAtXAddress), targetCameraLookAtX, alpha);
                 currentCameraLookAtY = _interpolator(m.ReadFloat(lookAtYAddress), targetCameraLookAtY, alpha);
                 currentCameraLookAtZ = _interpolator(m.ReadFloat(lookAtZAddress), targetCameraLookAtZ, alpha);
@@ -706,13 +785,11 @@ namespace Silicon
             {
                 currentCameraPitch = targetCameraPitch;
                 currentCameraYaw = targetCameraYaw;
-            } else {
-                double startYaw = m.ReadFloat(yawAddress);
-                double startPitch = m.ReadFloat(pitchAddress);
-                (double newYaw, double newPitch) = Interpolator.LerpRotation(startYaw, startPitch, targetCameraYaw, targetCameraPitch, alpha);
-                currentCameraYaw = newYaw;
-                currentCameraPitch = newPitch;
-
+            } 
+            else 
+            {
+                currentCameraPitch = _interpolator(m.ReadFloat(pitchAddress), targetCameraPitch, alpha);
+                currentCameraYaw = _interpolator(m.ReadFloat(yawAddress), targetCameraYaw, alpha);
             }
         }
 
@@ -741,7 +818,8 @@ namespace Silicon
                 item.SubItems.Add(frame[2].ToString("F1"));                   // LookAtZ
                 item.SubItems.Add(frame[3].ToString("F1"));                   // Pitch
                 item.SubItems.Add(frame[4].ToString("F1"));                   // Yaw
-                item.SubItems.Add((frame[5] * 100).ToString("F1"));                   // MoveSpeed
+                item.SubItems.Add(frame[5].ToString("F1"));                   // Speed
+                item.SubItems.Add(frame[6].ToString("F0"));                   // Interpolation
                 listViewFrames.Items.Add(item);
                 i++;
             }
@@ -821,7 +899,6 @@ namespace Silicon
             targetCameraLookAtZ = goToFrame[2];
             targetCameraPitch = goToFrame[3];
             targetCameraYaw = goToFrame[4];
-            cameraMoveSpeed = goToFrame[5];
 
             // Compute animation duration based on distance
             double distance = Math.Sqrt(
@@ -836,7 +913,8 @@ namespace Silicon
                 currentCameraLookAtZ = targetCameraLookAtZ;
             }
 
-            animationDuration = distance / cameraMoveSpeed;
+            double speed = double.TryParse(CinematicSpeedTextBox.Text, out var s) ? s : 10.0;
+            animationDuration = distance / (speed / 100);
             animationStartTime = (Environment.TickCount / 100.0);
         }
 
@@ -916,7 +994,8 @@ namespace Silicon
                         item.SubItems.Add(frame[2].ToString("F1"));                   // LookAtZ
                         item.SubItems.Add(frame[3].ToString("F1"));                   // Pitch
                         item.SubItems.Add(frame[4].ToString("F1"));                   // Yaw
-                        item.SubItems.Add((frame[5] * 100).ToString("F1"));           // Speed      
+                        item.SubItems.Add(frame[5].ToString("F1"));                   // Speed
+                        item.SubItems.Add(frame[6].ToString("F0"));                   // Interpolation                                                              
                         listViewFrames.Items.Add(item);
                         i++;
                     }
@@ -930,70 +1009,88 @@ namespace Silicon
             }
         }
 
-        private void RecordButton_Click(object sender, EventArgs e)
-        {
-            isRecording = !isRecording;
-
-            if (isRecording)
-            {
-                frameCounter = 0; // Reset the frame counter
-                recordedFrames.Clear(); // Clear any previous data
-                recordingStartTime = DateTime.Now; // Set the recording start time
-                (sender as MetroSet_UI.Controls.MetroSetButton).Text = "STOP";
-            }
-            else
-            {
-                (sender as MetroSet_UI.Controls.MetroSetButton).Text = "RECORD";
-                ExportRecordedFrames();
-            }
-        }
-
-
-        private void ExportRecordedFrames()
-        {
-            SaveFileDialog saveFileDialog = new SaveFileDialog
-            {
-                Filter = "CSV Files (*.csv)|*.csv|All Files (*.*)|*.*",
-                DefaultExt = "csv",
-                AddExtension = true,
-                Title = "Save Recorded Frames"
-            };
-
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                try
-                {
-                    using (StreamWriter writer = new StreamWriter(saveFileDialog.FileName))
-                    {
-                        writer.WriteLine("frame,time,x,y,z,pitch,azimuth");
-                        foreach (var frame in recordedFrames)
-                        {
-                            writer.WriteLine($"{frame[0]},{frame[1]:F4},{frame[2]},{frame[3]},{frame[4]},{frame[5]},{frame[6]}");
-                        }
-                    }
-                    MessageBox.Show("Recorded frames exported successfully", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error saving file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-        }
-
-
-        private void ResetButton_Click(object sender, EventArgs e)
-        {
-            cameraFOVSliderValue = defaultCameraFov;
-            CameraFOVSlider.Value = defaultCameraFov;
-            m.WriteMemory("Cubic.exe+E20E1D", "float", cameraFOVSliderValue.ToString());
-
-            cameraDistanceSliderValue = defaultCameraDistance;
-            CameraDistanceSlider.Value = defaultCameraDistance;
-            m.WriteMemory("Cubic.exe+E20FAC", "float", cameraDistanceSliderValue.ToString());
-        }
 
         private void interpComboBox_SelectedIndexChanged(object sender, EventArgs e) {
             _interpolator = Interpolator.GetMethodWithIndex(interpComboBox.SelectedIndex);
+        }
+
+
+        private void Preset1Button_Click(object sender, EventArgs e)
+        {
+            
+            cameraFOVSliderValue = 22;
+            CameraFOVSlider.Value = 22;
+            m.WriteMemory("Cubic.exe+E20E1D", "float", cameraFOVSliderValue.ToString());
+
+            cameraDistanceSliderValue = 33;
+            CameraDistanceSlider.Value = 33;
+            m.WriteMemory("Cubic.exe+E20FAC", "float", cameraDistanceSliderValue.ToString());
+
+            gameFogSliderValue = 110;
+            GameFogSlider.Value = 110;
+            m.WriteMemory("Cubic.exe+2FFEC8", "float", GameFogSlider.Value.ToString());
+
+            HidePlayerModelSwitch.Switched = false;
+            HideUserInterfaceSwitch.Switched = false;
+            HideNametagsSwitch.Switched = false;
+            FreecamSwitch.Switched = false;
+        }
+
+        private void Preset2Button_Click(object sender, EventArgs e)
+        {
+            cameraFOVSliderValue = 45;
+            CameraFOVSlider.Value = 45;
+            m.WriteMemory("Cubic.exe+E20E1D", "float", cameraFOVSliderValue.ToString());
+
+            cameraDistanceSliderValue = 33;
+            CameraDistanceSlider.Value = 33;
+            m.WriteMemory("Cubic.exe+E20FAC", "float", cameraDistanceSliderValue.ToString());
+
+            gameFogSliderValue = 110;
+            GameFogSlider.Value = 110;
+            m.WriteMemory("Cubic.exe+2FFEC8", "float", GameFogSlider.Value.ToString());
+
+            HidePlayerModelSwitch.Switched = false;
+            HideUserInterfaceSwitch.Switched = false;
+            HideNametagsSwitch.Switched = false;
+            FreecamSwitch.Switched = false;
+        }
+
+        private void Preset3Button_Click(object sender, EventArgs e)
+        {
+            cameraFOVSliderValue = 70;
+            CameraFOVSlider.Value = 70;
+            m.WriteMemory("Cubic.exe+E20E1D", "float", cameraFOVSliderValue.ToString());
+
+            cameraDistanceSliderValue = 1;
+            CameraDistanceSlider.Value = 1;
+            m.WriteMemory("Cubic.exe+E20FAC", "float", cameraDistanceSliderValue.ToString());
+
+            gameFogSliderValue = 110;
+            GameFogSlider.Value = 110;
+            m.WriteMemory("Cubic.exe+2FFEC8", "float", GameFogSlider.Value.ToString());
+
+            HidePlayerModelSwitch.Switched = true;
+            HideUserInterfaceSwitch.Switched = false;
+            HideNametagsSwitch.Switched = true;
+            FreecamSwitch.Switched = false;
+        }
+
+        private void CinematicSpeedTextBox_TextChanged(object sender, EventArgs e)
+        {
+            var metroBox = sender as MetroSet_UI.Controls.MetroSetTextBox;
+            var innerTextBox = metroBox.Controls[0] as TextBox;
+
+            if (innerTextBox != null)
+            {
+                int caret = innerTextBox.SelectionStart;
+
+                if (!Regex.IsMatch(metroBox.Text, @"^-?\d*\.?\d*$"))
+                {
+                    metroBox.Text = Regex.Replace(metroBox.Text, @"[^0-9.-]", "");
+                    innerTextBox.SelectionStart = Math.Min(caret, metroBox.Text.Length);
+                }
+            }
         }
     }
 }

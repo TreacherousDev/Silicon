@@ -13,7 +13,6 @@ An Advanced Camera Mod for Cubic Castles
   - [Interpolation Types](#interpolation-types)
   - [Saving & Loading Animations](#saving--loading-animations)
 - [Troubleshooting](#troubleshooting)
-- [Advanced Settings](#advanced-settings)
 - [Frequently Asked Questions](#frequently-asked-questions)
 - [Contact](#contact)
 
@@ -138,23 +137,20 @@ Each keyframe stores:
 - Interpolation type
 
 ### Interpolation Types
-Silicon provides several interpolation methods to define how the camera transitions between keyframes. These affect the speed curve of the movement:
-Linear (0)
--Moves at a constant speed between keyframes.
-Ease (1)
-- Applies a subtle, smooth curve — a basic ease that feels more natural than linear.
-Ease In (2)
-- Starts slowly and accelerates toward the next keyframe.
-Ease Out (3)
-- Starts quickly and slows down near the end.
-Ease In Out (4)
-- Smooth acceleration at the beginning and deceleration at the end.
-Exponential In (5)
-- Begins extremely slow, then rapidly speeds up.
-Exponential Out (6)
-- Begins fast and quickly eases into a stop.
-Exponential In Out (7)
-- Starts very slowly, accelerates rapidly in the middle, and slows down again at the end.
+
+Silicon provides several interpolation methods to define how the camera transitions between keyframes. These affect the speed curve of the movement:  
+
+| **Interpolation Method** | **Code** | **Description**                                                               |
+| ------------------------ | -------- | ----------------------------------------------------------------------------- |
+| **Linear**               | 0        | Moves at a constant speed between keyframes.                                  |
+| **Ease**                 | 1        | Applies a subtle, smooth curve — a basic ease that feels more natural.        |
+| **Ease In**              | 2        | Starts slowly and accelerates toward the next keyframe.                       |
+| **Ease Out**             | 3        | Starts quickly and slows down near the end.                                   |
+| **Ease In Out**          | 4        | Smooth acceleration at the beginning and deceleration at the end.             |
+| **Exponential In**       | 5        | Begins extremely slow, then rapidly speeds up.                                |
+| **Exponential Out**      | 6        | Begins fast and quickly eases into a stop.                                    |
+| **Exponential In Out**   | 7        | Starts very slowly, accelerates rapidly in the middle, and slows down at end. |
+
 
 Each method is stored in the animation data as a numeric code from 0 to 7, matching the order above. You can assign different interpolation types to each segment for more cinematic and expressive camera paths.
 

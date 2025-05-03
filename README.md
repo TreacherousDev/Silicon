@@ -38,7 +38,7 @@ Silicon is a camera modification tool for Cubic Castles that enhances the in-gam
 
 Follow these steps to quickly set up and begin using Silicon with Cubic Castles:
 1. Launch Cubic Castles and log into your account
-2. Run the Silicon application after Cubic Castles is open.
+2. Launch Silicon after Cubic Castles is open.
 3. In the information tab, check that the "CONNECTED" indicator is active. This confirms Silicon is successfully linked to the game.
 4. Toggle the "Freecam" button to detach the camera from your character.  
   Move with `W` `A` `S` `D` keys   

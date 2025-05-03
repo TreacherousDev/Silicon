@@ -191,6 +191,8 @@ To load a previously saved animation:
 ---
 
 ## Frequently Asked Questions
+**Q: My computer says this program is a Virus!**  
+A: Silicon uses memory injection to alter the behaviour of a program (Cubic Castles in this case). Malicious software use the same method to do bad things, which is why most antivirus will flag it as dangerous. 
 
 **Q: Is Silicon detectable by Cubic Castles anti-cheat systems?**  
 A: Silicon only modifies client side camera-related memory and doesn't send additional packets to the server that can be used to detect modified gameplay. However, use any third-party tool at your own risk.
@@ -201,6 +203,8 @@ A: By design, Silicon disables character movement when Freecam is active to prev
 **Q: Will Silicon work with future updates of Cubic Castles?**  
 A: Game updates  require Silicon updates if they change the byte addresses of the camera functions (which is almost always). Check for new Silicon releases after major game updates, or contact the developer if none are available.
 
+**Q: Will Silicon be released on Android / iOS?**  
+A: No.
 ---
 ## Contact
 - @treacherousdev on Discord

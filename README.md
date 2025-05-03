@@ -203,6 +203,7 @@ A: Game updates  require Silicon updates if they change the byte addresses of th
 
 **Q: Will Silicon be released on Android / iOS?**  
 A: No.
+
 ---
 ## Contact
 - @treacherousdev on Discord

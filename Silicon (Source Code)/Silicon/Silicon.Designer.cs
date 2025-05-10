@@ -89,8 +89,8 @@ namespace Silicon
             this.Pitch = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Yaw = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Speed = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Interpolation = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.metroSetSetToolTip1 = new MetroSet_UI.Components.MetroSetSetToolTip();
+            this.VersionLabel = new Sunny.UI.UILabel();
             this.Information.SuspendLayout();
             this.Utility.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -131,6 +131,7 @@ namespace Silicon
             // 
             this.Information.BackColor = System.Drawing.Color.Transparent;
             this.Information.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Information.Controls.Add(this.VersionLabel);
             this.Information.Controls.Add(this.HotkeysLabel);
             this.Information.Controls.Add(this.Status);
             this.Information.Controls.Add(this.ToolTipLabel);
@@ -139,9 +140,9 @@ namespace Silicon
             this.Information.Controls.Add(this.proID);
             this.Information.Controls.Add(this.procIDLabel);
             this.Information.ForeColor = System.Drawing.Color.White;
-            this.Information.Location = new System.Drawing.Point(0, 40);
+            this.Information.Location = new System.Drawing.Point(0, 30);
             this.Information.Name = "Information";
-            this.Information.Size = new System.Drawing.Size(200, 60);
+            this.Information.Size = new System.Drawing.Size(482, 272);
             this.Information.TabIndex = 1;
             this.Information.Text = "Information";
             // 
@@ -852,7 +853,8 @@ namespace Silicon
             " Ease In Out",
             " Exponential In",
             " Exponential Out",
-            " Exponential In Out"});
+            " Exponential In Out",
+            "Catmull-Rom"});
             this.InterpolationComboBox.Location = new System.Drawing.Point(215, 246);
             this.InterpolationComboBox.Name = "InterpolationComboBox";
             this.InterpolationComboBox.Size = new System.Drawing.Size(146, 28);
@@ -1069,8 +1071,7 @@ namespace Silicon
             this.Z,
             this.Pitch,
             this.Yaw,
-            this.Speed,
-            this.Interpolation});
+            this.Speed});
             this.listViewFrames.Cursor = System.Windows.Forms.Cursors.Default;
             this.listViewFrames.Font = new System.Drawing.Font("Leelawadee UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listViewFrames.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
@@ -1090,42 +1091,36 @@ namespace Silicon
             // 
             this.X.Text = "X";
             this.X.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.X.Width = 48;
+            this.X.Width = 54;
             // 
             // Y
             // 
             this.Y.Text = "Y";
             this.Y.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Y.Width = 48;
+            this.Y.Width = 54;
             // 
             // Z
             // 
             this.Z.Text = "Z";
             this.Z.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Z.Width = 48;
+            this.Z.Width = 54;
             // 
             // Pitch
             // 
             this.Pitch.Text = "Pitch";
             this.Pitch.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Pitch.Width = 48;
+            this.Pitch.Width = 54;
             // 
             // Yaw
             // 
             this.Yaw.Text = "Yaw";
             this.Yaw.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Yaw.Width = 48;
+            this.Yaw.Width = 54;
             // 
             // Speed
             // 
             this.Speed.Text = "Speed";
             this.Speed.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // Interpolation
-            // 
-            this.Interpolation.Text = "->";
-            this.Interpolation.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Interpolation.Width = 30;
             // 
             // metroSetSetToolTip1
             // 
@@ -1138,6 +1133,18 @@ namespace Silicon
             this.metroSetSetToolTip1.StyleManager = null;
             this.metroSetSetToolTip1.ThemeAuthor = "Narwin";
             this.metroSetSetToolTip1.ThemeName = "MetroLite";
+            // 
+            // VersionLabel
+            // 
+            this.VersionLabel.BackColor = System.Drawing.Color.Transparent;
+            this.VersionLabel.Cursor = System.Windows.Forms.Cursors.Arrow;
+            this.VersionLabel.Font = new System.Drawing.Font("Impact", 9F);
+            this.VersionLabel.ForeColor = System.Drawing.Color.Gray;
+            this.VersionLabel.Location = new System.Drawing.Point(444, 252);
+            this.VersionLabel.Name = "VersionLabel";
+            this.VersionLabel.Size = new System.Drawing.Size(51, 20);
+            this.VersionLabel.TabIndex = 38;
+            this.VersionLabel.Text = "v2.4.0";
             // 
             // SiliconForm
             // 
@@ -1236,11 +1243,11 @@ namespace Silicon
         private MetroSet_UI.Controls.MetroSetButton Preset1Button;
         private MetroSet_UI.Controls.MetroSetButton Preset2Button;
         private MetroSet_UI.Controls.MetroSetButton Preset3Button;
-        private System.Windows.Forms.ColumnHeader Interpolation;
         private Sunny.UI.UILabel uiLabel12;
         private MetroSet_UI.Controls.MetroSetTextBox CinematicSpeedTextBox;
         private Sunny.UI.UILabel uiLabel13;
         private MetroSet_UI.Controls.MetroSetLabel HotkeysLabel;
+        private Sunny.UI.UILabel VersionLabel;
     }
 }
 

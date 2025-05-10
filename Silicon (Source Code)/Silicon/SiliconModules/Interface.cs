@@ -84,6 +84,16 @@ namespace Silicon
             FreecamSwitch.Switched = false;
         }
 
+        private double CatmullRom(double p0, double p1, double p2, double p3, double t)
+        {
+            return 0.5 * (
+                2 * p1 +
+                (-p0 + p2) * t +
+                (2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t +
+                (-p0 + 3 * p1 - 3 * p2 + p3) * t * t * t
+            );
+        }
+
         // Play button state, alternates between play and stop when clicked
         private enum PlayButtonState { Play, Stop }
         private PlayButtonState playButtonState = PlayButtonState.Play;
@@ -108,8 +118,17 @@ namespace Silicon
                 animationCancellationTokenSource = new CancellationTokenSource();
                 CancellationToken token = animationCancellationTokenSource.Token;
 
-                // Teleport immediately to first frame
-                List<double> firstFrame = animationFrames[0];
+                // Play from selected frame (from first if there are multiple)
+                int startIndex = 0;
+                if (listViewFrames.SelectedItems.Count > 0)
+                {
+                    startIndex = listViewFrames.SelectedItems
+                        .Cast<ListViewItem>()
+                        .Min(item => item.Index);
+                }
+
+                // Teleport immediately to start frame
+                List<double> firstFrame = animationFrames[startIndex];
                 currentCameraLookAtX = firstFrame[0];
                 currentCameraLookAtY = firstFrame[1];
                 currentCameraLookAtZ = firstFrame[2];
@@ -122,7 +141,7 @@ namespace Silicon
                 targetCameraYaw = firstFrame[4];
                 await Task.Delay(20);
 
-                for (int i = 0; i < animationFrames.Count - 1; i++)
+                for (int i = startIndex; i < animationFrames.Count - 1; i++)
                 {
                     if (token.IsCancellationRequested)
                         break;
@@ -132,11 +151,11 @@ namespace Silicon
 
                     double startX = startFrame[0], startY = startFrame[1], startZ = startFrame[2];
                     double startPitch = startFrame[3], startYaw = startFrame[4];
-                    double moveSpeed = startFrame[5];
+                    double moveSpeed = endFrame[5];
 
                     double endX = endFrame[0], endY = endFrame[1], endZ = endFrame[2];
                     double endPitch = endFrame[3], endYaw = endFrame[4];
-                    Interpolator.MethodDelegate frameInterpolation = Interpolator.GetMethodWithIndex((int)startFrame[6]);
+                    Interpolator.MethodDelegate frameInterpolation = _interpolator;
 
                     double distance = Math.Sqrt(
                         Math.Pow(endX - startX, 2) +
@@ -155,14 +174,29 @@ namespace Silicon
                         double alpha = elapsedTime / duration;
                         alpha = Clamp(alpha, 0.0, 1.0);
 
-                        // Use selected interpolation method
-                        targetCameraLookAtX = frameInterpolation(startX, endX, alpha);
-                        targetCameraLookAtY = frameInterpolation(startY, endY, alpha);
-                        targetCameraLookAtZ = frameInterpolation(startZ, endZ, alpha);
-                        targetCameraPitch = frameInterpolation(startPitch, endPitch, alpha);
-                        targetCameraYaw = frameInterpolation(startYaw, endYaw, alpha);
+                        if (InterpolationComboBox.Text == "Catmull-Rom")
+                        {
+                            int lastIndex = animationFrames.Count - 1;
+                            List<double> p1 = animationFrames[i];
+                            List<double> p2 = animationFrames[i + 1];
+                            List<double> p0 = (i - 1) >= 0 ? animationFrames[i - 1] : p1;
+                            List<double> p3 = (i + 2) <= lastIndex ? animationFrames[i + 2] : p2;
 
-                        // Stop interpolating if alpha reaches 1
+                            targetCameraLookAtX = CatmullRom(p0[0], p1[0], p2[0], p3[0], alpha);
+                            targetCameraLookAtY = CatmullRom(p0[1], p1[1], p2[1], p3[1], alpha);
+                            targetCameraLookAtZ = CatmullRom(p0[2], p1[2], p2[2], p3[2], alpha);
+                            targetCameraPitch = CatmullRom(p0[3], p1[3], p2[3], p3[3], alpha);
+                            targetCameraYaw = CatmullRom(p0[4], p1[4], p2[4], p3[4], alpha);
+                        }
+                        else
+                        {
+                            targetCameraLookAtX = frameInterpolation(startX, endX, alpha);
+                            targetCameraLookAtY = frameInterpolation(startY, endY, alpha);
+                            targetCameraLookAtZ = frameInterpolation(startZ, endZ, alpha);
+                            targetCameraPitch = frameInterpolation(startPitch, endPitch, alpha);
+                            targetCameraYaw = frameInterpolation(startYaw, endYaw, alpha);
+                        }
+
                         if (alpha >= 1.0)
                             break;
 
@@ -170,7 +204,6 @@ namespace Silicon
                     }
                 }
 
-                // Reset button state after animation completes
                 playButtonState = PlayButtonState.Play;
                 PlayAnimationButton.Text = " ►";
                 PlayAnimationButton.Refresh();
@@ -230,7 +263,7 @@ namespace Silicon
                 item.SubItems.Add(frame[3].ToString("F1"));                   // Pitch
                 item.SubItems.Add(frame[4].ToString("F1"));                   // Yaw
                 item.SubItems.Add(frame[5].ToString("F1"));                   // Speed
-                item.SubItems.Add(frame[6].ToString("F0"));                   // Interpolation
+                //item.SubItems.Add(frame[6].ToString("F0"));                   // Interpolation
                 listViewFrames.Items.Add(item);
                 i++;
             }
@@ -408,7 +441,7 @@ namespace Silicon
                         item.SubItems.Add(frame[3].ToString("F1"));                   // Pitch
                         item.SubItems.Add(frame[4].ToString("F1"));                   // Yaw
                         item.SubItems.Add(frame[5].ToString("F1"));                   // Speed
-                        item.SubItems.Add(frame[6].ToString("F0"));                   // Interpolation                                                              
+                        //item.SubItems.Add(frame[6].ToString("F0"));                   // Interpolation                                                              
                         listViewFrames.Items.Add(item);
                         i++;
                     }

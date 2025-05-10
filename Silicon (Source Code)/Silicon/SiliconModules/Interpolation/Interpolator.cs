@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Numerics;
 
 namespace Silicon {
@@ -15,6 +16,7 @@ namespace Silicon {
                 case 5: return ExponentialIn;
                 case 6: return ExponentialOut;
                 case 7: return ExponentialInOut;
+                case 8: return Lerp; //CatmulRom code defaults to linear
                 default: return Lerp;
             }
         }
@@ -65,42 +67,5 @@ namespace Silicon {
             return start + (end - start) * (1 - 0.5 * Math.Pow(2, -20 * alpha + 10));
         }
 
-        internal static (double, double) SlerpRotation(
-            double startYaw, double startPitch,
-            double endYaw, double endPitch, double alpha)
-        {
-            double phi1 = Math.PI * startYaw / 180.0;
-            double theta1 = Math.PI * startPitch / 180.0;
-            double phi2 = Math.PI * endYaw / 180.0;
-            double theta2 = Math.PI * endPitch / 180.0;
-
-            Quaternion q1 = Quaternion.CreateFromYawPitchRoll((float)phi1, (float)theta1, 0);
-            Quaternion q2 = Quaternion.CreateFromYawPitchRoll((float)phi2, (float)theta2, 0);
-            Quaternion q = Quaternion.Slerp(q1, q2, (float)alpha);
-
-            double yaw = Math.Atan2(2.0 * (q.W * q.Y + q.X * q.Z), 1.0 - 2.0 * (q.Y * q.Y + q.Z * q.Z));
-            double pitch = Math.Asin(2.0 * (q.W * q.X - q.Y * q.Z));
-
-            return (yaw * 180.0 / Math.PI, pitch * 180.0 / Math.PI);
-        }
-
-        internal static (double, double) LerpRotation(
-            double startYaw, double startPitch,
-            double endYaw, double endPitch, double alpha)
-        {
-            double yaw = LerpDegrees(startYaw, endYaw, alpha);
-            double pitch = LerpDegrees(startPitch, endPitch, alpha);
-            return (yaw, pitch);
-        }
-
-        private static double LerpDegrees(double start, double end, double alpha)
-        {
-            double delta = (end - start) % 360.0;
-
-            if (delta > 180.0) delta -= 360.0;
-            if (delta < -180.0) delta += 360.0;
-
-            return (start + alpha * delta) % 360.0;
-        }
     }
 }

@@ -28,7 +28,7 @@
     <SuiteName>Silicon</SuiteName>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
     <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>58</ApplicationRevision>
+    <ApplicationRevision>59</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -86,7 +86,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
@@ -96,7 +96,7 @@
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x86</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
@@ -159,12 +159,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Silicon\SiliconModules\CameraController.cs">
+    <Compile Include="Silicon\SiliconModules\Camera.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Silicon\SiliconModules\InterfaceManager.cs">
+    <Compile Include="Silicon\SiliconModules\Input.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Silicon\SiliconModules\Interface.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Silicon\SiliconModules\Interpolation\AkimaSplineInterpolator.cs" />
     <Compile Include="Silicon\SiliconModules\Interpolation\CubicBezierInterpolator.cs" />
     <Compile Include="Silicon\SiliconModules\Interpolation\Interpolator.cs" />
     <Compile Include="Silicon\Silicon.cs">
@@ -175,7 +179,7 @@
     </Compile>
     <Compile Include="Config\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Silicon\SiliconModules\MemoryManager.cs">
+    <Compile Include="Silicon\SiliconModules\Memory.cs">
       <SubType>Form</SubType>
     </Compile>
     <EmbeddedResource Include="Silicon\Silicon.resx">

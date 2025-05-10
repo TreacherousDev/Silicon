@@ -13,6 +13,76 @@ namespace Silicon
 {
     public partial class SiliconForm
     {
+        private void CameraMoveSpeedSlider_Scroll(object sender)
+        {
+            cameraMoveSpeed = (double)CameraMoveSpeedSlider.Value / 500;
+        }
+
+        private void CameraRotateSpeedSlider_Scroll(object sender)
+        {
+            cameraRotateSpeed = (double)CameraRotateSpeedSlider.Value / 100;
+        }
+
+        private void Preset1Button_Click(object sender, EventArgs e)
+        {
+
+            cameraFOVSliderValue = 22;
+            CameraFOVSlider.Value = 22;
+            m.WriteMemory("Cubic.exe+E20E1D", "float", cameraFOVSliderValue.ToString());
+
+            cameraDistanceSliderValue = 33;
+            CameraDistanceSlider.Value = 33;
+            m.WriteMemory("Cubic.exe+E20FAC", "float", cameraDistanceSliderValue.ToString());
+
+            gameFogSliderValue = 110;
+            GameFogSlider.Value = 110;
+            m.WriteMemory("Cubic.exe+2FFEC8", "float", GameFogSlider.Value.ToString());
+
+            HidePlayerModelSwitch.Switched = false;
+            HideUserInterfaceSwitch.Switched = false;
+            HideNametagsSwitch.Switched = false;
+            FreecamSwitch.Switched = false;
+        }
+
+        private void Preset2Button_Click(object sender, EventArgs e)
+        {
+            cameraFOVSliderValue = 45;
+            CameraFOVSlider.Value = 45;
+            m.WriteMemory("Cubic.exe+E20E1D", "float", cameraFOVSliderValue.ToString());
+
+            cameraDistanceSliderValue = 33;
+            CameraDistanceSlider.Value = 33;
+            m.WriteMemory("Cubic.exe+E20FAC", "float", cameraDistanceSliderValue.ToString());
+
+            gameFogSliderValue = 110;
+            GameFogSlider.Value = 110;
+            m.WriteMemory("Cubic.exe+2FFEC8", "float", GameFogSlider.Value.ToString());
+
+            HidePlayerModelSwitch.Switched = false;
+            HideUserInterfaceSwitch.Switched = false;
+            HideNametagsSwitch.Switched = false;
+            FreecamSwitch.Switched = false;
+        }
+
+        private void Preset3Button_Click(object sender, EventArgs e)
+        {
+            cameraFOVSliderValue = 70;
+            CameraFOVSlider.Value = 70;
+            m.WriteMemory("Cubic.exe+E20E1D", "float", cameraFOVSliderValue.ToString());
+
+            cameraDistanceSliderValue = 1;
+            CameraDistanceSlider.Value = 1;
+            m.WriteMemory("Cubic.exe+E20FAC", "float", cameraDistanceSliderValue.ToString());
+
+            gameFogSliderValue = 110;
+            GameFogSlider.Value = 110;
+            m.WriteMemory("Cubic.exe+2FFEC8", "float", GameFogSlider.Value.ToString());
+
+            HidePlayerModelSwitch.Switched = true;
+            HideUserInterfaceSwitch.Switched = false;
+            HideNametagsSwitch.Switched = true;
+            FreecamSwitch.Switched = false;
+        }
 
         // Play button state, alternates between play and stop when clicked
         private enum PlayButtonState { Play, Stop }

@@ -59,7 +59,7 @@ namespace Silicon
                 moveX += Math.Cos(radians);
                 moveY += Math.Sin(radians);
             }
-            if (pressedKeys.Contains(Keys.Shift)) moveZ -= 1;
+            if (pressedKeys.Contains(Keys.ShiftKey)) moveZ -= 1;
             if (pressedKeys.Contains(Keys.ControlKey)) moveZ += 1;
             if (pressedKeys.Contains(Keys.Up)) rotatePitch -= 1;
             if (pressedKeys.Contains(Keys.Down)) rotatePitch += 1;

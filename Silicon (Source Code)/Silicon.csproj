@@ -159,8 +159,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Silicon\Animation\Interpolation\CubicBezierInterpolator.cs" />
-    <Compile Include="Silicon\Animation\Interpolation\Interpolator.cs" />
+    <Compile Include="Silicon\SiliconModules\CameraController.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Silicon\SiliconModules\InterfaceManager.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Silicon\SiliconModules\Interpolation\CubicBezierInterpolator.cs" />
+    <Compile Include="Silicon\SiliconModules\Interpolation\Interpolator.cs" />
     <Compile Include="Silicon\Silicon.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -169,6 +175,9 @@
     </Compile>
     <Compile Include="Config\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Silicon\SiliconModules\MemoryManager.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <EmbeddedResource Include="Silicon\Silicon.resx">
       <DependentUpon>Silicon.cs</DependentUpon>
     </EmbeddedResource>

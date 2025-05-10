@@ -33,6 +33,7 @@ namespace Silicon
             this.SiliconWorker = new System.ComponentModel.BackgroundWorker();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.Information = new System.Windows.Forms.TabPage();
+            this.HotkeysLabel = new MetroSet_UI.Controls.MetroSetLabel();
             this.Status = new MetroSet_UI.Controls.MetroSetLabel();
             this.ToolTipLabel = new Sunny.UI.UILabel();
             this.getStatus = new MetroSet_UI.Controls.MetroSetLabel();
@@ -40,6 +41,8 @@ namespace Silicon
             this.proID = new MetroSet_UI.Controls.MetroSetLabel();
             this.procIDLabel = new MetroSet_UI.Controls.MetroSetLabel();
             this.Utility = new System.Windows.Forms.TabPage();
+            this.Preset3Button = new MetroSet_UI.Controls.MetroSetButton();
+            this.Preset2Button = new MetroSet_UI.Controls.MetroSetButton();
             this.Preset1Button = new MetroSet_UI.Controls.MetroSetButton();
             this.uiLabel11 = new Sunny.UI.UILabel();
             this.GameFogSlider = new MetroSet_UI.Controls.MetroSetTrackBar();
@@ -67,7 +70,10 @@ namespace Silicon
             this.AddAnimationFrameButton = new MetroSet_UI.Controls.MetroSetButton();
             this.TabControl = new Sunny.UI.UITabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.interpComboBox = new System.Windows.Forms.ComboBox();
+            this.InterpolationComboBox = new System.Windows.Forms.ComboBox();
+            this.uiLabel13 = new Sunny.UI.UILabel();
+            this.CinematicSpeedTextBox = new MetroSet_UI.Controls.MetroSetTextBox();
+            this.uiLabel12 = new Sunny.UI.UILabel();
             this.LoadAnimationButton = new MetroSet_UI.Controls.MetroSetButton();
             this.SaveAnimationButton = new MetroSet_UI.Controls.MetroSetButton();
             this.CameraRotationInfoLabel2 = new Sunny.UI.UILabel();
@@ -83,14 +89,8 @@ namespace Silicon
             this.Pitch = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Yaw = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Speed = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.metroSetSetToolTip1 = new MetroSet_UI.Components.MetroSetSetToolTip();
-            this.Preset2Button = new MetroSet_UI.Controls.MetroSetButton();
-            this.Preset3Button = new MetroSet_UI.Controls.MetroSetButton();
             this.Interpolation = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.uiLabel12 = new Sunny.UI.UILabel();
-            this.CinematicSpeedTextBox = new MetroSet_UI.Controls.MetroSetTextBox();
-            this.uiLabel13 = new Sunny.UI.UILabel();
-            this.HotkeysLabel = new MetroSet_UI.Controls.MetroSetLabel();
+            this.metroSetSetToolTip1 = new MetroSet_UI.Components.MetroSetSetToolTip();
             this.Information.SuspendLayout();
             this.Utility.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -139,11 +139,26 @@ namespace Silicon
             this.Information.Controls.Add(this.proID);
             this.Information.Controls.Add(this.procIDLabel);
             this.Information.ForeColor = System.Drawing.Color.White;
-            this.Information.Location = new System.Drawing.Point(0, 30);
+            this.Information.Location = new System.Drawing.Point(0, 40);
             this.Information.Name = "Information";
-            this.Information.Size = new System.Drawing.Size(482, 272);
+            this.Information.Size = new System.Drawing.Size(200, 60);
             this.Information.TabIndex = 1;
             this.Information.Text = "Information";
+            // 
+            // HotkeysLabel
+            // 
+            this.HotkeysLabel.Font = new System.Drawing.Font("Impact", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.HotkeysLabel.IsDerivedStyle = true;
+            this.HotkeysLabel.Location = new System.Drawing.Point(12, 67);
+            this.HotkeysLabel.Name = "HotkeysLabel";
+            this.HotkeysLabel.Size = new System.Drawing.Size(77, 23);
+            this.HotkeysLabel.Style = MetroSet_UI.Enums.Style.Light;
+            this.HotkeysLabel.StyleManager = null;
+            this.HotkeysLabel.TabIndex = 27;
+            this.HotkeysLabel.Text = "HOTKEYS";
+            this.HotkeysLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.HotkeysLabel.ThemeAuthor = "Narwin";
+            this.HotkeysLabel.ThemeName = "MetroLite";
             // 
             // Status
             // 
@@ -269,6 +284,60 @@ namespace Silicon
             this.Utility.TabIndex = 0;
             this.Utility.Text = "Utility";
             // 
+            // Preset3Button
+            // 
+            this.Preset3Button.DisabledBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.Preset3Button.DisabledBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.Preset3Button.DisabledForeColor = System.Drawing.Color.Gray;
+            this.Preset3Button.Font = new System.Drawing.Font("Impact", 9F, System.Drawing.FontStyle.Bold);
+            this.Preset3Button.HoverBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
+            this.Preset3Button.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
+            this.Preset3Button.HoverTextColor = System.Drawing.Color.White;
+            this.Preset3Button.IsDerivedStyle = true;
+            this.Preset3Button.Location = new System.Drawing.Point(212, 237);
+            this.Preset3Button.Name = "Preset3Button";
+            this.Preset3Button.NormalBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.Preset3Button.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.Preset3Button.NormalTextColor = System.Drawing.Color.White;
+            this.Preset3Button.PressBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
+            this.Preset3Button.PressColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
+            this.Preset3Button.PressTextColor = System.Drawing.Color.White;
+            this.Preset3Button.Size = new System.Drawing.Size(29, 22);
+            this.Preset3Button.Style = MetroSet_UI.Enums.Style.Light;
+            this.Preset3Button.StyleManager = null;
+            this.Preset3Button.TabIndex = 53;
+            this.Preset3Button.Text = "3";
+            this.Preset3Button.ThemeAuthor = "Narwin";
+            this.Preset3Button.ThemeName = "MetroLite";
+            this.Preset3Button.Click += new System.EventHandler(this.Preset3Button_Click);
+            // 
+            // Preset2Button
+            // 
+            this.Preset2Button.DisabledBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.Preset2Button.DisabledBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.Preset2Button.DisabledForeColor = System.Drawing.Color.Gray;
+            this.Preset2Button.Font = new System.Drawing.Font("Impact", 9F, System.Drawing.FontStyle.Bold);
+            this.Preset2Button.HoverBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
+            this.Preset2Button.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
+            this.Preset2Button.HoverTextColor = System.Drawing.Color.White;
+            this.Preset2Button.IsDerivedStyle = true;
+            this.Preset2Button.Location = new System.Drawing.Point(172, 237);
+            this.Preset2Button.Name = "Preset2Button";
+            this.Preset2Button.NormalBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.Preset2Button.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.Preset2Button.NormalTextColor = System.Drawing.Color.White;
+            this.Preset2Button.PressBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
+            this.Preset2Button.PressColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
+            this.Preset2Button.PressTextColor = System.Drawing.Color.White;
+            this.Preset2Button.Size = new System.Drawing.Size(29, 22);
+            this.Preset2Button.Style = MetroSet_UI.Enums.Style.Light;
+            this.Preset2Button.StyleManager = null;
+            this.Preset2Button.TabIndex = 52;
+            this.Preset2Button.Text = "2";
+            this.Preset2Button.ThemeAuthor = "Narwin";
+            this.Preset2Button.ThemeName = "MetroLite";
+            this.Preset2Button.Click += new System.EventHandler(this.Preset2Button_Click);
+            // 
             // Preset1Button
             // 
             this.Preset1Button.DisabledBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
@@ -281,8 +350,8 @@ namespace Silicon
             this.Preset1Button.IsDerivedStyle = true;
             this.Preset1Button.Location = new System.Drawing.Point(132, 237);
             this.Preset1Button.Name = "Preset1Button";
-            this.Preset1Button.NormalBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
-            this.Preset1Button.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
+            this.Preset1Button.NormalBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.Preset1Button.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.Preset1Button.NormalTextColor = System.Drawing.Color.White;
             this.Preset1Button.PressBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
             this.Preset1Button.PressColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
@@ -748,7 +817,7 @@ namespace Silicon
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.Color.Transparent;
-            this.tabPage1.Controls.Add(this.interpComboBox);
+            this.tabPage1.Controls.Add(this.InterpolationComboBox);
             this.tabPage1.Controls.Add(this.uiLabel13);
             this.tabPage1.Controls.Add(this.CinematicSpeedTextBox);
             this.tabPage1.Controls.Add(this.uiLabel12);
@@ -768,14 +837,14 @@ namespace Silicon
             this.tabPage1.TabIndex = 2;
             this.tabPage1.Text = "Cinematic";
             // 
-            // interpComboBox
+            // InterpolationComboBox
             // 
-            this.interpComboBox.BackColor = System.Drawing.Color.White;
-            this.interpComboBox.Font = new System.Drawing.Font("Impact", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.interpComboBox.ForeColor = System.Drawing.Color.Black;
-            this.interpComboBox.FormattingEnabled = true;
-            this.interpComboBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.interpComboBox.Items.AddRange(new object[] {
+            this.InterpolationComboBox.BackColor = System.Drawing.Color.White;
+            this.InterpolationComboBox.Font = new System.Drawing.Font("Impact", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.InterpolationComboBox.ForeColor = System.Drawing.Color.Black;
+            this.InterpolationComboBox.FormattingEnabled = true;
+            this.InterpolationComboBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.InterpolationComboBox.Items.AddRange(new object[] {
             " Linear",
             " Ease",
             " Ease In",
@@ -784,12 +853,67 @@ namespace Silicon
             " Exponential In",
             " Exponential Out",
             " Exponential In Out"});
-            this.interpComboBox.Location = new System.Drawing.Point(215, 246);
-            this.interpComboBox.Name = "interpComboBox";
-            this.interpComboBox.Size = new System.Drawing.Size(146, 28);
-            this.interpComboBox.TabIndex = 49;
-            this.interpComboBox.Text = " Linear";
-            this.interpComboBox.SelectedIndexChanged += new System.EventHandler(this.interpComboBox_SelectedIndexChanged);
+            this.InterpolationComboBox.Location = new System.Drawing.Point(215, 246);
+            this.InterpolationComboBox.Name = "InterpolationComboBox";
+            this.InterpolationComboBox.Size = new System.Drawing.Size(146, 28);
+            this.InterpolationComboBox.TabIndex = 49;
+            this.InterpolationComboBox.Text = " Linear";
+            this.InterpolationComboBox.SelectedIndexChanged += new System.EventHandler(this.InterpolationComboBox_SelectedIndexChanged);
+            // 
+            // uiLabel13
+            // 
+            this.uiLabel13.BackColor = System.Drawing.Color.Transparent;
+            this.uiLabel13.Cursor = System.Windows.Forms.Cursors.Arrow;
+            this.uiLabel13.Font = new System.Drawing.Font("Impact", 12F);
+            this.uiLabel13.ForeColor = System.Drawing.Color.White;
+            this.uiLabel13.Location = new System.Drawing.Point(110, 249);
+            this.uiLabel13.Name = "uiLabel13";
+            this.uiLabel13.Size = new System.Drawing.Size(110, 17);
+            this.uiLabel13.TabIndex = 52;
+            this.uiLabel13.Text = "INTERPOLATION";
+            // 
+            // CinematicSpeedTextBox
+            // 
+            this.CinematicSpeedTextBox.AutoCompleteCustomSource = null;
+            this.CinematicSpeedTextBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.CinematicSpeedTextBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.CinematicSpeedTextBox.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(155)))), ((int)(((byte)(155)))));
+            this.CinematicSpeedTextBox.DisabledBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(204)))), ((int)(((byte)(204)))), ((int)(((byte)(204)))));
+            this.CinematicSpeedTextBox.DisabledBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(155)))), ((int)(((byte)(155)))));
+            this.CinematicSpeedTextBox.DisabledForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(136)))), ((int)(((byte)(136)))), ((int)(((byte)(136)))));
+            this.CinematicSpeedTextBox.Font = new System.Drawing.Font("Impact", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CinematicSpeedTextBox.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(102)))), ((int)(((byte)(102)))));
+            this.CinematicSpeedTextBox.Image = null;
+            this.CinematicSpeedTextBox.IsDerivedStyle = true;
+            this.CinematicSpeedTextBox.Lines = null;
+            this.CinematicSpeedTextBox.Location = new System.Drawing.Point(53, 246);
+            this.CinematicSpeedTextBox.MaxLength = 32767;
+            this.CinematicSpeedTextBox.Multiline = false;
+            this.CinematicSpeedTextBox.Name = "CinematicSpeedTextBox";
+            this.CinematicSpeedTextBox.ReadOnly = false;
+            this.CinematicSpeedTextBox.Size = new System.Drawing.Size(53, 28);
+            this.CinematicSpeedTextBox.Style = MetroSet_UI.Enums.Style.Light;
+            this.CinematicSpeedTextBox.StyleManager = null;
+            this.CinematicSpeedTextBox.TabIndex = 51;
+            this.CinematicSpeedTextBox.Text = "10.0";
+            this.CinematicSpeedTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.CinematicSpeedTextBox.ThemeAuthor = "Narwin";
+            this.CinematicSpeedTextBox.ThemeName = "MetroLite";
+            this.CinematicSpeedTextBox.UseSystemPasswordChar = false;
+            this.CinematicSpeedTextBox.WatermarkText = "";
+            this.CinematicSpeedTextBox.TextChanged += new System.EventHandler(this.CinematicSpeedTextBox_TextChanged);
+            // 
+            // uiLabel12
+            // 
+            this.uiLabel12.BackColor = System.Drawing.Color.Transparent;
+            this.uiLabel12.Cursor = System.Windows.Forms.Cursors.Arrow;
+            this.uiLabel12.Font = new System.Drawing.Font("Impact", 12F);
+            this.uiLabel12.ForeColor = System.Drawing.Color.White;
+            this.uiLabel12.Location = new System.Drawing.Point(3, 249);
+            this.uiLabel12.Name = "uiLabel12";
+            this.uiLabel12.Size = new System.Drawing.Size(51, 17);
+            this.uiLabel12.TabIndex = 50;
+            this.uiLabel12.Text = "SPEED";
             // 
             // LoadAnimationButton
             // 
@@ -997,6 +1121,12 @@ namespace Silicon
             this.Speed.Text = "Speed";
             this.Speed.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
+            // Interpolation
+            // 
+            this.Interpolation.Text = "->";
+            this.Interpolation.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.Interpolation.Width = 30;
+            // 
             // metroSetSetToolTip1
             // 
             this.metroSetSetToolTip1.BackColor = System.Drawing.Color.White;
@@ -1008,136 +1138,6 @@ namespace Silicon
             this.metroSetSetToolTip1.StyleManager = null;
             this.metroSetSetToolTip1.ThemeAuthor = "Narwin";
             this.metroSetSetToolTip1.ThemeName = "MetroLite";
-            // 
-            // Preset2Button
-            // 
-            this.Preset2Button.DisabledBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
-            this.Preset2Button.DisabledBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
-            this.Preset2Button.DisabledForeColor = System.Drawing.Color.Gray;
-            this.Preset2Button.Font = new System.Drawing.Font("Impact", 9F, System.Drawing.FontStyle.Bold);
-            this.Preset2Button.HoverBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
-            this.Preset2Button.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
-            this.Preset2Button.HoverTextColor = System.Drawing.Color.White;
-            this.Preset2Button.IsDerivedStyle = true;
-            this.Preset2Button.Location = new System.Drawing.Point(172, 237);
-            this.Preset2Button.Name = "Preset2Button";
-            this.Preset2Button.NormalBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
-            this.Preset2Button.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
-            this.Preset2Button.NormalTextColor = System.Drawing.Color.White;
-            this.Preset2Button.PressBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
-            this.Preset2Button.PressColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
-            this.Preset2Button.PressTextColor = System.Drawing.Color.White;
-            this.Preset2Button.Size = new System.Drawing.Size(29, 22);
-            this.Preset2Button.Style = MetroSet_UI.Enums.Style.Light;
-            this.Preset2Button.StyleManager = null;
-            this.Preset2Button.TabIndex = 52;
-            this.Preset2Button.Text = "2";
-            this.Preset2Button.ThemeAuthor = "Narwin";
-            this.Preset2Button.ThemeName = "MetroLite";
-            this.Preset2Button.Click += new System.EventHandler(this.Preset2Button_Click);
-            // 
-            // Preset3Button
-            // 
-            this.Preset3Button.DisabledBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
-            this.Preset3Button.DisabledBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
-            this.Preset3Button.DisabledForeColor = System.Drawing.Color.Gray;
-            this.Preset3Button.Font = new System.Drawing.Font("Impact", 9F, System.Drawing.FontStyle.Bold);
-            this.Preset3Button.HoverBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
-            this.Preset3Button.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
-            this.Preset3Button.HoverTextColor = System.Drawing.Color.White;
-            this.Preset3Button.IsDerivedStyle = true;
-            this.Preset3Button.Location = new System.Drawing.Point(212, 237);
-            this.Preset3Button.Name = "Preset3Button";
-            this.Preset3Button.NormalBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
-            this.Preset3Button.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
-            this.Preset3Button.NormalTextColor = System.Drawing.Color.White;
-            this.Preset3Button.PressBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
-            this.Preset3Button.PressColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
-            this.Preset3Button.PressTextColor = System.Drawing.Color.White;
-            this.Preset3Button.Size = new System.Drawing.Size(29, 22);
-            this.Preset3Button.Style = MetroSet_UI.Enums.Style.Light;
-            this.Preset3Button.StyleManager = null;
-            this.Preset3Button.TabIndex = 53;
-            this.Preset3Button.Text = "3";
-            this.Preset3Button.ThemeAuthor = "Narwin";
-            this.Preset3Button.ThemeName = "MetroLite";
-            this.Preset3Button.Click += new System.EventHandler(this.Preset3Button_Click);
-            // 
-            // Interpolation
-            // 
-            this.Interpolation.Text = "->";
-            this.Interpolation.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Interpolation.Width = 30;
-            // 
-            // uiLabel12
-            // 
-            this.uiLabel12.BackColor = System.Drawing.Color.Transparent;
-            this.uiLabel12.Cursor = System.Windows.Forms.Cursors.Arrow;
-            this.uiLabel12.Font = new System.Drawing.Font("Impact", 12F);
-            this.uiLabel12.ForeColor = System.Drawing.Color.White;
-            this.uiLabel12.Location = new System.Drawing.Point(3, 249);
-            this.uiLabel12.Name = "uiLabel12";
-            this.uiLabel12.Size = new System.Drawing.Size(51, 17);
-            this.uiLabel12.TabIndex = 50;
-            this.uiLabel12.Text = "SPEED";
-            // 
-            // CinematicSpeedTextBox
-            // 
-            this.CinematicSpeedTextBox.AutoCompleteCustomSource = null;
-            this.CinematicSpeedTextBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.CinematicSpeedTextBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
-            this.CinematicSpeedTextBox.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(155)))), ((int)(((byte)(155)))));
-            this.CinematicSpeedTextBox.DisabledBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(204)))), ((int)(((byte)(204)))), ((int)(((byte)(204)))));
-            this.CinematicSpeedTextBox.DisabledBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(155)))), ((int)(((byte)(155)))));
-            this.CinematicSpeedTextBox.DisabledForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(136)))), ((int)(((byte)(136)))), ((int)(((byte)(136)))));
-            this.CinematicSpeedTextBox.Font = new System.Drawing.Font("Impact", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CinematicSpeedTextBox.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(102)))), ((int)(((byte)(102)))));
-            this.CinematicSpeedTextBox.Image = null;
-            this.CinematicSpeedTextBox.IsDerivedStyle = true;
-            this.CinematicSpeedTextBox.Lines = null;
-            this.CinematicSpeedTextBox.Location = new System.Drawing.Point(53, 246);
-            this.CinematicSpeedTextBox.MaxLength = 32767;
-            this.CinematicSpeedTextBox.Multiline = false;
-            this.CinematicSpeedTextBox.Name = "CinematicSpeedTextBox";
-            this.CinematicSpeedTextBox.ReadOnly = false;
-            this.CinematicSpeedTextBox.Size = new System.Drawing.Size(53, 28);
-            this.CinematicSpeedTextBox.Style = MetroSet_UI.Enums.Style.Light;
-            this.CinematicSpeedTextBox.StyleManager = null;
-            this.CinematicSpeedTextBox.TabIndex = 51;
-            this.CinematicSpeedTextBox.Text = "10.0";
-            this.CinematicSpeedTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.CinematicSpeedTextBox.ThemeAuthor = "Narwin";
-            this.CinematicSpeedTextBox.ThemeName = "MetroLite";
-            this.CinematicSpeedTextBox.UseSystemPasswordChar = false;
-            this.CinematicSpeedTextBox.WatermarkText = "";
-            this.CinematicSpeedTextBox.TextChanged += new System.EventHandler(this.CinematicSpeedTextBox_TextChanged);
-            // 
-            // uiLabel13
-            // 
-            this.uiLabel13.BackColor = System.Drawing.Color.Transparent;
-            this.uiLabel13.Cursor = System.Windows.Forms.Cursors.Arrow;
-            this.uiLabel13.Font = new System.Drawing.Font("Impact", 12F);
-            this.uiLabel13.ForeColor = System.Drawing.Color.White;
-            this.uiLabel13.Location = new System.Drawing.Point(110, 249);
-            this.uiLabel13.Name = "uiLabel13";
-            this.uiLabel13.Size = new System.Drawing.Size(110, 17);
-            this.uiLabel13.TabIndex = 52;
-            this.uiLabel13.Text = "INTERPOLATION";
-            // 
-            // HotkeysLabel
-            // 
-            this.HotkeysLabel.Font = new System.Drawing.Font("Impact", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.HotkeysLabel.IsDerivedStyle = true;
-            this.HotkeysLabel.Location = new System.Drawing.Point(12, 67);
-            this.HotkeysLabel.Name = "HotkeysLabel";
-            this.HotkeysLabel.Size = new System.Drawing.Size(77, 23);
-            this.HotkeysLabel.Style = MetroSet_UI.Enums.Style.Light;
-            this.HotkeysLabel.StyleManager = null;
-            this.HotkeysLabel.TabIndex = 27;
-            this.HotkeysLabel.Text = "HOTKEYS";
-            this.HotkeysLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.HotkeysLabel.ThemeAuthor = "Narwin";
-            this.HotkeysLabel.ThemeName = "MetroLite";
             // 
             // SiliconForm
             // 
@@ -1169,7 +1169,7 @@ namespace Silicon
             this.ThemeName = "Helium-Red";
             this.UseSlideAnimation = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Silicon_OnFormClosing);
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Load += new System.EventHandler(this.Silicon_Load);
             this.Information.ResumeLayout(false);
             this.Utility.ResumeLayout(false);
             this.TabControl.ResumeLayout(false);
@@ -1229,7 +1229,7 @@ namespace Silicon
         private Sunny.UI.UILabel uiLabel7;
         private MetroSet_UI.Controls.MetroSetSwitch HideNametagsSwitch;
         private MetroSet_UI.Controls.MetroSetSwitch HideUserInterfaceSwitch;
-        private System.Windows.Forms.ComboBox interpComboBox;
+        private System.Windows.Forms.ComboBox InterpolationComboBox;
         private MetroSet_UI.Controls.MetroSetTrackBar GameFogSlider;
         private Sunny.UI.UILabel uiLabel10;
         private Sunny.UI.UILabel uiLabel11;

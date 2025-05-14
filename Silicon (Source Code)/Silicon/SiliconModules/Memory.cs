@@ -89,6 +89,8 @@ namespace Silicon
 
             InterpolateCameraMovement(lookAtXAddress, lookAtYAddress, lookAtZAddress);
             InterpolateCameraRotation(pitchAddress, yawAddress);
+            InterpolateCameraFOV("Cubic.exe+E20E1D");
+
 
             if (FreecamSwitch.Switched != isFreecamEnabled)
             {
@@ -135,7 +137,7 @@ namespace Silicon
                 if (isHideUserInterfaceEnabled == true)
                 {
                     m.WriteMemory("Cubic.exe+1BEB57", "bytes", "84");
-                    m.WriteMemory("Cubic.exe+230C0F", "bytes", "C7 82 38 02 00 00 00 00 7A C4 90 90 90 90 90 90");
+                    m.WriteMemory("Cubic.exe+230C0F", "bytes", "C7 82 38 02 00 00 00 40 1C C6 90 90 90 90 90 90");
                 }
                 else
                 {
@@ -150,20 +152,20 @@ namespace Silicon
                 isHideNametagsEnabled = HideNametagsSwitch.Switched;
                 if (isHideNametagsEnabled == true)
                 {
-                    m.WriteMemory("Cubic.exe+1A7AFD", "bytes", "01");
+                    m.WriteMemory("Cubic.exe+1A7B37", "bytes", "E9 09 0F 00 00 90");
                 }
                 else
                 {
-                    m.WriteMemory("Cubic.exe+1A7AFD", "bytes", "00");
+                    m.WriteMemory("Cubic.exe+1A7B37", "bytes", "0F 85 08 0F 00 00");
                 }
             }
-
 
 
             if (CameraFOVSlider.Value != cameraFOVSliderValue)
             {
                 cameraFOVSliderValue = CameraFOVSlider.Value;
-                m.WriteMemory("Cubic.exe+E20E1D", "float", CameraFOVSlider.Value.ToString());
+                targetCameraFOV = CameraFOVSlider.Value;
+                //m.WriteMemory("Cubic.exe+E20E1D", "float", CameraFOVSlider.Value.ToString());
             }
 
             if (CameraDistanceSlider.Value != cameraDistanceSliderValue)
@@ -195,7 +197,7 @@ namespace Silicon
                 }
                 m.WriteMemory("Cubic.exe+E21032", "bytes", ConvertDoubleToFloatBytes(currentCameraLookAtX));
                 m.WriteMemory("Cubic.exe+E21036", "bytes", ConvertDoubleToFloatBytes(currentCameraLookAtY));
-                m.WriteMemory("Cubic.exe+E2103A", "bytes", ConvertDoubleToFloatBytes(currentCameraLookAtZ));
+                m.WriteMemory("Cubic.exe+E2103A", "bytes", ConvertDoubleToFloatBytes(currentCameraLookAtZ)); 
             }
             else
             {
@@ -205,6 +207,8 @@ namespace Silicon
                 targetCameraPitch = m.ReadFloat(pitchAddress);
                 targetCameraYaw = m.ReadFloat(yawAddress);
             }
+            // FOV editing enabled even with freecam disabled
+            m.WriteMemory("Cubic.exe+E20E1D", "bytes", ConvertDoubleToFloatBytes(currentCameraFOV));
 
             string ConvertDoubleToFloatBytes(double num)
             {

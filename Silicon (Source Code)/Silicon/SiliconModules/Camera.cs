@@ -10,12 +10,14 @@ namespace Silicon
         private double currentCameraLookAtZ;
         private double currentCameraPitch;
         private double currentCameraYaw;
+        private double currentCameraFOV = 33;
 
         private double targetCameraLookAtX;
         private double targetCameraLookAtY;
         private double targetCameraLookAtZ;
         private double targetCameraPitch;
         private double targetCameraYaw;
+        private double targetCameraFOV = 33;
 
 
         // Mod menu checker variables
@@ -23,7 +25,7 @@ namespace Silicon
         private bool isHidePlayerModelEnabled = false;
         private bool isHideUserInterfaceEnabled = false;
         private bool isHideNametagsEnabled = false;
-        private int cameraFOVSliderValue = 0;
+        private int cameraFOVSliderValue = 33;
         private int cameraDistanceSliderValue = 0;
         private int gameFogSliderValue = 110;
         private double cameraMoveSpeed = 0.1;
@@ -143,6 +145,24 @@ namespace Silicon
                 currentCameraPitch = _interpolator(m.ReadFloat(pitchAddress), targetCameraPitch, alpha);
                 currentCameraYaw = _interpolator(m.ReadFloat(yawAddress), targetCameraYaw, alpha);
             }
+        }
+
+        private void InterpolateCameraFOV(string FOVAddress)
+        {
+            double elapsedTime = (Environment.TickCount / 100.0) - animationStartTime;
+            double alpha = elapsedTime / animationDuration;
+            alpha = Clamp(alpha, 0.0, 1.0);
+
+            // Stop interpolation when alpha reaches 1
+            if (alpha >= 1.0 - equalityTolerance)
+            {
+                currentCameraFOV = targetCameraFOV;
+            }
+            else
+            {
+                currentCameraFOV = _interpolator(m.ReadFloat(FOVAddress), targetCameraFOV, alpha);
+            }
+            
         }
 
     }

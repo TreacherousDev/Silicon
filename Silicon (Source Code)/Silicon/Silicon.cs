@@ -28,6 +28,7 @@ namespace Silicon
         private Interpolator.MethodDelegate _interpolator = Interpolator.GetMethodWithIndex(0);
         private double animationStartTime;
         private double animationDuration;
+        private GlobalMouseHook mouseHook;
 
 
         [DllImport("user32.dll")]
@@ -88,6 +89,33 @@ namespace Silicon
 
             if (!SiliconWorker.IsBusy)
                 SiliconWorker.RunWorkerAsync();
+
+            mouseHook = new GlobalMouseHook();
+            mouseHook.OnScrollDown += () =>
+            {
+                if ((Control.ModifierKeys & Keys.Alt) == Keys.Alt)
+                {
+                    CameraDistanceSlider.Value =  Math.Min(100, CameraDistanceSlider.Value + 1);
+                }
+                else
+                {
+                    CameraFOVSlider.Value = Math.Min(135, CameraFOVSlider.Value + 1);
+                }
+            };
+
+            mouseHook.OnScrollUp += () =>
+            {
+                if ((Control.ModifierKeys & Keys.Alt) == Keys.Alt)
+                {
+                    CameraDistanceSlider.Value = Math.Max(1, CameraDistanceSlider.Value - 1);
+                }
+                else
+                {
+                    CameraFOVSlider.Value = Math.Max(10, CameraFOVSlider.Value - 1);
+                }
+            };
+
+
         }
 
         private void StartProcessCheckTimer()
@@ -162,6 +190,7 @@ namespace Silicon
         {
             isRunning = false;
             keyPollingThread.Join();
+            mouseHook?.Dispose();
         }
         // Here ends the code edited by Hispano
 

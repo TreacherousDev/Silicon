@@ -16,7 +16,7 @@ namespace Silicon {
                 case 5: return ExponentialIn;
                 case 6: return ExponentialOut;
                 case 7: return ExponentialInOut;
-                case 8: return Lerp; //CatmulRom code defaults to linear
+                case 8: return Lerp; //Catmull-Rom code defaults to linear
                 default: return Lerp;
             }
         }

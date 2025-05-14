@@ -25,13 +25,13 @@ namespace Silicon
 
         private void Preset1Button_Click(object sender, EventArgs e)
         {
+            cameraFOVSliderValue = 33;
+            CameraFOVSlider.Value = 33;
+            //m.WriteMemory("Cubic.exe+E20E1D", "float", cameraFOVSliderValue.ToString());
+            targetCameraFOV = 33;
 
-            cameraFOVSliderValue = 22;
-            CameraFOVSlider.Value = 22;
-            m.WriteMemory("Cubic.exe+E20E1D", "float", cameraFOVSliderValue.ToString());
-
-            cameraDistanceSliderValue = 33;
-            CameraDistanceSlider.Value = 33;
+            cameraDistanceSliderValue = 22;
+            CameraDistanceSlider.Value = 22;
             m.WriteMemory("Cubic.exe+E20FAC", "float", cameraDistanceSliderValue.ToString());
 
             gameFogSliderValue = 110;
@@ -46,12 +46,13 @@ namespace Silicon
 
         private void Preset2Button_Click(object sender, EventArgs e)
         {
-            cameraFOVSliderValue = 45;
-            CameraFOVSlider.Value = 45;
-            m.WriteMemory("Cubic.exe+E20E1D", "float", cameraFOVSliderValue.ToString());
+            cameraFOVSliderValue = 33;
+            CameraFOVSlider.Value = 33;
+            //m.WriteMemory("Cubic.exe+E20E1D", "float", cameraFOVSliderValue.ToString());
+            targetCameraFOV = 33;
 
-            cameraDistanceSliderValue = 33;
-            CameraDistanceSlider.Value = 33;
+            cameraDistanceSliderValue = 45;
+            CameraDistanceSlider.Value = 45;
             m.WriteMemory("Cubic.exe+E20FAC", "float", cameraDistanceSliderValue.ToString());
 
             gameFogSliderValue = 110;
@@ -68,7 +69,8 @@ namespace Silicon
         {
             cameraFOVSliderValue = 70;
             CameraFOVSlider.Value = 70;
-            m.WriteMemory("Cubic.exe+E20E1D", "float", cameraFOVSliderValue.ToString());
+            //m.WriteMemory("Cubic.exe+E20E1D", "float", cameraFOVSliderValue.ToString());
+            targetCameraFOV = 70;
 
             cameraDistanceSliderValue = 1;
             CameraDistanceSlider.Value = 1;
@@ -113,6 +115,7 @@ namespace Silicon
 
             if (playButtonState == PlayButtonState.Play)
             {
+                FreecamSwitch.Switched = true;
                 playButtonState = PlayButtonState.Stop;
                 PlayAnimationButton.Text = "◼";
                 animationCancellationTokenSource = new CancellationTokenSource();
@@ -134,11 +137,18 @@ namespace Silicon
                 currentCameraLookAtZ = firstFrame[2];
                 currentCameraPitch = firstFrame[3];
                 currentCameraYaw = firstFrame[4];
+                currentCameraFOV = firstFrame[6];
                 targetCameraLookAtX = firstFrame[0];
                 targetCameraLookAtY = firstFrame[1];
                 targetCameraLookAtZ = firstFrame[2];
                 targetCameraPitch = firstFrame[3];
                 targetCameraYaw = firstFrame[4];
+                targetCameraFOV = firstFrame[6];
+
+                // Update FOV Slider
+                CameraFOVSlider.Value = (int)firstFrame[6];
+                cameraFOVSliderValue = (int)firstFrame[6];
+
                 await Task.Delay(20);
 
                 for (int i = startIndex; i < animationFrames.Count - 1; i++)
@@ -151,10 +161,12 @@ namespace Silicon
 
                     double startX = startFrame[0], startY = startFrame[1], startZ = startFrame[2];
                     double startPitch = startFrame[3], startYaw = startFrame[4];
+                    double startFOV = startFrame[6];
                     double moveSpeed = endFrame[5];
 
                     double endX = endFrame[0], endY = endFrame[1], endZ = endFrame[2];
                     double endPitch = endFrame[3], endYaw = endFrame[4];
+                    double endFOV = endFrame[6];
                     Interpolator.MethodDelegate frameInterpolation = _interpolator;
 
                     double distance = Math.Sqrt(
@@ -187,6 +199,7 @@ namespace Silicon
                             targetCameraLookAtZ = CatmullRom(p0[2], p1[2], p2[2], p3[2], alpha);
                             targetCameraPitch = CatmullRom(p0[3], p1[3], p2[3], p3[3], alpha);
                             targetCameraYaw = CatmullRom(p0[4], p1[4], p2[4], p3[4], alpha);
+                            targetCameraFOV = CatmullRom(p0[6], p1[6], p2[6], p3[6], alpha);
                         }
                         else
                         {
@@ -195,7 +208,12 @@ namespace Silicon
                             targetCameraLookAtZ = frameInterpolation(startZ, endZ, alpha);
                             targetCameraPitch = frameInterpolation(startPitch, endPitch, alpha);
                             targetCameraYaw = frameInterpolation(startYaw, endYaw, alpha);
+                            targetCameraFOV = frameInterpolation(startFOV, endFOV, alpha);
                         }
+
+                        // Update FOV slider after each keyframe pass
+                        CameraFOVSlider.Value = (int)endFrame[6];
+                        cameraFOVSliderValue = (int)endFrame[6];
 
                         if (alpha >= 1.0)
                             break;
@@ -225,6 +243,7 @@ namespace Silicon
             targetCameraLookAtZ = currentCameraLookAtZ;
             targetCameraPitch = currentCameraPitch;
             targetCameraYaw = currentCameraYaw;
+            targetCameraFOV = currentCameraFOV;
         }
 
 
@@ -236,18 +255,38 @@ namespace Silicon
             frame.Add(currentCameraLookAtZ);
             frame.Add(currentCameraPitch);
             frame.Add(currentCameraYaw);
-            double speed;
-            if (!double.TryParse(CinematicSpeedTextBox.Text, out speed))
-            {
-                speed = 10.0; // default value if parsing fails
-            }
-            frame.Add(speed);
-            frame.Add(InterpolationComboBox.SelectedIndex);
+            frame.Add(double.TryParse(CinematicSpeedTextBox.Text, out double speed) ? speed : 10.0);
+            frame.Add(currentCameraFOV);
 
-            animationFrames.Add(frame);
+            // Insert frame after selected row
+            int insertIndex;
+            if (listViewFrames.SelectedItems.Count == 0)
+            {
+                // No selection, append to the end
+                insertIndex = animationFrames.Count;
+            }
+            else
+            {
+                // Insert after the bottommost row if multiple are selected
+                insertIndex = listViewFrames.SelectedItems
+                    .Cast<ListViewItem>()
+                    .Max(item => item.Index) + 1;
+            }
+
+            animationFrames.Insert(insertIndex, frame);
             UpdateListView();
+
+            // Auto-select the newly added frame
+            listViewFrames.SelectedItems.Clear();
+            if (insertIndex < listViewFrames.Items.Count)
+            {
+                listViewFrames.Items[insertIndex].Selected = true;
+                listViewFrames.Items[insertIndex].Focused = true;
+                listViewFrames.EnsureVisible(insertIndex);
+            }
         }
-    
+
+
 
         private void UpdateListView()
         {
@@ -263,7 +302,7 @@ namespace Silicon
                 item.SubItems.Add(frame[3].ToString("F1"));                   // Pitch
                 item.SubItems.Add(frame[4].ToString("F1"));                   // Yaw
                 item.SubItems.Add(frame[5].ToString("F1"));                   // Speed
-                //item.SubItems.Add(frame[6].ToString("F0"));                   // Interpolation
+                item.SubItems.Add(frame[6].ToString("F0"));                   // FOV
                 listViewFrames.Items.Add(item);
                 i++;
             }
@@ -344,6 +383,11 @@ namespace Silicon
             targetCameraLookAtZ = goToFrame[2];
             targetCameraPitch = goToFrame[3];
             targetCameraYaw = goToFrame[4];
+            targetCameraFOV = goToFrame[6];
+
+            // Update FOV slider
+            CameraFOVSlider.Value = (int)goToFrame[6];
+            cameraFOVSliderValue = (int)goToFrame[6];
 
             // Compute animation duration based on distance
             double distance = Math.Sqrt(
@@ -363,6 +407,60 @@ namespace Silicon
             animationDuration = distance / (speed / 100);
             animationStartTime = (Environment.TickCount / 100.0);
         }
+
+        private void GoToNextFrame()
+        {
+            if (listViewFrames.Items.Count == 0)
+                return;
+
+            int targetIndex;
+
+            if (listViewFrames.SelectedItems.Count == 0)
+            {
+                targetIndex = 0; // Go to first frame
+            }
+            else
+            {
+                int maxIndex = listViewFrames.SelectedItems
+                    .Cast<ListViewItem>()
+                    .Max(item => item.Index);
+                targetIndex = (maxIndex + 1) % listViewFrames.Items.Count; // wrap around to 0
+            }
+
+            SelectAndGoToFrame(targetIndex);
+        }
+
+        private void GoToPreviousFrame()
+        {
+            if (listViewFrames.Items.Count == 0)
+                return;
+
+            int targetIndex;
+
+            if (listViewFrames.SelectedItems.Count == 0)
+            {
+                targetIndex = listViewFrames.Items.Count - 1; // Go to last frame
+            }
+            else
+            {
+                int minIndex = listViewFrames.SelectedItems
+                    .Cast<ListViewItem>()
+                    .Min(item => item.Index);
+                targetIndex = (minIndex - 1 + listViewFrames.Items.Count) % listViewFrames.Items.Count; // wrap around to last
+            }
+
+            SelectAndGoToFrame(targetIndex);
+        }
+
+        private void SelectAndGoToFrame(int index)
+        {
+            listViewFrames.SelectedItems.Clear();
+            listViewFrames.Items[index].Selected = true;
+            listViewFrames.Items[index].Focused = true;
+            listViewFrames.EnsureVisible(index);
+            ActivateGoToFrame(index);
+        }
+
 
         private void GoToAnnimationFrameButton_Click(object sender, EventArgs e)
         {
@@ -396,8 +494,13 @@ namespace Silicon
             {
                 try
                 {
-                    // Serialize the animationFrames list to JSON
-                    string json = System.Text.Json.JsonSerializer.Serialize(animationFrames);
+                    // Serialize with indentation
+                    var options = new System.Text.Json.JsonSerializerOptions
+                    {
+                        WriteIndented = true
+                    };
+
+                    string json = System.Text.Json.JsonSerializer.Serialize(animationFrames, options);
 
                     // Write to the selected file
                     File.WriteAllText(saveFileDialog.FileName, json);
@@ -411,6 +514,7 @@ namespace Silicon
             }
         }
 
+
         private void LoadAnimationButton_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
@@ -423,25 +527,41 @@ namespace Silicon
             {
                 try
                 {
-                    // Read the file content
                     string json = File.ReadAllText(openFileDialog.FileName);
 
-                    // Deserialize JSON to List<List<double>>
-                    animationFrames = System.Text.Json.JsonSerializer.Deserialize<List<List<double>>>(json);
+                    // Deserialize to List<List<double>> even if the inner lists are incomplete
+                    var rawFrames = System.Text.Json.JsonSerializer.Deserialize<List<List<double>>>(json);
+                    if (rawFrames == null)
+                        throw new Exception("Invalid or empty JSON format.");
 
-                    // Refresh the ListView to reflect loaded data
+                    animationFrames.Clear();
                     listViewFrames.Items.Clear();
+
                     int i = 1;
-                    foreach (var frame in animationFrames)
+                    foreach (var rawFrame in rawFrames)
                     {
+                        // Fill missing or invalid values with defaults
+                        List<double> frame = new List<double>
+                {
+                    rawFrame.Count > 0 ? rawFrame[0] : 50.0,  // X
+                    rawFrame.Count > 1 ? rawFrame[1] : 50.0,  // Y
+                    rawFrame.Count > 2 ? rawFrame[2] : 50.0,  // Z
+                    rawFrame.Count > 3 ? rawFrame[3] : 0.0,   // Pitch
+                    rawFrame.Count > 4 ? rawFrame[4] : 0.0,   // Yaw
+                    rawFrame.Count > 5 ? rawFrame[5] : 10.0,  // Speed
+                    rawFrame.Count > 6 ? rawFrame[6] : 70.0   // FOV
+                };
+
+                        animationFrames.Add(frame);
+
                         ListViewItem item = new ListViewItem(i.ToString());
-                        item.SubItems.Add(frame[0].ToString("F1"));                   // LookAtX
-                        item.SubItems.Add(frame[1].ToString("F1"));                   // LookAtY
-                        item.SubItems.Add(frame[2].ToString("F1"));                   // LookAtZ
-                        item.SubItems.Add(frame[3].ToString("F1"));                   // Pitch
-                        item.SubItems.Add(frame[4].ToString("F1"));                   // Yaw
-                        item.SubItems.Add(frame[5].ToString("F1"));                   // Speed
-                        //item.SubItems.Add(frame[6].ToString("F0"));                   // Interpolation                                                              
+                        item.SubItems.Add(frame[0].ToString("F1"));
+                        item.SubItems.Add(frame[1].ToString("F1"));
+                        item.SubItems.Add(frame[2].ToString("F1"));
+                        item.SubItems.Add(frame[3].ToString("F1"));
+                        item.SubItems.Add(frame[4].ToString("F1"));
+                        item.SubItems.Add(frame[5].ToString("F1"));
+                        item.SubItems.Add(frame[6].ToString("F0"));
                         listViewFrames.Items.Add(item);
                         i++;
                     }
@@ -454,6 +574,7 @@ namespace Silicon
                 }
             }
         }
+
 
         private void InterpolationComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {

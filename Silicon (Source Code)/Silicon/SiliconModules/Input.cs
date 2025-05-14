@@ -33,7 +33,7 @@ namespace Silicon
                 Keys.W, Keys.S, Keys.A, Keys.D,
                 Keys.ShiftKey, Keys.ControlKey,
                 Keys.Up, Keys.Down, Keys.Left, Keys.Right,
-                Keys.F1, Keys.F2, Keys.F3, Keys.F4, Keys.C, Keys.V, Keys.B, Keys.N, Keys.M
+                Keys.F1, Keys.F2, Keys.F3, Keys.F4, Keys.F5, Keys.F6, Keys.F7, Keys.F8
             };
 
             foreach (var key in keysToMonitor)
@@ -92,20 +92,17 @@ namespace Silicon
                 case Keys.F4:
                     FreecamSwitch.Switched = !FreecamSwitch.Switched;
                     break;
-                case Keys.C:
-                    ActivateGoToFrame(0);
+                case Keys.F5:
+                    AddAnimationFrameButton_Click(null, EventArgs.Empty);
                     break;
-                case Keys.V:
-                    ActivateGoToFrame(1);
+                case Keys.F6:
+                    GoToPreviousFrame();
                     break;
-                case Keys.B:
-                    ActivateGoToFrame(2);
+                case Keys.F7:
+                    GoToNextFrame();
                     break;
-                case Keys.N:
-                    ActivateGoToFrame(3);
-                    break;
-                case Keys.M:
-                    ActivateGoToFrame(4);
+                case Keys.F8:
+                    PlayAnimationButton_Click(null, EventArgs.Empty);
                     break;
             }
         }

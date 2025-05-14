@@ -33,6 +33,7 @@ namespace Silicon
             this.SiliconWorker = new System.ComponentModel.BackgroundWorker();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.Information = new System.Windows.Forms.TabPage();
+            this.VersionLabel = new Sunny.UI.UILabel();
             this.HotkeysLabel = new MetroSet_UI.Controls.MetroSetLabel();
             this.Status = new MetroSet_UI.Controls.MetroSetLabel();
             this.ToolTipLabel = new Sunny.UI.UILabel();
@@ -89,8 +90,9 @@ namespace Silicon
             this.Pitch = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Yaw = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Speed = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.FOV = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.metroSetSetToolTip1 = new MetroSet_UI.Components.MetroSetSetToolTip();
-            this.VersionLabel = new Sunny.UI.UILabel();
+            this.uiLabel14 = new Sunny.UI.UILabel();
             this.Information.SuspendLayout();
             this.Utility.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -131,6 +133,7 @@ namespace Silicon
             // 
             this.Information.BackColor = System.Drawing.Color.Transparent;
             this.Information.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Information.Controls.Add(this.uiLabel14);
             this.Information.Controls.Add(this.VersionLabel);
             this.Information.Controls.Add(this.HotkeysLabel);
             this.Information.Controls.Add(this.Status);
@@ -145,6 +148,18 @@ namespace Silicon
             this.Information.Size = new System.Drawing.Size(482, 272);
             this.Information.TabIndex = 1;
             this.Information.Text = "Information";
+            // 
+            // VersionLabel
+            // 
+            this.VersionLabel.BackColor = System.Drawing.Color.Transparent;
+            this.VersionLabel.Cursor = System.Windows.Forms.Cursors.Arrow;
+            this.VersionLabel.Font = new System.Drawing.Font("Impact", 9F);
+            this.VersionLabel.ForeColor = System.Drawing.Color.Gray;
+            this.VersionLabel.Location = new System.Drawing.Point(444, 252);
+            this.VersionLabel.Name = "VersionLabel";
+            this.VersionLabel.Size = new System.Drawing.Size(51, 20);
+            this.VersionLabel.TabIndex = 38;
+            this.VersionLabel.Text = "v2.5.0";
             // 
             // HotkeysLabel
             // 
@@ -182,12 +197,13 @@ namespace Silicon
             this.ToolTipLabel.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.ToolTipLabel.Font = new System.Drawing.Font("Leelawadee UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ToolTipLabel.ForeColor = System.Drawing.Color.White;
-            this.ToolTipLabel.Location = new System.Drawing.Point(13, 86);
+            this.ToolTipLabel.Location = new System.Drawing.Point(13, 88);
             this.ToolTipLabel.Name = "ToolTipLabel";
-            this.ToolTipLabel.Size = new System.Drawing.Size(351, 149);
+            this.ToolTipLabel.Size = new System.Drawing.Size(224, 149);
             this.ToolTipLabel.TabIndex = 26;
-            this.ToolTipLabel.Text = resources.GetString("ToolTipLabel.Text");
-            this.ToolTipLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.ToolTipLabel.Text = "DEFAULT PRESETS\r\nF1: Realm Camera\r\nF2: Overworld Camera\r\nF3: 1st Person POV Camer" +
+    "a\r\n\r\nCAMERA\r\nMouse Scrollwheel to change FOV\r\nAlt + Mouse Schrollwheel to change" +
+    "\r\nDistance to Focal Point";
             // 
             // getStatus
             // 
@@ -575,7 +591,7 @@ namespace Silicon
             this.CameraFOVSlider.Text = "metroSetTrackBar6";
             this.CameraFOVSlider.ThemeAuthor = "Narwin";
             this.CameraFOVSlider.ThemeName = "MetroLite";
-            this.CameraFOVSlider.Value = 60;
+            this.CameraFOVSlider.Value = 33;
             this.CameraFOVSlider.ValueColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
             // 
             // uiLabel4
@@ -611,7 +627,7 @@ namespace Silicon
             this.CameraDistanceSlider.Text = "metroSetTrackBar6";
             this.CameraDistanceSlider.ThemeAuthor = "Narwin";
             this.CameraDistanceSlider.ThemeName = "MetroLite";
-            this.CameraDistanceSlider.Value = 10;
+            this.CameraDistanceSlider.Value = 22;
             this.CameraDistanceSlider.ValueColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
             // 
             // uiLabel3
@@ -1071,9 +1087,10 @@ namespace Silicon
             this.Z,
             this.Pitch,
             this.Yaw,
-            this.Speed});
+            this.Speed,
+            this.FOV});
             this.listViewFrames.Cursor = System.Windows.Forms.Cursors.Default;
-            this.listViewFrames.Font = new System.Drawing.Font("Leelawadee UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listViewFrames.Font = new System.Drawing.Font("Leelawadee UI", 8.5F);
             this.listViewFrames.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
             this.listViewFrames.HideSelection = false;
             this.listViewFrames.Location = new System.Drawing.Point(3, 3);
@@ -1085,42 +1102,48 @@ namespace Silicon
             // FrameNumber
             // 
             this.FrameNumber.Text = "#";
-            this.FrameNumber.Width = 22;
+            this.FrameNumber.Width = 23;
             // 
             // X
             // 
             this.X.Text = "X";
             this.X.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.X.Width = 54;
+            this.X.Width = 45;
             // 
             // Y
             // 
             this.Y.Text = "Y";
             this.Y.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Y.Width = 54;
+            this.Y.Width = 45;
             // 
             // Z
             // 
             this.Z.Text = "Z";
             this.Z.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Z.Width = 54;
+            this.Z.Width = 45;
             // 
             // Pitch
             // 
             this.Pitch.Text = "Pitch";
             this.Pitch.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Pitch.Width = 54;
+            this.Pitch.Width = 45;
             // 
             // Yaw
             // 
             this.Yaw.Text = "Yaw";
             this.Yaw.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Yaw.Width = 54;
+            this.Yaw.Width = 45;
             // 
             // Speed
             // 
             this.Speed.Text = "Speed";
             this.Speed.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.Speed.Width = 50;
+            // 
+            // FOV
+            // 
+            this.FOV.Text = "FOV";
+            this.FOV.Width = 45;
             // 
             // metroSetSetToolTip1
             // 
@@ -1134,17 +1157,17 @@ namespace Silicon
             this.metroSetSetToolTip1.ThemeAuthor = "Narwin";
             this.metroSetSetToolTip1.ThemeName = "MetroLite";
             // 
-            // VersionLabel
+            // uiLabel14
             // 
-            this.VersionLabel.BackColor = System.Drawing.Color.Transparent;
-            this.VersionLabel.Cursor = System.Windows.Forms.Cursors.Arrow;
-            this.VersionLabel.Font = new System.Drawing.Font("Impact", 9F);
-            this.VersionLabel.ForeColor = System.Drawing.Color.Gray;
-            this.VersionLabel.Location = new System.Drawing.Point(444, 252);
-            this.VersionLabel.Name = "VersionLabel";
-            this.VersionLabel.Size = new System.Drawing.Size(51, 20);
-            this.VersionLabel.TabIndex = 38;
-            this.VersionLabel.Text = "v2.4.0";
+            this.uiLabel14.BackColor = System.Drawing.Color.Transparent;
+            this.uiLabel14.Cursor = System.Windows.Forms.Cursors.Arrow;
+            this.uiLabel14.Font = new System.Drawing.Font("Leelawadee UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.uiLabel14.ForeColor = System.Drawing.Color.White;
+            this.uiLabel14.Location = new System.Drawing.Point(243, 88);
+            this.uiLabel14.Name = "uiLabel14";
+            this.uiLabel14.Size = new System.Drawing.Size(224, 149);
+            this.uiLabel14.TabIndex = 39;
+            this.uiLabel14.Text = resources.GetString("uiLabel14.Text");
             // 
             // SiliconForm
             // 
@@ -1248,6 +1271,8 @@ namespace Silicon
         private Sunny.UI.UILabel uiLabel13;
         private MetroSet_UI.Controls.MetroSetLabel HotkeysLabel;
         private Sunny.UI.UILabel VersionLabel;
+        private System.Windows.Forms.ColumnHeader FOV;
+        private Sunny.UI.UILabel uiLabel14;
     }
 }
 

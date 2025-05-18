@@ -10,6 +10,8 @@ using Timer = System.Timers.Timer;
 using System.Collections.Generic;
 using System.Threading;
 using System.Runtime.InteropServices;
+using System.Diagnostics;
+using System.Text;
 
 
 
@@ -30,9 +32,17 @@ namespace Silicon
         private double animationDuration;
         private GlobalMouseHook mouseHook;
 
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll")]
+        private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
         [DllImport("user32.dll")]
         private static extern short GetAsyncKeyState(Keys key);
+
+        private delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
+
         public SiliconForm()
         {
             InitializeComponent();
@@ -65,7 +75,7 @@ namespace Silicon
                 SaveAnimationButton,
                 LoadAnimationButton
             };
-            foreach (MetroSet_UI.Controls.MetroSetButton button in interfaceButtons) 
+            foreach (MetroSet_UI.Controls.MetroSetButton button in interfaceButtons)
             {
                 button.NormalBorderColor = Color.FromArgb(80, 160, 255);
                 button.NormalColor = Color.FromArgb(80, 160, 255);
@@ -93,9 +103,12 @@ namespace Silicon
             mouseHook = new GlobalMouseHook();
             mouseHook.OnScrollDown += () =>
             {
+                if (!IsCubicWindowFocused())
+                    return;
+
                 if ((Control.ModifierKeys & Keys.Alt) == Keys.Alt)
                 {
-                    CameraDistanceSlider.Value =  Math.Min(100, CameraDistanceSlider.Value + 1);
+                    CameraDistanceSlider.Value = Math.Min(100, CameraDistanceSlider.Value + 1);
                 }
                 else
                 {
@@ -105,6 +118,9 @@ namespace Silicon
 
             mouseHook.OnScrollUp += () =>
             {
+                if (!IsCubicWindowFocused())
+                    return;
+
                 if ((Control.ModifierKeys & Keys.Alt) == Keys.Alt)
                 {
                     CameraDistanceSlider.Value = Math.Max(1, CameraDistanceSlider.Value - 1);
@@ -127,8 +143,8 @@ namespace Silicon
         }
 
         private bool wasConnected = false;
+        private int connectedPID = -1;
 
-        // This reads and tells you if the program can find the game process (Cubic.exe)
         private void ProcessCheckTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             processCheckTimer.Enabled = false;
@@ -138,6 +154,8 @@ namespace Silicon
 
             if (openProc)
             {
+                connectedPID = pID; // ✅ Save the exact process ID we opened
+
                 this.Invoke(new Action(() =>
                 {
                     UpdateLabel(procIDLabel, pID.ToString(), Color.Green);
@@ -149,10 +167,11 @@ namespace Silicon
                     wasConnected = true;
                     InjectBaseFunctions();
                 }
-
             }
             else
             {
+                connectedPID = -1;
+
                 this.Invoke(new Action(() =>
                 {
                     UpdateLabel(procIDLabel, "DISCONNECTED", Color.Red);
@@ -164,8 +183,10 @@ namespace Silicon
                     wasConnected = false;
                 }
             }
+
             processCheckTimer.Enabled = true;
         }
+
 
         private void UpdateLabel(Label label, string text, Color color)
         {
@@ -193,6 +214,25 @@ namespace Silicon
             mouseHook?.Dispose();
         }
         // Here ends the code edited by Hispano
+
+
+
+        private bool IsCubicWindowFocused()
+        {
+            if (connectedPID <= 0)
+                return false;
+
+            IntPtr foregroundWindow = GetForegroundWindow();
+            if (foregroundWindow == IntPtr.Zero)
+                return false;
+
+            GetWindowThreadProcessId(foregroundWindow, out uint foregroundPID);
+
+            uint currentPID = (uint)Process.GetCurrentProcess().Id;
+
+            // Return true if foreground window belongs to either Cubic or this app
+            return foregroundPID == (uint)connectedPID || foregroundPID == currentPID;
+        }
 
     }
 }

@@ -27,23 +27,23 @@ namespace Silicon
 
         private void UpdateKeyStates()
         {
-            // List of keys to monitor
+            if (!IsCubicWindowFocused())
+                return;
+
             Keys[] keysToMonitor = new Keys[]
             {
-                Keys.W, Keys.S, Keys.A, Keys.D,
-                Keys.ShiftKey, Keys.ControlKey,
-                Keys.Up, Keys.Down, Keys.Left, Keys.Right,
-                Keys.F1, Keys.F2, Keys.F3, Keys.F4, Keys.F5, Keys.F6, Keys.F7, Keys.F8
+        Keys.W, Keys.S, Keys.A, Keys.D,
+        Keys.ShiftKey, Keys.ControlKey,
+        Keys.Up, Keys.Down, Keys.Left, Keys.Right,
+        Keys.F1, Keys.F2, Keys.F3, Keys.F4, Keys.F5, Keys.F6, Keys.F7, Keys.F8
             };
 
             foreach (var key in keysToMonitor)
             {
-                // Check if the key is currently pressed
                 bool isPressed = (GetAsyncKeyState(key) & 0x8000) != 0;
 
                 if (isPressed)
                 {
-                    // Add the key if is pressed
                     if (!pressedKeys.Contains(key))
                     {
                         pressedKeys.Add(key);
@@ -52,7 +52,6 @@ namespace Silicon
                 }
                 else
                 {
-                    // Remove the key if is released
                     if (pressedKeys.Contains(key))
                     {
                         pressedKeys.Remove(key);
@@ -65,8 +64,12 @@ namespace Silicon
             }
         }
 
+
         private bool IsRightMouseButtonDown()
         {
+            if (!IsCubicWindowFocused())
+                return false;
+
             return (GetAsyncKeyState(Keys.RButton) & 0x8000) != 0;
         }
 

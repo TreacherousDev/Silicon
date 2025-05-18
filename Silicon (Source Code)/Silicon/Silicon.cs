@@ -55,32 +55,6 @@ namespace Silicon
         [DllImport("user32.dll")]
         static extern bool IsWindowVisible(IntPtr hWnd);
 
-        public List<IntPtr> GetCubicWindowHandles()
-        {
-            List<IntPtr> cubicWindows = new List<IntPtr>();
-
-            Process[] procs = Process.GetProcessesByName("Cubic");
-
-            HashSet<int> cubicPids = new HashSet<int>();
-            foreach (var p in procs)
-                cubicPids.Add(p.Id);
-
-            EnumWindows(delegate (IntPtr hWnd, IntPtr lParam)
-            {
-                if (!IsWindowVisible(hWnd))
-                    return true; // continue
-
-                GetWindowThreadProcessId(hWnd, out uint pid);
-                if (cubicPids.Contains((int)pid))
-                {
-                    cubicWindows.Add(hWnd);
-                }
-                return true; // continue enumeration
-            }, IntPtr.Zero);
-
-            return cubicWindows;
-        }
-
         [DllImport("dwmapi.dll")]
         static extern int DwmRegisterThumbnail(IntPtr dest, IntPtr src, out IntPtr thumb);
 
@@ -400,13 +374,21 @@ namespace Silicon
                 if (!IsWindowVisible(hWnd))
                     return true;
 
-                StringBuilder sb = new StringBuilder(256);
-                GetWindowText(hWnd, sb, sb.Capacity);
-                string title = sb.ToString();
+                GetWindowThreadProcessId(hWnd, out uint pid);
 
-                if (title.Contains("Cubic"))
+                try
                 {
-                    cubicWindows.Add(hWnd);
+                    Process proc = Process.GetProcessById((int)pid);
+                    string exeName = Path.GetFileName(proc.MainModule.FileName);
+
+                    if (string.Equals(exeName, "Cubic.exe", StringComparison.OrdinalIgnoreCase))
+                    {
+                        cubicWindows.Add(hWnd);
+                    }
+                }
+                catch
+                {
+                    // Ignore inaccessible/exited processes
                 }
 
                 return true;

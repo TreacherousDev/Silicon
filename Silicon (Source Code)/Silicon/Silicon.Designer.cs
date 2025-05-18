@@ -33,6 +33,8 @@ namespace Silicon
             this.SiliconWorker = new System.ComponentModel.BackgroundWorker();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.Information = new System.Windows.Forms.TabPage();
+            this.CubicWindows = new System.Windows.Forms.FlowLayoutPanel();
+            this.uiLabel14 = new Sunny.UI.UILabel();
             this.VersionLabel = new Sunny.UI.UILabel();
             this.HotkeysLabel = new MetroSet_UI.Controls.MetroSetLabel();
             this.Status = new MetroSet_UI.Controls.MetroSetLabel();
@@ -92,7 +94,6 @@ namespace Silicon
             this.Speed = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.FOV = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.metroSetSetToolTip1 = new MetroSet_UI.Components.MetroSetSetToolTip();
-            this.uiLabel14 = new Sunny.UI.UILabel();
             this.Information.SuspendLayout();
             this.Utility.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -133,6 +134,7 @@ namespace Silicon
             // 
             this.Information.BackColor = System.Drawing.Color.Transparent;
             this.Information.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Information.Controls.Add(this.CubicWindows);
             this.Information.Controls.Add(this.uiLabel14);
             this.Information.Controls.Add(this.VersionLabel);
             this.Information.Controls.Add(this.HotkeysLabel);
@@ -149,6 +151,28 @@ namespace Silicon
             this.Information.TabIndex = 1;
             this.Information.Text = "Information";
             // 
+            // CubicWindows
+            // 
+            this.CubicWindows.AutoScroll = true;
+            this.CubicWindows.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.CubicWindows.Location = new System.Drawing.Point(-1, 67);
+            this.CubicWindows.Name = "CubicWindows";
+            this.CubicWindows.Padding = new System.Windows.Forms.Padding(10);
+            this.CubicWindows.Size = new System.Drawing.Size(482, 204);
+            this.CubicWindows.TabIndex = 40;
+            // 
+            // uiLabel14
+            // 
+            this.uiLabel14.BackColor = System.Drawing.Color.Transparent;
+            this.uiLabel14.Cursor = System.Windows.Forms.Cursors.Arrow;
+            this.uiLabel14.Font = new System.Drawing.Font("Leelawadee UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.uiLabel14.ForeColor = System.Drawing.Color.White;
+            this.uiLabel14.Location = new System.Drawing.Point(243, 88);
+            this.uiLabel14.Name = "uiLabel14";
+            this.uiLabel14.Size = new System.Drawing.Size(224, 149);
+            this.uiLabel14.TabIndex = 39;
+            this.uiLabel14.Text = resources.GetString("uiLabel14.Text");
+            // 
             // VersionLabel
             // 
             this.VersionLabel.BackColor = System.Drawing.Color.Transparent;
@@ -159,7 +183,7 @@ namespace Silicon
             this.VersionLabel.Name = "VersionLabel";
             this.VersionLabel.Size = new System.Drawing.Size(51, 20);
             this.VersionLabel.TabIndex = 38;
-            this.VersionLabel.Text = "v2.5.0";
+            this.VersionLabel.Text = "v2.6.0";
             // 
             // HotkeysLabel
             // 
@@ -848,9 +872,9 @@ namespace Silicon
             this.tabPage1.Controls.Add(this.PlayAnimationButton);
             this.tabPage1.Controls.Add(this.listViewFrames);
             this.tabPage1.Controls.Add(this.AddAnimationFrameButton);
-            this.tabPage1.Location = new System.Drawing.Point(0, 30);
+            this.tabPage1.Location = new System.Drawing.Point(0, 40);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(482, 272);
+            this.tabPage1.Size = new System.Drawing.Size(200, 60);
             this.tabPage1.TabIndex = 2;
             this.tabPage1.Text = "Cinematic";
             // 
@@ -1157,18 +1181,6 @@ namespace Silicon
             this.metroSetSetToolTip1.ThemeAuthor = "Narwin";
             this.metroSetSetToolTip1.ThemeName = "MetroLite";
             // 
-            // uiLabel14
-            // 
-            this.uiLabel14.BackColor = System.Drawing.Color.Transparent;
-            this.uiLabel14.Cursor = System.Windows.Forms.Cursors.Arrow;
-            this.uiLabel14.Font = new System.Drawing.Font("Leelawadee UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.uiLabel14.ForeColor = System.Drawing.Color.White;
-            this.uiLabel14.Location = new System.Drawing.Point(243, 88);
-            this.uiLabel14.Name = "uiLabel14";
-            this.uiLabel14.Size = new System.Drawing.Size(224, 149);
-            this.uiLabel14.TabIndex = 39;
-            this.uiLabel14.Text = resources.GetString("uiLabel14.Text");
-            // 
             // SiliconForm
             // 
             this.AllowResize = false;
@@ -1273,6 +1285,7 @@ namespace Silicon
         private Sunny.UI.UILabel VersionLabel;
         private System.Windows.Forms.ColumnHeader FOV;
         private Sunny.UI.UILabel uiLabel14;
+        private System.Windows.Forms.FlowLayoutPanel CubicWindows;
     }
 }
 

@@ -27,7 +27,8 @@ namespace Silicon
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent() {
+        private void InitializeComponent()
+        {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SiliconForm));
             this.metroSetControlBox1 = new MetroSet_UI.Controls.MetroSetControlBox();
             this.SiliconWorker = new System.ComponentModel.BackgroundWorker();
@@ -44,6 +45,7 @@ namespace Silicon
             this.proID = new MetroSet_UI.Controls.MetroSetLabel();
             this.procIDLabel = new MetroSet_UI.Controls.MetroSetLabel();
             this.Utility = new System.Windows.Forms.TabPage();
+            this.Preset4Button = new MetroSet_UI.Controls.MetroSetButton();
             this.Preset3Button = new MetroSet_UI.Controls.MetroSetButton();
             this.Preset2Button = new MetroSet_UI.Controls.MetroSetButton();
             this.Preset1Button = new MetroSet_UI.Controls.MetroSetButton();
@@ -85,14 +87,14 @@ namespace Silicon
             this.GoToAnnimationFrameButton = new MetroSet_UI.Controls.MetroSetButton();
             this.DeleteAnimationFrameButton = new MetroSet_UI.Controls.MetroSetButton();
             this.listViewFrames = new System.Windows.Forms.ListView();
-            this.FrameNumber = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.X = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Y = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Z = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Pitch = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Yaw = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Speed = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.FOV = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.FrameNumber = new System.Windows.Forms.ColumnHeader();
+            this.X = new System.Windows.Forms.ColumnHeader();
+            this.Y = new System.Windows.Forms.ColumnHeader();
+            this.Z = new System.Windows.Forms.ColumnHeader();
+            this.Pitch = new System.Windows.Forms.ColumnHeader();
+            this.Yaw = new System.Windows.Forms.ColumnHeader();
+            this.Speed = new System.Windows.Forms.ColumnHeader();
+            this.FOV = new System.Windows.Forms.ColumnHeader();
             this.metroSetSetToolTip1 = new MetroSet_UI.Components.MetroSetSetToolTip();
             this.Information.SuspendLayout();
             this.Utility.SuspendLayout();
@@ -225,9 +227,7 @@ namespace Silicon
             this.ToolTipLabel.Name = "ToolTipLabel";
             this.ToolTipLabel.Size = new System.Drawing.Size(224, 149);
             this.ToolTipLabel.TabIndex = 26;
-            this.ToolTipLabel.Text = "DEFAULT PRESETS\r\nF1: Realm Camera\r\nF2: Overworld Camera\r\nF3: 1st Person POV Camer" +
-    "a\r\n\r\nCAMERA\r\nMouse Scrollwheel to change FOV\r\nAlt + Mouse Schrollwheel to change" +
-    "\r\nDistance to Focal Point";
+            this.ToolTipLabel.Text = "DEFAULT PRESETS\r\nF1: Realm Camera\r\nF2: Overworld Camera\r\nF3: 1st Person POV Camer" + "a\r\n\r\nCAMERA\r\nMouse Scrollwheel to change FOV\r\nAlt + Mouse Schrollwheel to change" + "\r\nDistance to Focal Point";
             // 
             // getStatus
             // 
@@ -293,6 +293,7 @@ namespace Silicon
             // 
             this.Utility.BackColor = System.Drawing.Color.Transparent;
             this.Utility.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Utility.Controls.Add(this.Preset4Button);
             this.Utility.Controls.Add(this.Preset3Button);
             this.Utility.Controls.Add(this.Preset2Button);
             this.Utility.Controls.Add(this.Preset1Button);
@@ -324,6 +325,33 @@ namespace Silicon
             this.Utility.Size = new System.Drawing.Size(482, 272);
             this.Utility.TabIndex = 0;
             this.Utility.Text = "Utility";
+            // 
+            // Preset4Button
+            // 
+            this.Preset4Button.DisabledBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.Preset4Button.DisabledBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.Preset4Button.DisabledForeColor = System.Drawing.Color.Gray;
+            this.Preset4Button.Font = new System.Drawing.Font("Impact", 9F, System.Drawing.FontStyle.Bold);
+            this.Preset4Button.HoverBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
+            this.Preset4Button.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
+            this.Preset4Button.HoverTextColor = System.Drawing.Color.White;
+            this.Preset4Button.IsDerivedStyle = true;
+            this.Preset4Button.Location = new System.Drawing.Point(251, 237);
+            this.Preset4Button.Name = "Preset4Button";
+            this.Preset4Button.NormalBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.Preset4Button.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.Preset4Button.NormalTextColor = System.Drawing.Color.White;
+            this.Preset4Button.PressBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
+            this.Preset4Button.PressColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
+            this.Preset4Button.PressTextColor = System.Drawing.Color.White;
+            this.Preset4Button.Size = new System.Drawing.Size(29, 22);
+            this.Preset4Button.Style = MetroSet_UI.Enums.Style.Light;
+            this.Preset4Button.StyleManager = null;
+            this.Preset4Button.TabIndex = 54;
+            this.Preset4Button.Text = "4";
+            this.Preset4Button.ThemeAuthor = "Narwin";
+            this.Preset4Button.ThemeName = "MetroLite";
+            this.Preset4Button.Click += new System.EventHandler(this.Preset4Button_Click);
             // 
             // Preset3Button
             // 
@@ -885,16 +913,7 @@ namespace Silicon
             this.InterpolationComboBox.ForeColor = System.Drawing.Color.Black;
             this.InterpolationComboBox.FormattingEnabled = true;
             this.InterpolationComboBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.InterpolationComboBox.Items.AddRange(new object[] {
-            " Linear",
-            " Ease",
-            " Ease In",
-            " Ease Out",
-            " Ease In Out",
-            " Exponential In",
-            " Exponential Out",
-            " Exponential In Out",
-            "Catmull-Rom"});
+            this.InterpolationComboBox.Items.AddRange(new object[] { " Linear", " Ease", " Ease In", " Ease Out", " Ease In Out", " Exponential In", " Exponential Out", " Exponential In Out", "Catmull-Rom" });
             this.InterpolationComboBox.Location = new System.Drawing.Point(215, 246);
             this.InterpolationComboBox.Name = "InterpolationComboBox";
             this.InterpolationComboBox.Size = new System.Drawing.Size(146, 28);
@@ -1104,15 +1123,7 @@ namespace Silicon
             // listViewFrames
             // 
             this.listViewFrames.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.listViewFrames.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.FrameNumber,
-            this.X,
-            this.Y,
-            this.Z,
-            this.Pitch,
-            this.Yaw,
-            this.Speed,
-            this.FOV});
+            this.listViewFrames.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] { this.FrameNumber, this.X, this.Y, this.Z, this.Pitch, this.Yaw, this.Speed, this.FOV });
             this.listViewFrames.Cursor = System.Windows.Forms.Cursors.Default;
             this.listViewFrames.Font = new System.Drawing.Font("Leelawadee UI", 8.5F);
             this.listViewFrames.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
@@ -1217,8 +1228,9 @@ namespace Silicon
             this.TabControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.ResumeLayout(false);
-
         }
+
+        private MetroSet_UI.Controls.MetroSetButton Preset4Button;
 
         #endregion
         private MetroSet_UI.Controls.MetroSetControlBox metroSetControlBox1;

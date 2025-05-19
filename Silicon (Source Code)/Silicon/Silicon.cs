@@ -497,8 +497,5 @@ namespace Silicon
 
             return picBox;
         }
-
-
-
     }
 }

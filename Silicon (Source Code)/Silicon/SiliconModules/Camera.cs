@@ -33,7 +33,7 @@ namespace Silicon
         private int cameraDistanceSliderValue = 0;
         private int gameFogSliderValue = 110;
         private double cameraMoveSpeed = 0.1;
-        private double cameraRotateSpeed = 2;
+        private double cameraRotateSpeed = 1.5;
 
 
         private void HandleCameraController(double yawRotation)

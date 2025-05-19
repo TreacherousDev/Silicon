@@ -145,9 +145,9 @@ namespace Silicon
             this.Information.Controls.Add(this.proID);
             this.Information.Controls.Add(this.procIDLabel);
             this.Information.ForeColor = System.Drawing.Color.White;
-            this.Information.Location = new System.Drawing.Point(0, 30);
+            this.Information.Location = new System.Drawing.Point(0, 40);
             this.Information.Name = "Information";
-            this.Information.Size = new System.Drawing.Size(482, 272);
+            this.Information.Size = new System.Drawing.Size(200, 60);
             this.Information.TabIndex = 1;
             this.Information.Text = "Information";
             // 
@@ -687,7 +687,7 @@ namespace Silicon
             this.CameraRotateSpeedSlider.Text = "metroSetTrackBar6";
             this.CameraRotateSpeedSlider.ThemeAuthor = "Narwin";
             this.CameraRotateSpeedSlider.ThemeName = "MetroLite";
-            this.CameraRotateSpeedSlider.Value = 200;
+            this.CameraRotateSpeedSlider.Value = 150;
             this.CameraRotateSpeedSlider.ValueColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
             this.CameraRotateSpeedSlider.Scroll += new MetroSet_UI.Controls.MetroSetTrackBar.ScrollEventHandler(this.CameraRotateSpeedSlider_Scroll);
             // 
@@ -872,9 +872,9 @@ namespace Silicon
             this.tabPage1.Controls.Add(this.PlayAnimationButton);
             this.tabPage1.Controls.Add(this.listViewFrames);
             this.tabPage1.Controls.Add(this.AddAnimationFrameButton);
-            this.tabPage1.Location = new System.Drawing.Point(0, 30);
+            this.tabPage1.Location = new System.Drawing.Point(0, 40);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(482, 272);
+            this.tabPage1.Size = new System.Drawing.Size(200, 60);
             this.tabPage1.TabIndex = 2;
             this.tabPage1.Text = "Cinematic";
             // 

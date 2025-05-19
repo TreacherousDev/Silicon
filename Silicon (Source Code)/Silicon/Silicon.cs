@@ -136,6 +136,7 @@ namespace Silicon
                 Preset1Button,
                 Preset2Button,
                 Preset3Button,
+                Preset4Button,
                 AddAnimationFrameButton,
                 PlayAnimationButton,
                 DeleteAnimationFrameButton,

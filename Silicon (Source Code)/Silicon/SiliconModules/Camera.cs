@@ -225,12 +225,12 @@ namespace Silicon
 
         private void UpdateCameraRoll()
         {
-            if (pressedKeys.Contains(Keys.Up) || pressedKeys.Contains(Keys.Down) || pressedKeys.Contains(Keys.Left)
-                || pressedKeys.Contains(Keys.Right) || IsRightMouseButtonDown())
-            {
-                ResetCameraRoll();
-                return;
-            }
+            // if (pressedKeys.Contains(Keys.Up) || pressedKeys.Contains(Keys.Down) || pressedKeys.Contains(Keys.Left)
+            //     || pressedKeys.Contains(Keys.Right) || IsRightMouseButtonDown())
+            // {
+            //     ResetCameraRoll();
+            //     return;
+            // }
 
             if (pressedKeys.Contains(Keys.Q))
                 currentCameraRoll -= 2;

@@ -29,7 +29,7 @@ namespace Silicon
         {
             cameraFOVSliderValue = 33;
             CameraFOVSlider.Value = 33;
-            //m.WriteMemory("Cubic.exe+E20E1D", "float", cameraFOVSliderValue.ToString());
+            //m.WriteMemory("Cubic.exe+E20E25", "float", cameraFOVSliderValue.ToString());
             targetCameraFOV = 33;
 
             cameraDistanceSliderValue = 22;
@@ -50,7 +50,7 @@ namespace Silicon
         {
             cameraFOVSliderValue = 33;
             CameraFOVSlider.Value = 33;
-            //m.WriteMemory("Cubic.exe+E20E1D", "float", cameraFOVSliderValue.ToString());
+            //m.WriteMemory("Cubic.exe+E20E25", "float", cameraFOVSliderValue.ToString());
             targetCameraFOV = 33;
 
             cameraDistanceSliderValue = 45;
@@ -71,7 +71,7 @@ namespace Silicon
         {
             cameraFOVSliderValue = 70;
             CameraFOVSlider.Value = 70;
-            //m.WriteMemory("Cubic.exe+E20E1D", "float", cameraFOVSliderValue.ToString());
+            //m.WriteMemory("Cubic.exe+E20E25", "float", cameraFOVSliderValue.ToString());
             targetCameraFOV = 70;
 
             cameraDistanceSliderValue = 1;

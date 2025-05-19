@@ -93,10 +93,10 @@ namespace Silicon
             this.Z = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Pitch = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Yaw = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Roll = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Speed = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.FOV = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.metroSetSetToolTip1 = new MetroSet_UI.Components.MetroSetSetToolTip();
-            this.Roll = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Information.SuspendLayout();
             this.Utility.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -234,13 +234,13 @@ namespace Silicon
             // 
             this.Hispano.Font = new System.Drawing.Font("Impact", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Hispano.IsDerivedStyle = true;
-            this.Hispano.Location = new System.Drawing.Point(94, 234);
+            this.Hispano.Location = new System.Drawing.Point(62, 233);
             this.Hispano.Name = "Hispano";
-            this.Hispano.Size = new System.Drawing.Size(293, 41);
+            this.Hispano.Size = new System.Drawing.Size(344, 41);
             this.Hispano.Style = MetroSet_UI.Enums.Style.Light;
             this.Hispano.StyleManager = null;
             this.Hispano.TabIndex = 3;
-            this.Hispano.Text = "Developed by TreacherousDev\r\nhttps://github.com/TreacherousDev/Silicon\r\n";
+            this.Hispano.Text = "TreacherousDev · Krita · Hispano\r\nhttps://github.com/TreacherousDev/Silicon\r\n";
             this.Hispano.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.Hispano.ThemeAuthor = "Narwin";
             this.Hispano.ThemeName = "MetroLite";
@@ -900,9 +900,9 @@ namespace Silicon
             this.tabPage1.Controls.Add(this.PlayAnimationButton);
             this.tabPage1.Controls.Add(this.listViewFrames);
             this.tabPage1.Controls.Add(this.AddAnimationFrameButton);
-            this.tabPage1.Location = new System.Drawing.Point(0, 30);
+            this.tabPage1.Location = new System.Drawing.Point(0, 40);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(482, 272);
+            this.tabPage1.Size = new System.Drawing.Size(200, 60);
             this.tabPage1.TabIndex = 2;
             this.tabPage1.Text = "Cinematic";
             // 
@@ -1199,6 +1199,11 @@ namespace Silicon
             this.Yaw.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.Yaw.Width = 42;
             // 
+            // Roll
+            // 
+            this.Roll.Text = "Roll";
+            this.Roll.Width = 42;
+            // 
             // Speed
             // 
             this.Speed.Text = "Speed";
@@ -1221,11 +1226,6 @@ namespace Silicon
             this.metroSetSetToolTip1.StyleManager = null;
             this.metroSetSetToolTip1.ThemeAuthor = "Narwin";
             this.metroSetSetToolTip1.ThemeName = "MetroLite";
-            // 
-            // Roll
-            // 
-            this.Roll.Text = "Roll";
-            this.Roll.Width = 42;
             // 
             // SiliconForm
             // 

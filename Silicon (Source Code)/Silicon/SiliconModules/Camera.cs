@@ -229,10 +229,10 @@ namespace Silicon
             //     return;
             // }
 
-            if (pressedKeys.Contains(Keys.Q))
+            if (pressedKeys.Contains(Keys.E))
                 currentCameraRoll -= 1;
 
-            if (pressedKeys.Contains(Keys.E))
+            if (pressedKeys.Contains(Keys.Q))
                 currentCameraRoll += 1;
 
             upVector = ComputeUpVectorFromYawRoll((float)currentCameraRoll);

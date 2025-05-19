@@ -70,9 +70,9 @@ namespace Silicon
 
         private void Preset4Button_Click(object sender, EventArgs e)
         {
-            CameraFOVSlider.Value = 45;
+            CameraFOVSlider.Value = 60;
             CameraDistanceSlider.Value = 220;
-            GameFogSlider.Value = 150;
+            GameFogSlider.Value = 200;
             targetCameraFOV = 45;
 
             HidePlayerModelSwitch.Switched = false;
@@ -81,10 +81,10 @@ namespace Silicon
             FreecamSwitch.Switched = false;
 
             ResetCameraRoll();
-            currentCameraPitch = 0;
-            targetCameraPitch = 0;
-            currentCameraYaw = 0;
-            targetCameraYaw = 0;
+            //currentCameraPitch = 0;
+            //targetCameraPitch = 0;
+            //currentCameraYaw = 0;
+            //targetCameraYaw = 0;
         }
 
         private double CatmullRom(double p0, double p1, double p2, double p3, double t)

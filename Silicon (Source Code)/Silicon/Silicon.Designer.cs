@@ -677,8 +677,8 @@ namespace Silicon
             this.CameraRotateSpeedSlider.HandlerColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.CameraRotateSpeedSlider.IsDerivedStyle = true;
             this.CameraRotateSpeedSlider.Location = new System.Drawing.Point(254, 108);
-            this.CameraRotateSpeedSlider.Maximum = 100;
-            this.CameraRotateSpeedSlider.Minimum = 3;
+            this.CameraRotateSpeedSlider.Maximum = 400;
+            this.CameraRotateSpeedSlider.Minimum = 1;
             this.CameraRotateSpeedSlider.Name = "CameraRotateSpeedSlider";
             this.CameraRotateSpeedSlider.Size = new System.Drawing.Size(180, 16);
             this.CameraRotateSpeedSlider.Style = MetroSet_UI.Enums.Style.Light;
@@ -687,7 +687,7 @@ namespace Silicon
             this.CameraRotateSpeedSlider.Text = "metroSetTrackBar6";
             this.CameraRotateSpeedSlider.ThemeAuthor = "Narwin";
             this.CameraRotateSpeedSlider.ThemeName = "MetroLite";
-            this.CameraRotateSpeedSlider.Value = 50;
+            this.CameraRotateSpeedSlider.Value = 200;
             this.CameraRotateSpeedSlider.ValueColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
             this.CameraRotateSpeedSlider.Scroll += new MetroSet_UI.Controls.MetroSetTrackBar.ScrollEventHandler(this.CameraRotateSpeedSlider_Scroll);
             // 
@@ -872,9 +872,9 @@ namespace Silicon
             this.tabPage1.Controls.Add(this.PlayAnimationButton);
             this.tabPage1.Controls.Add(this.listViewFrames);
             this.tabPage1.Controls.Add(this.AddAnimationFrameButton);
-            this.tabPage1.Location = new System.Drawing.Point(0, 40);
+            this.tabPage1.Location = new System.Drawing.Point(0, 30);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(200, 60);
+            this.tabPage1.Size = new System.Drawing.Size(482, 272);
             this.tabPage1.TabIndex = 2;
             this.tabPage1.Text = "Cinematic";
             // 

@@ -27,7 +27,7 @@ namespace Silicon
 
         private void UpdateKeyStates()
         {
-            if (!IsCubicWindowFocused())
+            if (!IsCubicWindowFocused() && !IsSiliconWindowFocused())
                 return;
 
             Keys[] keysToMonitor = new Keys[]

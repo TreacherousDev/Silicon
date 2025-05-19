@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Drawing;
 using System.Timers;
+using System.Windows.Forms;
 
 namespace Silicon
 {
     public partial class SiliconForm
     {
-        private Timer _updateTimer;
+        private System.Timers.Timer _updateTimer;
 
         // Persistent Functions (Required for the engine to function)
         readonly string cameraCoordinatesFunction = "90 90 90 90 90 90 90 90 90 90 90 90";
@@ -29,6 +30,8 @@ namespace Silicon
 
         readonly string upVectorInjection = "55 8B EC 8B 55 08 39 D1 0F 84 02 6D 25 FF 50 E8 00 00 00 00 58 53 8B 58 2B 89 1A 8B 58 2F 89 5A 04 8B 58 33 89 5A 08 5B 58 8B 02 89 01 8B 42 04 89 41 04 8B 42 08 89 41 08 8B C1 5D C2 04 00 00 00 00 00 00 00 00 00 00 00 80 BF FF FF FF FF";
         readonly string upVectorFunctionEntry = "E8 21 48 C6 00";
+
+        readonly string overrideArrowHotkeysFunction = "90 90 90 90 90 90 90 90";
 
         // Revertable functions (Optional switch states available)
         readonly string cameraLookAtEditorInjection = "50 E8 00 00 00 00 58 F3 0F 11 58 5D F3 0F 11 48 61 F3 0F 11 40 65 F3 0F 10 58 4D F3 0F 10 48 51 F3 0F 10 40 55 58 50 E8 00 00 00 00 58 F3 0F 11 58 37 F3 0F 11 48 3B F3 0F 11 40 3F 53 8D 5E 10 89 58 33 5B 58 F3 0F 11 1E F3 0F 11 4E 04 E9 B1 80 39 FF 00 00 00 00 00 00 00 00 00 00 8C 42 40 D8 7D 10 00 00 00 00 00 00 00 00 00 00 8C 42 FF FF FF FF";
@@ -69,7 +72,9 @@ namespace Silicon
             m.WriteMemory("Cubic.exe+E21097", "bytes", upVectorInjection);
             m.WriteMemory("Cubic.exe+1BC871", "bytes", upVectorFunctionEntry);
 
-            
+            m.WriteMemory("Cubic.exe+1B8AD2", "bytes", overrideArrowHotkeysFunction);
+            m.WriteMemory("Cubic.exe+1B8B0E", "bytes", overrideArrowHotkeysFunction);
+
             //Revertable, injections only as set to false by default
             m.WriteMemory("Cubic.exe+E20ED7", "bytes", hidePlayerAvatarInjection);
         }
@@ -81,10 +86,11 @@ namespace Silicon
 
         private void CheckAndUpdateMemory()
         {
-            if (isFreecamEnabled)
-            {
+
+            //if (isFreecamEnabled)
+            //{
                 HandleCameraController(currentCameraYaw);
-            }
+            //}
             UpdateCameraRoll();
 
             uint intRotationAddress = m.ReadUInt("Cubic.exe+E2103E");
@@ -188,7 +194,9 @@ namespace Silicon
             }
 
             // Code updates camera labels regardless of freecam toggle
-            if (FreecamSwitch.Switched == true)
+            //if (FreecamSwitch.Switched == true)
+            if (pressedKeys.Contains(Keys.Up) || pressedKeys.Contains(Keys.Down) || pressedKeys.Contains(Keys.Left)
+                || pressedKeys.Contains(Keys.Right) || IsRightMouseButtonDown())
             {
                 // Overwrite camera position, pitch and yaw using Silicon as the new controller
                 // Handle vanilla screen orbiting

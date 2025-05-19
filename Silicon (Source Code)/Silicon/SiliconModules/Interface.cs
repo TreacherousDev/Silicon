@@ -42,6 +42,8 @@ namespace Silicon
             HideUserInterfaceSwitch.Switched = false;
             HideNametagsSwitch.Switched = false;
             FreecamSwitch.Switched = false;
+
+            ResetCameraRoll();
         }
 
         private void Preset2Button_Click(object sender, EventArgs e)
@@ -63,6 +65,8 @@ namespace Silicon
             HideUserInterfaceSwitch.Switched = false;
             HideNametagsSwitch.Switched = false;
             FreecamSwitch.Switched = false;
+
+            ResetCameraRoll();
         }
 
         private void Preset3Button_Click(object sender, EventArgs e)
@@ -84,6 +88,8 @@ namespace Silicon
             HideUserInterfaceSwitch.Switched = false;
             HideNametagsSwitch.Switched = true;
             FreecamSwitch.Switched = false;
+
+            ResetCameraRoll();
         }
 
         private double CatmullRom(double p0, double p1, double p2, double p3, double t)

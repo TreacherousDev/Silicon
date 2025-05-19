@@ -33,11 +33,13 @@ namespace Silicon
         private int cameraDistanceSliderValue = 0;
         private int gameFogSliderValue = 110;
         private double cameraMoveSpeed = 0.1;
-        private double cameraRotateSpeed = 0.5;
+        private double cameraRotateSpeed = 2;
 
 
         private void HandleCameraController(double yawRotation)
         {
+            if (!IsCubicWindowFocused()) return;
+
             double moveX = 0, moveY = 0, moveZ = 0;
             double rotatePitch = 0, rotateYaw = 0;
 
@@ -75,11 +77,6 @@ namespace Silicon
             if (pressedKeys.Contains(Keys.Down)) rotatePitch += 1;
             if (pressedKeys.Contains(Keys.Left)) rotateYaw -= 1;
             if (pressedKeys.Contains(Keys.Right)) rotateYaw += 1;
-
-
-            //// Optional: re-orthogonalize the basis
-            //Vector3 right = Vector3.Normalize(Vector3.Cross(forward, up));
-            //up = Vector3.Normalize(Vector3.Cross(right, forward));
 
 
             double moveMagnitude = Math.Sqrt(moveX * moveX + moveY * moveY + moveZ * moveZ);

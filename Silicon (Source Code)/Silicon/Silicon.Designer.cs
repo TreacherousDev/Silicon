@@ -27,8 +27,7 @@ namespace Silicon
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent()
-        {
+        private void InitializeComponent() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SiliconForm));
             this.metroSetControlBox1 = new MetroSet_UI.Controls.MetroSetControlBox();
             this.SiliconWorker = new System.ComponentModel.BackgroundWorker();
@@ -679,9 +678,9 @@ namespace Silicon
             this.CameraRotateSpeedSlider.DisabledValueColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))));
             this.CameraRotateSpeedSlider.HandlerColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.CameraRotateSpeedSlider.IsDerivedStyle = true;
-            this.CameraRotateSpeedSlider.Location = new System.Drawing.Point(301, 106);
-            this.CameraRotateSpeedSlider.Maximum = 100;
-            this.CameraRotateSpeedSlider.Minimum = 3;
+            this.CameraRotateSpeedSlider.Location = new System.Drawing.Point(254, 108);
+            this.CameraRotateSpeedSlider.Maximum = 400;
+            this.CameraRotateSpeedSlider.Minimum = 1;
             this.CameraRotateSpeedSlider.Name = "CameraRotateSpeedSlider";
             this.CameraRotateSpeedSlider.Size = new System.Drawing.Size(180, 16);
             this.CameraRotateSpeedSlider.Style = MetroSet_UI.Enums.Style.Light;
@@ -690,7 +689,7 @@ namespace Silicon
             this.CameraRotateSpeedSlider.Text = "metroSetTrackBar6";
             this.CameraRotateSpeedSlider.ThemeAuthor = "Narwin";
             this.CameraRotateSpeedSlider.ThemeName = "MetroLite";
-            this.CameraRotateSpeedSlider.Value = 50;
+            this.CameraRotateSpeedSlider.Value = 150;
             this.CameraRotateSpeedSlider.ValueColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
             this.CameraRotateSpeedSlider.Scroll += new MetroSet_UI.Controls.MetroSetTrackBar.ScrollEventHandler(this.CameraRotateSpeedSlider_Scroll);
             // 
@@ -1157,7 +1156,7 @@ namespace Silicon
             this.FOV.Width = 45;
             // 
             // tabPage2
-            // 
+            //
             this.tabPage2.BackColor = System.Drawing.Color.Transparent;
             this.tabPage2.Controls.Add(this.uiLabel15);
             this.tabPage2.Controls.Add(this.CameraShakeSwitch);
@@ -1166,9 +1165,9 @@ namespace Silicon
             this.tabPage2.Size = new System.Drawing.Size(200, 60);
             this.tabPage2.TabIndex = 3;
             this.tabPage2.Text = "Effects";
-            // 
+            //
             // uiLabel15
-            // 
+            //
             this.uiLabel15.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.uiLabel15.Font = new System.Drawing.Font("Impact", 12F);
             this.uiLabel15.ForeColor = System.Drawing.Color.White;
@@ -1177,9 +1176,9 @@ namespace Silicon
             this.uiLabel15.Size = new System.Drawing.Size(109, 23);
             this.uiLabel15.TabIndex = 38;
             this.uiLabel15.Text = "CAMERA SHAKE";
-            // 
+            //
             // CameraShakeSwitch
-            // 
+            //
             this.CameraShakeSwitch.BackColor = System.Drawing.Color.Transparent;
             this.CameraShakeSwitch.BackgroundColor = System.Drawing.Color.Empty;
             this.CameraShakeSwitch.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(165)))), ((int)(((byte)(159)))), ((int)(((byte)(147)))));
@@ -1202,7 +1201,7 @@ namespace Silicon
             this.CameraShakeSwitch.ThemeName = "MetroLite";
             this.CameraShakeSwitch.UnCheckColor = System.Drawing.Color.White;
             this.CameraShakeSwitch.SwitchedChanged += new MetroSet_UI.Controls.MetroSetSwitch.SwitchedChangedEventHandler(this.CameraShakeSwitch_SwitchedChanged);
-            // 
+            //
             // metroSetSetToolTip1
             // 
             this.metroSetSetToolTip1.BackColor = System.Drawing.Color.White;

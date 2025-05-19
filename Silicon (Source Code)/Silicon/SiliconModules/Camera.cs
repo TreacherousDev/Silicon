@@ -35,11 +35,13 @@ namespace Silicon
         private int cameraDistanceSliderValue = 0;
         private int gameFogSliderValue = 110;
         private double cameraMoveSpeed = 0.1;
-        private double cameraRotateSpeed = 0.5;
+        private double cameraRotateSpeed = 1.5;
 
 
         private void HandleCameraController(double yawRotation)
         {
+            if (!IsCubicWindowFocused()) return;
+
             double moveX = 0, moveY = 0, moveZ = 0;
             double rotatePitch = 0, rotateYaw = 0;
 

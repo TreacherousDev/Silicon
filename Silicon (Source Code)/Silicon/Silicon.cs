@@ -173,7 +173,7 @@ namespace Silicon
             mouseHook = new GlobalMouseHook();
             mouseHook.OnScrollDown += () =>
             {
-                if (!IsCubicWindowFocused())
+                if (!IsCubicWindowFocused() && !IsSiliconWindowFocused())
                     return;
 
                 if ((Control.ModifierKeys & Keys.Alt) == Keys.Alt)
@@ -188,7 +188,7 @@ namespace Silicon
 
             mouseHook.OnScrollUp += () =>
             {
-                if (!IsCubicWindowFocused())
+                if (!IsCubicWindowFocused() && !IsSiliconWindowFocused())
                     return;
 
                 if ((Control.ModifierKeys & Keys.Alt) == Keys.Alt)
@@ -353,12 +353,20 @@ namespace Silicon
                 return false;
 
             GetWindowThreadProcessId(foregroundWindow, out uint foregroundPID);
-
-            uint currentPID = (uint)Process.GetCurrentProcess().Id;
-
-            // Return true if foreground window belongs to either Cubic or this app
-            return foregroundPID == (uint)connectedPID || foregroundPID == currentPID;
+            return foregroundPID == (uint)connectedPID;
         }
+
+        private bool IsSiliconWindowFocused()
+        {
+            IntPtr foregroundWindow = GetForegroundWindow();
+            if (foregroundWindow == IntPtr.Zero)
+                return false;
+
+            GetWindowThreadProcessId(foregroundWindow, out uint foregroundPID);
+            uint currentPID = (uint)Process.GetCurrentProcess().Id;
+            return foregroundPID == currentPID;
+        }
+
 
         private void PopulateCubicWindowThumbnails()
         {

@@ -71,8 +71,8 @@ namespace Silicon
         private void Preset4Button_Click(object sender, EventArgs e)
         {
             CameraFOVSlider.Value = 45;
-            CameraDistanceSlider.Value = 90;
-            GameFogSlider.Value = 110;
+            CameraDistanceSlider.Value = 220;
+            GameFogSlider.Value = 150;
             targetCameraFOV = 45;
 
             HidePlayerModelSwitch.Switched = false;

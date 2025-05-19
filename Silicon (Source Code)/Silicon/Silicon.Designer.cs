@@ -43,6 +43,7 @@ namespace Silicon
             this.proID = new MetroSet_UI.Controls.MetroSetLabel();
             this.procIDLabel = new MetroSet_UI.Controls.MetroSetLabel();
             this.Utility = new System.Windows.Forms.TabPage();
+            this.CameraZoomInfoLabel = new Sunny.UI.UILabel();
             this.Preset4Button = new MetroSet_UI.Controls.MetroSetButton();
             this.Preset3Button = new MetroSet_UI.Controls.MetroSetButton();
             this.Preset2Button = new MetroSet_UI.Controls.MetroSetButton();
@@ -73,6 +74,7 @@ namespace Silicon
             this.AddAnimationFrameButton = new MetroSet_UI.Controls.MetroSetButton();
             this.TabControl = new Sunny.UI.UITabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.CameraZoomInfoLabel2 = new Sunny.UI.UILabel();
             this.InterpolationComboBox = new System.Windows.Forms.ComboBox();
             this.uiLabel13 = new Sunny.UI.UILabel();
             this.CinematicSpeedTextBox = new MetroSet_UI.Controls.MetroSetTextBox();
@@ -94,8 +96,6 @@ namespace Silicon
             this.Speed = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.FOV = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.metroSetSetToolTip1 = new MetroSet_UI.Components.MetroSetSetToolTip();
-            this.CameraZoomInfoLabel = new Sunny.UI.UILabel();
-            this.CameraZoomInfoLabel2 = new Sunny.UI.UILabel();
             this.Information.SuspendLayout();
             this.Utility.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -311,6 +311,18 @@ namespace Silicon
             this.Utility.Size = new System.Drawing.Size(482, 272);
             this.Utility.TabIndex = 0;
             this.Utility.Text = "Utility";
+            // 
+            // CameraZoomInfoLabel
+            // 
+            this.CameraZoomInfoLabel.BackColor = System.Drawing.Color.Transparent;
+            this.CameraZoomInfoLabel.Cursor = System.Windows.Forms.Cursors.Arrow;
+            this.CameraZoomInfoLabel.Font = new System.Drawing.Font("Leelawadee UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CameraZoomInfoLabel.ForeColor = System.Drawing.Color.White;
+            this.CameraZoomInfoLabel.Location = new System.Drawing.Point(371, 211);
+            this.CameraZoomInfoLabel.Name = "CameraZoomInfoLabel";
+            this.CameraZoomInfoLabel.Size = new System.Drawing.Size(74, 44);
+            this.CameraZoomInfoLabel.TabIndex = 55;
+            this.CameraZoomInfoLabel.Text = "Zoom: 50.00\r\nFOV: 50.00";
             // 
             // Preset4Button
             // 
@@ -893,6 +905,18 @@ namespace Silicon
             this.tabPage1.TabIndex = 2;
             this.tabPage1.Text = "Cinematic";
             // 
+            // CameraZoomInfoLabel2
+            // 
+            this.CameraZoomInfoLabel2.BackColor = System.Drawing.Color.Transparent;
+            this.CameraZoomInfoLabel2.Cursor = System.Windows.Forms.Cursors.Arrow;
+            this.CameraZoomInfoLabel2.Font = new System.Drawing.Font("Leelawadee UI", 7F, System.Drawing.FontStyle.Bold);
+            this.CameraZoomInfoLabel2.ForeColor = System.Drawing.Color.White;
+            this.CameraZoomInfoLabel2.Location = new System.Drawing.Point(366, 207);
+            this.CameraZoomInfoLabel2.Name = "CameraZoomInfoLabel2";
+            this.CameraZoomInfoLabel2.Size = new System.Drawing.Size(71, 44);
+            this.CameraZoomInfoLabel2.TabIndex = 53;
+            this.CameraZoomInfoLabel2.Text = "Zoom: 50.0\r\nFOV: 50.0";
+            // 
             // InterpolationComboBox
             // 
             this.InterpolationComboBox.BackColor = System.Drawing.Color.White;
@@ -1195,30 +1219,6 @@ namespace Silicon
             this.metroSetSetToolTip1.StyleManager = null;
             this.metroSetSetToolTip1.ThemeAuthor = "Narwin";
             this.metroSetSetToolTip1.ThemeName = "MetroLite";
-            // 
-            // CameraZoomInfoLabel
-            // 
-            this.CameraZoomInfoLabel.BackColor = System.Drawing.Color.Transparent;
-            this.CameraZoomInfoLabel.Cursor = System.Windows.Forms.Cursors.Arrow;
-            this.CameraZoomInfoLabel.Font = new System.Drawing.Font("Leelawadee UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CameraZoomInfoLabel.ForeColor = System.Drawing.Color.White;
-            this.CameraZoomInfoLabel.Location = new System.Drawing.Point(371, 211);
-            this.CameraZoomInfoLabel.Name = "CameraZoomInfoLabel";
-            this.CameraZoomInfoLabel.Size = new System.Drawing.Size(74, 44);
-            this.CameraZoomInfoLabel.TabIndex = 55;
-            this.CameraZoomInfoLabel.Text = "Zoom: 50.00\r\nFOV: 50.00";
-            // 
-            // CameraZoomInfoLabel2
-            // 
-            this.CameraZoomInfoLabel2.BackColor = System.Drawing.Color.Transparent;
-            this.CameraZoomInfoLabel2.Cursor = System.Windows.Forms.Cursors.Arrow;
-            this.CameraZoomInfoLabel2.Font = new System.Drawing.Font("Leelawadee UI", 7F, System.Drawing.FontStyle.Bold);
-            this.CameraZoomInfoLabel2.ForeColor = System.Drawing.Color.White;
-            this.CameraZoomInfoLabel2.Location = new System.Drawing.Point(366, 207);
-            this.CameraZoomInfoLabel2.Name = "CameraZoomInfoLabel2";
-            this.CameraZoomInfoLabel2.Size = new System.Drawing.Size(71, 44);
-            this.CameraZoomInfoLabel2.TabIndex = 53;
-            this.CameraZoomInfoLabel2.Text = "Zoom: 50.0\r\nFOV: 50.0";
             // 
             // SiliconForm
             // 

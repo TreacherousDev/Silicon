@@ -498,7 +498,8 @@ namespace Silicon
         {
             if (_cameraShakeToggle)
             {
-                // _cameraShakeToggle = false;
+                _effectManager.ClearEffects();
+                _cameraShakeToggle = false;
             }
             else
             {

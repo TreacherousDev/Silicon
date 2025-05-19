@@ -10,6 +10,11 @@ namespace Silicon.CameraEffect
 
         public void AddEffect(ICameraEffect e) => _effects.Add(e);
 
+        public void ClearEffects()
+        {
+            _effects.Clear();
+        }
+
         public ProjectiveEffector ComputeDelta(double deltaTime)
         {
             ProjectiveEffector netEffector = new ProjectiveEffector
@@ -29,6 +34,7 @@ namespace Silicon.CameraEffect
                 );
                 netEffector.FovDelta += layer.FovDelta;
             }
+
             return netEffector;
         }
     }

@@ -1,4 +1,5 @@
-using System;
+﻿using System;
+using System.Numerics;
 using System.Windows.Forms;
 
 namespace Silicon
@@ -10,6 +11,7 @@ namespace Silicon
         private double currentCameraLookAtZ;
         private double currentCameraPitch;
         private double currentCameraYaw;
+        private double currentCameraRoll;
         private double currentCameraFOV = 33;
 
         private double targetCameraLookAtX;
@@ -18,6 +20,8 @@ namespace Silicon
         private double targetCameraPitch;
         private double targetCameraYaw;
         private double targetCameraFOV = 33;
+
+        private Vector3 upVector = new Vector3(0, 0, -1);
 
 
         // Mod menu checker variables
@@ -67,6 +71,13 @@ namespace Silicon
             if (pressedKeys.Contains(Keys.Down)) rotatePitch += 1;
             if (pressedKeys.Contains(Keys.Left)) rotateYaw -= 1;
             if (pressedKeys.Contains(Keys.Right)) rotateYaw += 1;
+
+
+            
+
+            //// Optional: re-orthogonalize the basis
+            //Vector3 right = Vector3.Normalize(Vector3.Cross(forward, up));
+            //up = Vector3.Normalize(Vector3.Cross(right, forward));
 
 
 
@@ -164,6 +175,67 @@ namespace Silicon
             }
             
         }
+
+        private Vector3 GetForwardVector(float pitchDeg, float yawDeg)
+        {
+            float pitch = (float)Math.PI / 180f * pitchDeg;
+            float yaw = (float)Math.PI / 180f * yawDeg;
+
+            float x = (float)Math.Cos(pitch) * (float)Math.Sin(yaw);
+            float y = (float)Math.Cos(pitch) * (float)Math.Cos(yaw);
+            float z = (float)Math.Sin(pitch);
+
+            Vector3 forward = new Vector3(x, y, z);
+            return Vector3.Normalize(forward);
+        }
+
+
+        private Vector3 ComputeUpVectorFromYawRoll(float yawDegrees, float rollDegrees)
+        {
+            // Convert angles to radians
+            float yawRad = (float)Math.PI / 180f * yawDegrees;
+            float rollRad = (float)Math.PI / 180f * rollDegrees;
+
+
+            Vector3 forward = GetForwardVector((float)currentCameraPitch, (float)currentCameraYaw);
+
+            // Right vector (perpendicular to forward and world up)
+            Vector3 worldUp = new Vector3(0, 0, -1);
+            Vector3 right = Vector3.Normalize(Vector3.Cross(worldUp, forward));
+
+            // Compute roll-adjusted up vector:
+            // This rotates the up vector around the flat forward direction
+            Vector3 up = worldUp * (float)Math.Cos(rollRad) + right * (float)Math.Sin(rollRad);
+                
+            return Vector3.Normalize(up);
+        }
+
+        private void UpdateCameraRoll()
+        {  
+            if (pressedKeys.Contains(Keys.Up) || pressedKeys.Contains(Keys.Down) || pressedKeys.Contains(Keys.Left) 
+                || pressedKeys.Contains(Keys.Right) || IsRightMouseButtonDown())
+            {
+                ResetCameraRoll();
+                return;
+            }
+
+            Vector3 forward = GetForwardVector((float)currentCameraPitch, (float)currentCameraYaw);
+            if (pressedKeys.Contains(Keys.Q))
+                currentCameraRoll -= 1;
+            
+            if (pressedKeys.Contains(Keys.E))
+                currentCameraRoll += 1;
+
+            upVector = ComputeUpVectorFromYawRoll((float)currentCameraYaw, (float)currentCameraRoll);
+            Console.WriteLine($"Up: {upVector.X:F2}, {upVector.Y:F2}, {upVector.Z:F2}");
+        }
+
+        private void ResetCameraRoll()
+        {
+            upVector = new Vector3(0, 0, -1);
+            currentCameraRoll = 0;
+        }
+
 
     }
 }

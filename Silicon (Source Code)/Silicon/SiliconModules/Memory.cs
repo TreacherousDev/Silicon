@@ -21,11 +21,14 @@ namespace Silicon
         readonly string unlockCameraRMBInjection = "50 E8 00 00 00 00 58 F3 0F 10 70 1F 0F 2F F1 58 0F 86 AA 94 3A FF C7 80 EC 09 00 00 00 00 B2 C2 E9 9B 94 3A FF 00 00 B2 C2 00 00 00";
         readonly string unlockCameraRMBFunctionEntry = "E9 47 6B C5 00";
 
-        readonly string unlockCameraFOVInjection = "50 E8 00 00 00 00 58 F3 0F 10 40 12 58 8D 85 D8 FE FF FF E9 30 BA 39 FF 00 00 96 42 FF FF FF FF";
-        readonly string unlockCameraFOVFunctionEntry = "E9 B9 45 C6 00 90";
+        readonly string unlockCameraFOVInjection = "50 E8 00 00 00 00 58 53 8B 58 1A 89 9F E8 07 00 00 5B 58 F3 0F 10 87 E8 07 00 00 E9 22 BA 39 FF 00 00 04 42 FF FF FF FF";
+        readonly string unlockCameraFOVFunctionEntry = "E9 C1 45 C6 00 0F 1F";
 
         readonly string adjustCameraDistanceInjection = "50 E8 00 00 00 00 58 F3 0F 59 40 24 F3 0F 59 58 24 F3 0F 59 60 24 58 E9 00 00 00 00 F3 0F 5C D0 F3 0F 10 40 08 E9 67 B8 39 FF 00 00 C8 41 FF FF FF FF";
         readonly string adjustCameraDistanceFunctionEntry = "E9 73 47 C6 00 0F 1F 40 00";
+
+        readonly string upVectorInjection = "55 8B EC 8B 55 08 39 D1 0F 84 02 6D 25 FF 50 E8 00 00 00 00 58 53 8B 58 2B 89 1A 8B 58 2F 89 5A 04 8B 58 33 89 5A 08 5B 58 8B 02 89 01 8B 42 04 89 41 04 8B 42 08 89 41 08 8B C1 5D C2 04 00 00 00 00 00 00 00 00 00 00 00 80 BF FF FF FF FF";
+        readonly string upVectorFunctionEntry = "E8 21 48 C6 00";
 
         // Revertable functions (Optional switch states available)
         readonly string cameraLookAtEditorInjection = "50 E8 00 00 00 00 58 F3 0F 11 58 5D F3 0F 11 48 61 F3 0F 11 40 65 F3 0F 10 58 4D F3 0F 10 48 51 F3 0F 10 40 55 58 50 E8 00 00 00 00 58 F3 0F 11 58 37 F3 0F 11 48 3B F3 0F 11 40 3F 53 8D 5E 10 89 58 33 5B 58 F3 0F 11 1E F3 0F 11 4E 04 E9 B1 80 39 FF 00 00 00 00 00 00 00 00 00 00 8C 42 40 D8 7D 10 00 00 00 00 00 00 00 00 00 00 8C 42 FF FF FF FF";
@@ -60,10 +63,13 @@ namespace Silicon
             m.WriteMemory("Cubic.exe+E20DC8", "bytes", unlockCameraRMBInjection);
             m.WriteMemory("Cubic.exe+1CA27C", "bytes", unlockCameraRMBFunctionEntry);
             m.WriteMemory("Cubic.exe+E20E05", "bytes", unlockCameraFOVInjection);
-            m.WriteMemory("Cubic.exe+1BC847", "bytes", unlockCameraFOVFunctionEntry);
+            m.WriteMemory("Cubic.exe+1BC83F", "bytes", unlockCameraFOVFunctionEntry);
             m.WriteMemory("Cubic.exe+E20F82", "bytes", adjustCameraDistanceInjection);
             m.WriteMemory("Cubic.exe+1BC80A", "bytes", adjustCameraDistanceFunctionEntry);
+            m.WriteMemory("Cubic.exe+E21097", "bytes", upVectorInjection);
+            m.WriteMemory("Cubic.exe+1BC871", "bytes", upVectorFunctionEntry);
 
+            
             //Revertable, injections only as set to false by default
             m.WriteMemory("Cubic.exe+E20ED7", "bytes", hidePlayerAvatarInjection);
         }
@@ -79,6 +85,7 @@ namespace Silicon
             {
                 HandleCameraController(currentCameraYaw);
             }
+            UpdateCameraRoll();
 
             uint intRotationAddress = m.ReadUInt("Cubic.exe+E2103E");
             string pitchAddress = (intRotationAddress + 4).ToString("X");
@@ -89,7 +96,7 @@ namespace Silicon
 
             InterpolateCameraMovement(lookAtXAddress, lookAtYAddress, lookAtZAddress);
             InterpolateCameraRotation(pitchAddress, yawAddress);
-            InterpolateCameraFOV("Cubic.exe+E20E1D");
+            InterpolateCameraFOV("Cubic.exe+E20E25");
 
 
             if (FreecamSwitch.Switched != isFreecamEnabled)
@@ -165,7 +172,7 @@ namespace Silicon
             {
                 cameraFOVSliderValue = CameraFOVSlider.Value;
                 targetCameraFOV = CameraFOVSlider.Value;
-                //m.WriteMemory("Cubic.exe+E20E1D", "float", CameraFOVSlider.Value.ToString());
+                //m.WriteMemory("Cubic.exe+E20E25", "float", CameraFOVSlider.Value.ToString());
             }
 
             if (CameraDistanceSlider.Value != cameraDistanceSliderValue)
@@ -208,7 +215,13 @@ namespace Silicon
                 targetCameraYaw = m.ReadFloat(yawAddress);
             }
             // FOV editing enabled even with freecam disabled
-            m.WriteMemory("Cubic.exe+E20E1D", "bytes", ConvertDoubleToFloatBytes(currentCameraFOV));
+            m.WriteMemory("Cubic.exe+E20E25", "bytes", ConvertDoubleToFloatBytes(currentCameraFOV));
+            // Up vector override for camera roll
+            m.WriteMemory("Cubic.exe+E210D6", "float", upVector.X.ToString());
+            m.WriteMemory("Cubic.exe+E210DA", "float", upVector.Y.ToString());
+            m.WriteMemory("Cubic.exe+E210DE", "float", upVector.Z.ToString());
+            //Console.WriteLine($"Up: {upVector.X:F2}, {upVector.Y:F2}, {upVector.Z:F2}");
+
 
             string ConvertDoubleToFloatBytes(double num)
             {

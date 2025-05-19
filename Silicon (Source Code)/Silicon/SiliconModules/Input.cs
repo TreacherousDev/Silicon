@@ -32,7 +32,7 @@ namespace Silicon
 
             Keys[] keysToMonitor = new Keys[]
             {
-        Keys.W, Keys.S, Keys.A, Keys.D,
+        Keys.W, Keys.S, Keys.A, Keys.D, Keys.Q, Keys.E,
         Keys.ShiftKey, Keys.ControlKey,
         Keys.Up, Keys.Down, Keys.Left, Keys.Right,
         Keys.F1, Keys.F2, Keys.F3, Keys.F4, Keys.F5, Keys.F6, Keys.F7, Keys.F8

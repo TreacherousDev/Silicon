@@ -92,6 +92,34 @@ namespace Silicon
             ResetCameraRoll();
         }
 
+        private void Preset4Button_Click(object sender, EventArgs e)
+        {
+            cameraFOVSliderValue = 45;
+            CameraFOVSlider.Value = 45;
+            //m.WriteMemory("Cubic.exe+E20E25", "float", cameraFOVSliderValue.ToString());
+            targetCameraFOV = 45;
+
+            cameraDistanceSliderValue = 45;
+            CameraDistanceSlider.Value = 45;
+            m.WriteMemory("Cubic.exe+E20FAC", "float", cameraDistanceSliderValue.ToString());
+
+            gameFogSliderValue = 110;
+            GameFogSlider.Value = 110;
+            m.WriteMemory("Cubic.exe+2FFEC8", "float", GameFogSlider.Value.ToString());
+
+            HidePlayerModelSwitch.Switched = false;
+            HideUserInterfaceSwitch.Switched = true;
+            HideNametagsSwitch.Switched = true;
+            FreecamSwitch.Switched = false;
+
+            ResetCameraRoll();
+            currentCameraPitch = 0;
+            targetCameraPitch = 0;
+            currentCameraYaw = 0;
+            targetCameraYaw = 0;
+            CheckAndUpdateMemory();
+        }
+
         private double CatmullRom(double p0, double p1, double p2, double p3, double t)
         {
             return 0.5 * (
@@ -103,19 +131,26 @@ namespace Silicon
         }
 
         // Play button state, alternates between play and stop when clicked
-        private enum PlayButtonState { Play, Stop }
+        private enum PlayButtonState
+        {
+            Play,
+            Stop
+        }
+
         private PlayButtonState playButtonState = PlayButtonState.Play;
+
         // Animation stopping mechanism for when stop button is pressed or freecam is disabled
         private CancellationTokenSource animationCancellationTokenSource;
         List<List<double>> animationFrames = new List<List<double>>();
+
         private async void PlayAnimationButton_Click(object sender, EventArgs e)
         {
             if (animationFrames.Count == 0)
             {
                 MessageBox.Show("No keyframes found. Please add at least one keyframe before playing the animation.",
-                                "Animation Error",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Warning);
+                    "Animation Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
 
@@ -293,7 +328,6 @@ namespace Silicon
         }
 
 
-
         private void UpdateListView()
         {
             // Update the ListView with the current animationFrames
@@ -302,13 +336,13 @@ namespace Silicon
             foreach (var frame in animationFrames)
             {
                 ListViewItem item = new ListViewItem(i.ToString()); // LookAtX
-                item.SubItems.Add(frame[0].ToString("F1"));                   // LookAtX
-                item.SubItems.Add(frame[1].ToString("F1"));                   // LookAtY
-                item.SubItems.Add(frame[2].ToString("F1"));                   // LookAtZ
-                item.SubItems.Add(frame[3].ToString("F1"));                   // Pitch
-                item.SubItems.Add(frame[4].ToString("F1"));                   // Yaw
-                item.SubItems.Add(frame[5].ToString("F1"));                   // Speed
-                item.SubItems.Add(frame[6].ToString("F0"));                   // FOV
+                item.SubItems.Add(frame[0].ToString("F1")); // LookAtX
+                item.SubItems.Add(frame[1].ToString("F1")); // LookAtY
+                item.SubItems.Add(frame[2].ToString("F1")); // LookAtZ
+                item.SubItems.Add(frame[3].ToString("F1")); // Pitch
+                item.SubItems.Add(frame[4].ToString("F1")); // Yaw
+                item.SubItems.Add(frame[5].ToString("F1")); // Speed
+                item.SubItems.Add(frame[6].ToString("F0")); // FOV
                 listViewFrames.Items.Add(item);
                 i++;
             }
@@ -351,13 +385,15 @@ namespace Silicon
         {
             if (playButtonState == PlayButtonState.Stop)
             {
-                MessageBox.Show("Cannot delete while animation is in progress", "Delete Frame", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Cannot delete while animation is in progress", "Delete Frame", MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
 
             if (listViewFrames.SelectedItems.Count == 0)
             {
-                MessageBox.Show("Please select a frame to delete.", "Delete Frame", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please select a frame to delete.", "Delete Frame", MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
 
@@ -452,7 +488,8 @@ namespace Silicon
                 int minIndex = listViewFrames.SelectedItems
                     .Cast<ListViewItem>()
                     .Min(item => item.Index);
-                targetIndex = (minIndex - 1 + listViewFrames.Items.Count) % listViewFrames.Items.Count; // wrap around to last
+                targetIndex =
+                    (minIndex - 1 + listViewFrames.Items.Count) % listViewFrames.Items.Count; // wrap around to last
             }
 
             SelectAndGoToFrame(targetIndex);
@@ -472,13 +509,15 @@ namespace Silicon
         {
             if (listViewFrames.SelectedItems.Count == 0)
             {
-                MessageBox.Show("Please select a frame to view.", "Delete Frame", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please select a frame to view.", "Delete Frame", MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
+
             if (listViewFrames.SelectedItems.Count > 1)
             {
-
-                MessageBox.Show("multiple frames selected. Please select only one.", "Delete Frame", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("multiple frames selected. Please select only one.", "Delete Frame",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -511,11 +550,13 @@ namespace Silicon
                     // Write to the selected file
                     File.WriteAllText(saveFileDialog.FileName, json);
 
-                    MessageBox.Show("Animation frames saved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Animation frames saved successfully!", "Success", MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Error saving file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"Error saving file: {ex.Message}", "Error", MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
                 }
             }
         }
@@ -548,15 +589,15 @@ namespace Silicon
                     {
                         // Fill missing or invalid values with defaults
                         List<double> frame = new List<double>
-                {
-                    rawFrame.Count > 0 ? rawFrame[0] : 50.0,  // X
-                    rawFrame.Count > 1 ? rawFrame[1] : 50.0,  // Y
-                    rawFrame.Count > 2 ? rawFrame[2] : 50.0,  // Z
-                    rawFrame.Count > 3 ? rawFrame[3] : 0.0,   // Pitch
-                    rawFrame.Count > 4 ? rawFrame[4] : 0.0,   // Yaw
-                    rawFrame.Count > 5 ? rawFrame[5] : 10.0,  // Speed
-                    rawFrame.Count > 6 ? rawFrame[6] : 70.0   // FOV
-                };
+                        {
+                            rawFrame.Count > 0 ? rawFrame[0] : 50.0, // X
+                            rawFrame.Count > 1 ? rawFrame[1] : 50.0, // Y
+                            rawFrame.Count > 2 ? rawFrame[2] : 50.0, // Z
+                            rawFrame.Count > 3 ? rawFrame[3] : 0.0, // Pitch
+                            rawFrame.Count > 4 ? rawFrame[4] : 0.0, // Yaw
+                            rawFrame.Count > 5 ? rawFrame[5] : 10.0, // Speed
+                            rawFrame.Count > 6 ? rawFrame[6] : 70.0 // FOV
+                        };
 
                         animationFrames.Add(frame);
 
@@ -572,11 +613,13 @@ namespace Silicon
                         i++;
                     }
 
-                    MessageBox.Show("Animation frames loaded successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Animation frames loaded successfully!", "Success", MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Error loading file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"Error loading file: {ex.Message}", "Error", MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
                 }
             }
         }
@@ -603,6 +646,5 @@ namespace Silicon
                 }
             }
         }
-
     }
 }

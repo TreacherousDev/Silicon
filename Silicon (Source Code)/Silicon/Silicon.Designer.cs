@@ -27,8 +27,10 @@ namespace Silicon
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent() {
+        private void InitializeComponent()
+        {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SiliconForm));
+            Sunny.UI.UITabControl TabControl;
             this.metroSetControlBox1 = new MetroSet_UI.Controls.MetroSetControlBox();
             this.SiliconWorker = new System.ComponentModel.BackgroundWorker();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
@@ -72,8 +74,7 @@ namespace Silicon
             this.FreecamSwitch = new MetroSet_UI.Controls.MetroSetSwitch();
             this.PlayAnimationButton = new MetroSet_UI.Controls.MetroSetButton();
             this.AddAnimationFrameButton = new MetroSet_UI.Controls.MetroSetButton();
-            this.TabControl = new Sunny.UI.UITabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.Cinematic = new System.Windows.Forms.TabPage();
             this.CameraZoomInfoLabel2 = new Sunny.UI.UILabel();
             this.InterpolationComboBox = new System.Windows.Forms.ComboBox();
             this.uiLabel13 = new Sunny.UI.UILabel();
@@ -87,20 +88,25 @@ namespace Silicon
             this.GoToAnnimationFrameButton = new MetroSet_UI.Controls.MetroSetButton();
             this.DeleteAnimationFrameButton = new MetroSet_UI.Controls.MetroSetButton();
             this.listViewFrames = new System.Windows.Forms.ListView();
-            this.FrameNumber = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.X = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Y = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Z = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Pitch = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Yaw = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Roll = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Speed = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.FOV = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.FrameNumber = new System.Windows.Forms.ColumnHeader();
+            this.X = new System.Windows.Forms.ColumnHeader();
+            this.Y = new System.Windows.Forms.ColumnHeader();
+            this.Z = new System.Windows.Forms.ColumnHeader();
+            this.Pitch = new System.Windows.Forms.ColumnHeader();
+            this.Yaw = new System.Windows.Forms.ColumnHeader();
+            this.Roll = new System.Windows.Forms.ColumnHeader();
+            this.Speed = new System.Windows.Forms.ColumnHeader();
+            this.FOV = new System.Windows.Forms.ColumnHeader();
+            this.Effects = new System.Windows.Forms.TabPage();
+            this.uiLabel15 = new Sunny.UI.UILabel();
+            this.metroSetSwitch1 = new MetroSet_UI.Controls.MetroSetSwitch();
             this.metroSetSetToolTip1 = new MetroSet_UI.Components.MetroSetSetToolTip();
+            TabControl = new Sunny.UI.UITabControl();
             this.Information.SuspendLayout();
             this.Utility.SuspendLayout();
-            this.TabControl.SuspendLayout();
-            this.tabPage1.SuspendLayout();
+            TabControl.SuspendLayout();
+            this.Cinematic.SuspendLayout();
+            this.Effects.SuspendLayout();
             this.SuspendLayout();
             // 
             // metroSetControlBox1
@@ -147,9 +153,9 @@ namespace Silicon
             this.Information.Controls.Add(this.proID);
             this.Information.Controls.Add(this.procIDLabel);
             this.Information.ForeColor = System.Drawing.Color.White;
-            this.Information.Location = new System.Drawing.Point(0, 30);
+            this.Information.Location = new System.Drawing.Point(0, 40);
             this.Information.Name = "Information";
-            this.Information.Size = new System.Drawing.Size(482, 272);
+            this.Information.Size = new System.Drawing.Size(200, 60);
             this.Information.TabIndex = 1;
             this.Information.Text = "Information";
             // 
@@ -161,7 +167,7 @@ namespace Silicon
             this.CubicWindows.Location = new System.Drawing.Point(0, 0);
             this.CubicWindows.Name = "CubicWindows";
             this.CubicWindows.Padding = new System.Windows.Forms.Padding(10);
-            this.CubicWindows.Size = new System.Drawing.Size(480, 231);
+            this.CubicWindows.Size = new System.Drawing.Size(198, 231);
             this.CubicWindows.TabIndex = 40;
             // 
             // uiLabel14
@@ -213,7 +219,6 @@ namespace Silicon
             this.ToolTipLabel.Name = "ToolTipLabel";
             this.ToolTipLabel.Size = new System.Drawing.Size(224, 149);
             this.ToolTipLabel.TabIndex = 26;
-            this.ToolTipLabel.Text = resources.GetString("ToolTipLabel.Text");
             // 
             // getStatus
             // 
@@ -858,53 +863,54 @@ namespace Silicon
             // 
             // TabControl
             // 
-            this.TabControl.Controls.Add(this.Utility);
-            this.TabControl.Controls.Add(this.Information);
-            this.TabControl.Controls.Add(this.tabPage1);
-            this.TabControl.Cursor = System.Windows.Forms.Cursors.Default;
-            this.TabControl.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
-            this.TabControl.FillColor = System.Drawing.Color.Transparent;
-            this.TabControl.Font = new System.Drawing.Font("Impact", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TabControl.ItemSize = new System.Drawing.Size(120, 30);
-            this.TabControl.Location = new System.Drawing.Point(15, 93);
-            this.TabControl.MainPage = "";
-            this.TabControl.MenuStyle = Sunny.UI.UIMenuStyle.Custom;
-            this.TabControl.Name = "TabControl";
-            this.TabControl.SelectedIndex = 0;
-            this.TabControl.Size = new System.Drawing.Size(482, 302);
-            this.TabControl.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
-            this.TabControl.TabBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.TabControl.TabIndex = 1;
-            this.TabControl.TabSelectedColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
-            this.TabControl.TabSelectedForeColor = System.Drawing.Color.White;
-            this.TabControl.TabSelectedHighColor = System.Drawing.Color.RoyalBlue;
-            this.TabControl.TabSelectedHighColorSize = 2;
-            this.TabControl.TabUnSelectedForeColor = System.Drawing.Color.White;
-            this.TabControl.TipsFont = new System.Drawing.Font("Microsoft Sans Serif", 9F);
+            TabControl.Controls.Add(this.Utility);
+            TabControl.Controls.Add(this.Information);
+            TabControl.Controls.Add(this.Cinematic);
+            TabControl.Controls.Add(this.Effects);
+            TabControl.Cursor = System.Windows.Forms.Cursors.Default;
+            TabControl.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
+            TabControl.FillColor = System.Drawing.Color.Transparent;
+            TabControl.Font = new System.Drawing.Font("Impact", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            TabControl.ItemSize = new System.Drawing.Size(90, 30);
+            TabControl.Location = new System.Drawing.Point(15, 93);
+            TabControl.MainPage = "";
+            TabControl.MenuStyle = Sunny.UI.UIMenuStyle.Custom;
+            TabControl.Name = "TabControl";
+            TabControl.SelectedIndex = 0;
+            TabControl.Size = new System.Drawing.Size(482, 302);
+            TabControl.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
+            TabControl.TabBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            TabControl.TabIndex = 1;
+            TabControl.TabSelectedColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
+            TabControl.TabSelectedForeColor = System.Drawing.Color.White;
+            TabControl.TabSelectedHighColor = System.Drawing.Color.RoyalBlue;
+            TabControl.TabSelectedHighColorSize = 2;
+            TabControl.TabUnSelectedForeColor = System.Drawing.Color.White;
+            TabControl.TipsFont = new System.Drawing.Font("Microsoft Sans Serif", 9F);
             // 
-            // tabPage1
+            // Cinematic
             // 
-            this.tabPage1.BackColor = System.Drawing.Color.Transparent;
-            this.tabPage1.Controls.Add(this.CameraZoomInfoLabel2);
-            this.tabPage1.Controls.Add(this.InterpolationComboBox);
-            this.tabPage1.Controls.Add(this.uiLabel13);
-            this.tabPage1.Controls.Add(this.CinematicSpeedTextBox);
-            this.tabPage1.Controls.Add(this.uiLabel12);
-            this.tabPage1.Controls.Add(this.LoadAnimationButton);
-            this.tabPage1.Controls.Add(this.SaveAnimationButton);
-            this.tabPage1.Controls.Add(this.CameraRotationInfoLabel2);
-            this.tabPage1.Controls.Add(this.CameraLookAtInfoLabel2);
-            this.tabPage1.Controls.Add(this.uiLabel9);
-            this.tabPage1.Controls.Add(this.GoToAnnimationFrameButton);
-            this.tabPage1.Controls.Add(this.DeleteAnimationFrameButton);
-            this.tabPage1.Controls.Add(this.PlayAnimationButton);
-            this.tabPage1.Controls.Add(this.listViewFrames);
-            this.tabPage1.Controls.Add(this.AddAnimationFrameButton);
-            this.tabPage1.Location = new System.Drawing.Point(0, 40);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(200, 60);
-            this.tabPage1.TabIndex = 2;
-            this.tabPage1.Text = "Cinematic";
+            this.Cinematic.BackColor = System.Drawing.Color.Transparent;
+            this.Cinematic.Controls.Add(this.CameraZoomInfoLabel2);
+            this.Cinematic.Controls.Add(this.InterpolationComboBox);
+            this.Cinematic.Controls.Add(this.uiLabel13);
+            this.Cinematic.Controls.Add(this.CinematicSpeedTextBox);
+            this.Cinematic.Controls.Add(this.uiLabel12);
+            this.Cinematic.Controls.Add(this.LoadAnimationButton);
+            this.Cinematic.Controls.Add(this.SaveAnimationButton);
+            this.Cinematic.Controls.Add(this.CameraRotationInfoLabel2);
+            this.Cinematic.Controls.Add(this.CameraLookAtInfoLabel2);
+            this.Cinematic.Controls.Add(this.uiLabel9);
+            this.Cinematic.Controls.Add(this.GoToAnnimationFrameButton);
+            this.Cinematic.Controls.Add(this.DeleteAnimationFrameButton);
+            this.Cinematic.Controls.Add(this.PlayAnimationButton);
+            this.Cinematic.Controls.Add(this.listViewFrames);
+            this.Cinematic.Controls.Add(this.AddAnimationFrameButton);
+            this.Cinematic.Location = new System.Drawing.Point(0, 40);
+            this.Cinematic.Name = "Cinematic";
+            this.Cinematic.Size = new System.Drawing.Size(200, 60);
+            this.Cinematic.TabIndex = 2;
+            this.Cinematic.Text = "Cinematic";
             // 
             // CameraZoomInfoLabel2
             // 
@@ -925,16 +931,7 @@ namespace Silicon
             this.InterpolationComboBox.ForeColor = System.Drawing.Color.Black;
             this.InterpolationComboBox.FormattingEnabled = true;
             this.InterpolationComboBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.InterpolationComboBox.Items.AddRange(new object[] {
-            " Linear",
-            " Ease",
-            " Ease In",
-            " Ease Out",
-            " Ease In Out",
-            " Exponential In",
-            " Exponential Out",
-            " Exponential In Out",
-            "Catmull-Rom"});
+            this.InterpolationComboBox.Items.AddRange(new object[] { " Linear", " Ease", " Ease In", " Ease Out", " Ease In Out", " Exponential In", " Exponential Out", " Exponential In Out", "Catmull-Rom" });
             this.InterpolationComboBox.Location = new System.Drawing.Point(215, 246);
             this.InterpolationComboBox.Name = "InterpolationComboBox";
             this.InterpolationComboBox.Size = new System.Drawing.Size(146, 28);
@@ -1144,16 +1141,7 @@ namespace Silicon
             // listViewFrames
             // 
             this.listViewFrames.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.listViewFrames.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.FrameNumber,
-            this.X,
-            this.Y,
-            this.Z,
-            this.Pitch,
-            this.Yaw,
-            this.Roll,
-            this.Speed,
-            this.FOV});
+            this.listViewFrames.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] { this.FrameNumber, this.X, this.Y, this.Z, this.Pitch, this.Yaw, this.Roll, this.Speed, this.FOV });
             this.listViewFrames.Cursor = System.Windows.Forms.Cursors.Default;
             this.listViewFrames.Font = new System.Drawing.Font("Leelawadee UI", 8.5F);
             this.listViewFrames.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
@@ -1215,6 +1203,53 @@ namespace Silicon
             this.FOV.Text = "FOV";
             this.FOV.Width = 39;
             // 
+            // Effects
+            // 
+            this.Effects.BackColor = System.Drawing.Color.Transparent;
+            this.Effects.Controls.Add(this.uiLabel15);
+            this.Effects.Controls.Add(this.metroSetSwitch1);
+            this.Effects.Location = new System.Drawing.Point(0, 40);
+            this.Effects.Name = "Effects";
+            this.Effects.Size = new System.Drawing.Size(200, 60);
+            this.Effects.TabIndex = 3;
+            this.Effects.Text = "Effects";
+            // 
+            // uiLabel15
+            // 
+            this.uiLabel15.Cursor = System.Windows.Forms.Cursors.Arrow;
+            this.uiLabel15.Font = new System.Drawing.Font("Impact", 12F);
+            this.uiLabel15.ForeColor = System.Drawing.Color.White;
+            this.uiLabel15.Location = new System.Drawing.Point(79, 15);
+            this.uiLabel15.Name = "uiLabel15";
+            this.uiLabel15.Size = new System.Drawing.Size(151, 23);
+            this.uiLabel15.TabIndex = 27;
+            this.uiLabel15.Text = "CAMERA SHAKE";
+            // 
+            // metroSetSwitch1
+            // 
+            this.metroSetSwitch1.BackColor = System.Drawing.Color.Transparent;
+            this.metroSetSwitch1.BackgroundColor = System.Drawing.Color.Empty;
+            this.metroSetSwitch1.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(165)))), ((int)(((byte)(159)))), ((int)(((byte)(147)))));
+            this.metroSetSwitch1.CheckColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.metroSetSwitch1.CheckState = MetroSet_UI.Enums.CheckState.Unchecked;
+            this.metroSetSwitch1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.metroSetSwitch1.DisabledBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))));
+            this.metroSetSwitch1.DisabledCheckColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.metroSetSwitch1.DisabledUnCheckColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))));
+            this.metroSetSwitch1.IsDerivedStyle = true;
+            this.metroSetSwitch1.Location = new System.Drawing.Point(15, 15);
+            this.metroSetSwitch1.Name = "metroSetSwitch1";
+            this.metroSetSwitch1.Size = new System.Drawing.Size(58, 22);
+            this.metroSetSwitch1.Style = MetroSet_UI.Enums.Style.Light;
+            this.metroSetSwitch1.StyleManager = null;
+            this.metroSetSwitch1.Switched = false;
+            this.metroSetSwitch1.SymbolColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
+            this.metroSetSwitch1.TabIndex = 26;
+            this.metroSetSwitch1.ThemeAuthor = "Narwin";
+            this.metroSetSwitch1.ThemeName = "MetroLite";
+            this.metroSetSwitch1.UnCheckColor = System.Drawing.Color.White;
+            this.metroSetSwitch1.SwitchedChanged += new MetroSet_UI.Controls.MetroSetSwitch.SwitchedChangedEventHandler(this.CameraShakeSwitch_SwitchedChanged);
+            // 
             // metroSetSetToolTip1
             // 
             this.metroSetSetToolTip1.BackColor = System.Drawing.Color.White;
@@ -1235,7 +1270,7 @@ namespace Silicon
             this.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.BackgroundImageTransparency = 0.1F;
             this.ClientSize = new System.Drawing.Size(512, 410);
-            this.Controls.Add(this.TabControl);
+            this.Controls.Add(TabControl);
             this.Controls.Add(this.metroSetControlBox1);
             this.Font = new System.Drawing.Font("Impact", 14F);
             this.HeaderColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
@@ -1260,11 +1295,16 @@ namespace Silicon
             this.Load += new System.EventHandler(this.Silicon_Load);
             this.Information.ResumeLayout(false);
             this.Utility.ResumeLayout(false);
-            this.TabControl.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
+            TabControl.ResumeLayout(false);
+            this.Cinematic.ResumeLayout(false);
+            this.Effects.ResumeLayout(false);
             this.ResumeLayout(false);
-
         }
+
+        private Sunny.UI.UILabel uiLabel15;
+        private MetroSet_UI.Controls.MetroSetSwitch metroSetSwitch1;
+
+        private System.Windows.Forms.TabPage Effects;
 
         #endregion
         private MetroSet_UI.Controls.MetroSetControlBox metroSetControlBox1;
@@ -1277,7 +1317,6 @@ namespace Silicon
         private MetroSet_UI.Controls.MetroSetLabel proID;
         private MetroSet_UI.Controls.MetroSetLabel procIDLabel;
         private System.Windows.Forms.TabPage Utility;
-        private Sunny.UI.UITabControl TabControl;
         private MetroSet_UI.Controls.MetroSetSwitch FreecamSwitch;
         private Sunny.UI.UILabel FreecamLabel;
         private Sunny.UI.UILabel ToolTipLabel;
@@ -1298,7 +1337,7 @@ namespace Silicon
         private MetroSet_UI.Controls.MetroSetButton AddAnimationFrameButton;
         private MetroSet_UI.Controls.MetroSetButton PlayAnimationButton;
         private System.Windows.Forms.ListView listViewFrames;
-        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage Cinematic;
         private System.Windows.Forms.ColumnHeader FrameNumber;
         private System.Windows.Forms.ColumnHeader X;
         private System.Windows.Forms.ColumnHeader Y;

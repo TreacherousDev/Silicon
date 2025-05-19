@@ -16,12 +16,6 @@ namespace Silicon
         readonly string cameraHeightInjection = "53 E8 00 00 00 00 5B F3 0F 5C 43 1B F3 0F 11 40 08 5B F3 0F 5C CB 8D 85 FC FE FF FF E9 CB BA 39 FF 66 66 A6 3F 00 00 00 00";
         readonly string cameraHeightFunctionEntry = "E9 19 45 C6 00 0F 1F 44 00 00";
 
-        readonly string unlockCameraArrowsInjection = "50 E8 00 00 00 00 58 F3 0F 10 58 1F 0F 2F D8 58 0F 86 04 7E 39 FF C7 86 EC 09 00 00 00 00 B2 C2 E9 F5 7D 39 FF 00 00 B2 C2 00 00 00";
-        readonly string unlockCameraArrowsFunctionEntry = "E9 ED 81 C6 00";
-
-        readonly string unlockCameraRMBInjection = "50 E8 00 00 00 00 58 F3 0F 10 70 1F 0F 2F F1 58 0F 86 AA 94 3A FF C7 80 EC 09 00 00 00 00 B2 C2 E9 9B 94 3A FF 00 00 B2 C2 00 00 00";
-        readonly string unlockCameraRMBFunctionEntry = "E9 47 6B C5 00";
-
         readonly string unlockCameraFOVInjection = "50 E8 00 00 00 00 58 53 8B 58 1A 89 9F E8 07 00 00 5B 58 F3 0F 10 87 E8 07 00 00 E9 22 BA 39 FF 00 00 04 42 FF FF FF FF";
         readonly string unlockCameraFOVFunctionEntry = "E9 C1 45 C6 00 0F 1F";
 
@@ -33,9 +27,6 @@ namespace Silicon
 
         readonly string overrideArrowHotkeysFunction = "90 90 90 90 90 90 90 90";
         readonly string overrideRightClickDragFunction = "90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90";
-
-        readonly string isChattingFunctionInjection = "50 E8 00 00 00 00 58 88 48 10 58 88 88 A8 11 00 00 E9 A2 58 3A FF 01 00 00 00 FF FF FF FF";
-        readonly string isChattingFunctionEntry = "E9 49 A7 C5 00 90";
 
         // Revertable functions (Optional switch states available)
         readonly string cameraLookAtEditorInjection = "50 E8 00 00 00 00 58 F3 0F 11 58 5D F3 0F 11 48 61 F3 0F 11 40 65 F3 0F 10 58 4D F3 0F 10 48 51 F3 0F 10 40 55 58 50 E8 00 00 00 00 58 F3 0F 11 58 37 F3 0F 11 48 3B F3 0F 11 40 3F 53 8D 5E 10 89 58 33 5B 58 F3 0F 11 1E F3 0F 11 4E 04 E9 B1 80 39 FF 00 00 00 00 00 00 00 00 00 00 8C 42 40 D8 7D 10 00 00 00 00 00 00 00 00 00 00 8C 42 FF FF FF FF";
@@ -65,10 +56,6 @@ namespace Silicon
 
             m.WriteMemory("Cubic.exe+E20D31", "bytes", cameraHeightInjection);
             m.WriteMemory("Cubic.exe+1BC813", "bytes", cameraHeightFunctionEntry);
-            m.WriteMemory("Cubic.exe+E20D7A", "bytes", unlockCameraArrowsInjection);
-            m.WriteMemory("Cubic.exe+1B8B88", "bytes", unlockCameraArrowsFunctionEntry);
-            m.WriteMemory("Cubic.exe+E20DC8", "bytes", unlockCameraRMBInjection);
-            m.WriteMemory("Cubic.exe+1CA27C", "bytes", unlockCameraRMBFunctionEntry);
             m.WriteMemory("Cubic.exe+E20E05", "bytes", unlockCameraFOVInjection);
             m.WriteMemory("Cubic.exe+1BC83F", "bytes", unlockCameraFOVFunctionEntry);
             m.WriteMemory("Cubic.exe+E20F82", "bytes", adjustCameraDistanceInjection);
@@ -79,9 +66,6 @@ namespace Silicon
             m.WriteMemory("Cubic.exe+1B8AD2", "bytes", overrideArrowHotkeysFunction);
             m.WriteMemory("Cubic.exe+1B8B0E", "bytes", overrideArrowHotkeysFunction);
             m.WriteMemory("Cubic.exe+1CA21A", "bytes", overrideRightClickDragFunction);
-
-            m.WriteMemory("Cubic.exe+1C69D9", "bytes", isChattingFunctionEntry);
-            m.WriteMemory("Cubic.exe+E21127", "bytes", isChattingFunctionInjection);
 
             //Revertable, injections only as set to false by default
             m.WriteMemory("Cubic.exe+E20ED7", "bytes", hidePlayerAvatarInjection);
@@ -109,7 +93,7 @@ namespace Silicon
             InterpolateCameraRotation(pitchAddress, yawAddress);
             InterpolateCameraFOV("Cubic.exe+E20E25");
 
-            isChatting = m.ReadByte("Cubic.exe+E2113D") == 1;
+            isChatting = m.ReadInt("Cubic.exe+34E48C") != 0;
 
 
             if (FreecamSwitch.Switched != isFreecamEnabled)

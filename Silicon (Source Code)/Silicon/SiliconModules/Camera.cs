@@ -230,10 +230,10 @@ namespace Silicon
             // }
 
             if (pressedKeys.Contains(Keys.Q))
-                currentCameraRoll -= 2;
+                currentCameraRoll -= 1;
 
             if (pressedKeys.Contains(Keys.E))
-                currentCameraRoll += 2;
+                currentCameraRoll += 1;
 
             Console.WriteLine(
                 $@"Pitch: {currentCameraPitch:F2}, Yaw: {currentCameraYaw:F2}, Roll: {currentCameraRoll:F2}");

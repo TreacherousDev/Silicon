@@ -95,7 +95,7 @@ namespace Silicon
         {
 
             HandleCameraController(currentCameraYaw);
-            UpdateCameraRoll();
+            //UpdateCameraRoll();
 
             uint intRotationAddress = m.ReadUInt("Cubic.exe+E2103E");
             string pitchAddress = (intRotationAddress + 4).ToString("X");

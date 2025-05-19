@@ -145,17 +145,19 @@ namespace Silicon
                 currentCameraLookAtZ = firstFrame[2];
                 currentCameraPitch = firstFrame[3];
                 currentCameraYaw = firstFrame[4];
-                currentCameraFOV = firstFrame[6];
+                currentCameraRoll = firstFrame[5];
+                currentCameraFOV = firstFrame[7];
                 targetCameraLookAtX = firstFrame[0];
                 targetCameraLookAtY = firstFrame[1];
                 targetCameraLookAtZ = firstFrame[2];
                 targetCameraPitch = firstFrame[3];
                 targetCameraYaw = firstFrame[4];
-                targetCameraFOV = firstFrame[6];
+                targetCameraRoll = firstFrame[5];
+                targetCameraFOV = firstFrame[7];
 
                 // Update FOV Slider
-                CameraFOVSlider.Value = (int)firstFrame[6];
-                cameraFOVSliderValue = (int)firstFrame[6];
+                CameraFOVSlider.Value = (int)firstFrame[7];
+                cameraFOVSliderValue = (int)firstFrame[7];
 
                 await Task.Delay(20);
 
@@ -168,13 +170,13 @@ namespace Silicon
                     List<double> endFrame = animationFrames[i + 1];
 
                     double startX = startFrame[0], startY = startFrame[1], startZ = startFrame[2];
-                    double startPitch = startFrame[3], startYaw = startFrame[4];
-                    double startFOV = startFrame[6];
-                    double moveSpeed = endFrame[5];
+                    double startPitch = startFrame[3], startYaw = startFrame[4], startRoll = startFrame[5];
+                    double startFOV = startFrame[7];
+                    double moveSpeed = endFrame[6];
 
                     double endX = endFrame[0], endY = endFrame[1], endZ = endFrame[2];
-                    double endPitch = endFrame[3], endYaw = endFrame[4];
-                    double endFOV = endFrame[6];
+                    double endPitch = endFrame[3], endYaw = endFrame[4], endRoll = endFrame[5];
+                    double endFOV = endFrame[7];
                     Interpolator.MethodDelegate frameInterpolation = _interpolator;
 
                     double distance = Math.Sqrt(
@@ -207,7 +209,8 @@ namespace Silicon
                             targetCameraLookAtZ = CatmullRom(p0[2], p1[2], p2[2], p3[2], alpha);
                             targetCameraPitch = CatmullRom(p0[3], p1[3], p2[3], p3[3], alpha);
                             targetCameraYaw = CatmullRom(p0[4], p1[4], p2[4], p3[4], alpha);
-                            targetCameraFOV = CatmullRom(p0[6], p1[6], p2[6], p3[6], alpha);
+                            targetCameraRoll = CatmullRom(p0[5], p1[5], p2[5], p3[5], alpha);
+                            targetCameraFOV = CatmullRom(p0[7], p1[7], p2[7], p3[7], alpha);
                         }
                         else
                         {
@@ -216,12 +219,14 @@ namespace Silicon
                             targetCameraLookAtZ = frameInterpolation(startZ, endZ, alpha);
                             targetCameraPitch = frameInterpolation(startPitch, endPitch, alpha);
                             targetCameraYaw = frameInterpolation(startYaw, endYaw, alpha);
+                            targetCameraRoll = frameInterpolation(startRoll, endRoll, alpha);
                             targetCameraFOV = frameInterpolation(startFOV, endFOV, alpha);
                         }
+                        upVector = ComputeUpVectorFromRoll((float)currentCameraRoll);
 
                         // Update FOV slider after each keyframe pass
-                        CameraFOVSlider.Value = (int)endFrame[6];
-                        cameraFOVSliderValue = (int)endFrame[6];
+                        CameraFOVSlider.Value = (int)endFrame[7];
+                        cameraFOVSliderValue = (int)endFrame[7];
 
                         if (alpha >= 1.0)
                             break;
@@ -263,6 +268,7 @@ namespace Silicon
             frame.Add(currentCameraLookAtZ);
             frame.Add(currentCameraPitch);
             frame.Add(currentCameraYaw);
+            frame.Add(currentCameraRoll);
             frame.Add(double.TryParse(CinematicSpeedTextBox.Text, out double speed) ? speed : 10.0);
             frame.Add(currentCameraFOV);
 
@@ -308,8 +314,9 @@ namespace Silicon
                 item.SubItems.Add(frame[2].ToString("F1")); // LookAtZ
                 item.SubItems.Add(frame[3].ToString("F1")); // Pitch
                 item.SubItems.Add(frame[4].ToString("F1")); // Yaw
-                item.SubItems.Add(frame[5].ToString("F1")); // Speed
-                item.SubItems.Add(frame[6].ToString("F0")); // FOV
+                item.SubItems.Add(frame[5].ToString("F1")); // Roll
+                item.SubItems.Add(frame[6].ToString("F1")); // Speed
+                item.SubItems.Add(frame[7].ToString("F0")); // FOV
                 listViewFrames.Items.Add(item);
                 i++;
             }
@@ -392,11 +399,12 @@ namespace Silicon
             targetCameraLookAtZ = goToFrame[2];
             targetCameraPitch = goToFrame[3];
             targetCameraYaw = goToFrame[4];
-            targetCameraFOV = goToFrame[6];
+            targetCameraRoll = goToFrame[5];
+            targetCameraFOV = goToFrame[7];
 
             // Update FOV slider
-            CameraFOVSlider.Value = (int)goToFrame[6];
-            cameraFOVSliderValue = (int)goToFrame[6];
+            CameraFOVSlider.Value = (int)goToFrame[7];
+            cameraFOVSliderValue = (int)goToFrame[7];
 
             // Compute animation duration based on distance
             double distance = Math.Sqrt(
@@ -562,8 +570,9 @@ namespace Silicon
                             rawFrame.Count > 2 ? rawFrame[2] : 50.0, // Z
                             rawFrame.Count > 3 ? rawFrame[3] : 0.0, // Pitch
                             rawFrame.Count > 4 ? rawFrame[4] : 0.0, // Yaw
-                            rawFrame.Count > 5 ? rawFrame[5] : 10.0, // Speed
-                            rawFrame.Count > 6 ? rawFrame[6] : 70.0 // FOV
+                            rawFrame.Count > 5 ? rawFrame[5] : 0.0, // Roll
+                            rawFrame.Count > 6 ? rawFrame[6] : 10.0, // Speed
+                            rawFrame.Count > 7 ? rawFrame[7] : 70.0 // FOV
                         };
 
                         animationFrames.Add(frame);
@@ -575,7 +584,8 @@ namespace Silicon
                         item.SubItems.Add(frame[3].ToString("F1"));
                         item.SubItems.Add(frame[4].ToString("F1"));
                         item.SubItems.Add(frame[5].ToString("F1"));
-                        item.SubItems.Add(frame[6].ToString("F0"));
+                        item.SubItems.Add(frame[6].ToString("F1"));
+                        item.SubItems.Add(frame[7].ToString("F0"));
                         listViewFrames.Items.Add(item);
                         i++;
                     }

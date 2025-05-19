@@ -96,6 +96,7 @@ namespace Silicon
             this.Speed = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.FOV = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.metroSetSetToolTip1 = new MetroSet_UI.Components.MetroSetSetToolTip();
+            this.Roll = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Information.SuspendLayout();
             this.Utility.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -1150,6 +1151,7 @@ namespace Silicon
             this.Z,
             this.Pitch,
             this.Yaw,
+            this.Roll,
             this.Speed,
             this.FOV});
             this.listViewFrames.Cursor = System.Windows.Forms.Cursors.Default;
@@ -1165,37 +1167,37 @@ namespace Silicon
             // FrameNumber
             // 
             this.FrameNumber.Text = "#";
-            this.FrameNumber.Width = 23;
+            this.FrameNumber.Width = 20;
             // 
             // X
             // 
             this.X.Text = "X";
             this.X.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.X.Width = 45;
+            this.X.Width = 39;
             // 
             // Y
             // 
             this.Y.Text = "Y";
             this.Y.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Y.Width = 45;
+            this.Y.Width = 39;
             // 
             // Z
             // 
             this.Z.Text = "Z";
             this.Z.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Z.Width = 45;
+            this.Z.Width = 39;
             // 
             // Pitch
             // 
             this.Pitch.Text = "Pitch";
             this.Pitch.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Pitch.Width = 45;
+            this.Pitch.Width = 42;
             // 
             // Yaw
             // 
             this.Yaw.Text = "Yaw";
             this.Yaw.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Yaw.Width = 45;
+            this.Yaw.Width = 42;
             // 
             // Speed
             // 
@@ -1206,7 +1208,7 @@ namespace Silicon
             // FOV
             // 
             this.FOV.Text = "FOV";
-            this.FOV.Width = 45;
+            this.FOV.Width = 39;
             // 
             // metroSetSetToolTip1
             // 
@@ -1219,6 +1221,11 @@ namespace Silicon
             this.metroSetSetToolTip1.StyleManager = null;
             this.metroSetSetToolTip1.ThemeAuthor = "Narwin";
             this.metroSetSetToolTip1.ThemeName = "MetroLite";
+            // 
+            // Roll
+            // 
+            this.Roll.Text = "Roll";
+            this.Roll.Width = 42;
             // 
             // SiliconForm
             // 
@@ -1327,6 +1334,7 @@ namespace Silicon
         private MetroSet_UI.Controls.MetroSetButton Preset4Button;
         private Sunny.UI.UILabel CameraZoomInfoLabel;
         private Sunny.UI.UILabel CameraZoomInfoLabel2;
+        private System.Windows.Forms.ColumnHeader Roll;
     }
 }
 

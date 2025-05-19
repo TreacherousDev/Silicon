@@ -19,6 +19,7 @@ namespace Silicon
         private double targetCameraLookAtZ;
         private double targetCameraPitch;
         private double targetCameraYaw;
+        private double targetCameraRoll;
         private double targetCameraFOV = 33;
 
         private Vector3 upVector = new Vector3(0, 0, -1);
@@ -42,7 +43,7 @@ namespace Silicon
             if (isChatting) return;
 
             double moveX = 0, moveY = 0, moveZ = 0;
-            double rotatePitch = 0, rotateYaw = 0;
+            double rotatePitch = 0, rotateYaw = 0, rotateRoll = 0;
 
             if (pressedKeys.Contains(Keys.W))
             {
@@ -78,7 +79,8 @@ namespace Silicon
             if (pressedKeys.Contains(Keys.Down)) rotatePitch += 1;
             if (pressedKeys.Contains(Keys.Left)) rotateYaw -= 1;
             if (pressedKeys.Contains(Keys.Right)) rotateYaw += 1;
-
+            if (pressedKeys.Contains(Keys.E)) rotateRoll -= 1;
+            if (pressedKeys.Contains(Keys.Q)) rotateRoll += 1;
 
             double moveMagnitude = Math.Sqrt(moveX * moveX + moveY * moveY + moveZ * moveZ);
             if (moveMagnitude > 0.05)
@@ -105,9 +107,11 @@ namespace Silicon
 
             targetCameraPitch += rotatePitch * cameraRotateSpeed;
             targetCameraYaw += rotateYaw * cameraRotateSpeed;
+            targetCameraRoll += rotateRoll * cameraRotateSpeed;
 
             // Limit pitch angle using the custom Clamp
             targetCameraPitch = Clamp(targetCameraPitch, -89, 89);
+            //upVector = ComputeUpVectorFromRoll((float)currentCameraRoll);
         }
 
         public static double Clamp(double value, double min, double max)
@@ -149,12 +153,15 @@ namespace Silicon
             {
                 currentCameraPitch = targetCameraPitch;
                 currentCameraYaw = targetCameraYaw;
+                currentCameraRoll = targetCameraRoll;
             }
             else
             {
-                currentCameraPitch = _interpolator(m.ReadFloat(pitchAddress), targetCameraPitch, alpha);
-                currentCameraYaw = _interpolator(m.ReadFloat(yawAddress), targetCameraYaw, alpha);
+                currentCameraPitch = _interpolator(currentCameraPitch, targetCameraPitch, alpha);
+                currentCameraYaw = _interpolator(currentCameraYaw, targetCameraYaw, alpha);
+                currentCameraRoll = _interpolator(currentCameraRoll, targetCameraRoll, alpha);
             }
+            upVector = ComputeUpVectorFromRoll((float)currentCameraRoll);
         }
 
         private void InterpolateCameraFOV(string FOVAddress)
@@ -187,7 +194,7 @@ namespace Silicon
             return Vector3.Normalize(forward);
         }
 
-        private Vector3 ComputeUpVectorFromYawRoll(float rollDegrees)
+        private Vector3 ComputeUpVectorFromRoll(float rollDegrees)
         {
             // Convert angles to radians
             double rollRad = rollDegrees * (Math.PI / 180f);
@@ -219,23 +226,12 @@ namespace Silicon
             return Vector3.Normalize(c1 * v + c2 * kCrossV);
         }
 
-        private void UpdateCameraRoll()
-        {
-            if (isChatting) return;
-
-            if (pressedKeys.Contains(Keys.E))
-                currentCameraRoll -= 1;
-
-            if (pressedKeys.Contains(Keys.Q))
-                currentCameraRoll += 1;
-
-            upVector = ComputeUpVectorFromYawRoll((float)currentCameraRoll);  
-        }
 
         private void ResetCameraRoll()
         {
             upVector = new Vector3(0, 0, -1);
             currentCameraRoll = 0;
+            targetCameraRoll = 0;
         }
     }
 }

@@ -182,7 +182,7 @@
     <Compile Include="Silicon\SiliconModules\Memory.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Silicon\SiliconModules\ScrollWheel.cs" />
+    <Compile Include="Silicon\SiliconModules\MouseHook.cs" />
     <EmbeddedResource Include="Silicon\Silicon.resx">
       <DependentUpon>Silicon.cs</DependentUpon>
     </EmbeddedResource>

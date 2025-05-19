@@ -1,11 +1,52 @@
 using System;
 using System.Threading;
 using System.Windows.Forms;
+using System.Drawing;
+
 
 namespace Silicon
 {
     public partial class SiliconForm
     {
+
+        private bool isRightDragging = false;
+        private Point lastMousePos;
+
+        private void InitMouseDrag()
+        {
+            mouseHook.OnRightDown += (Point pos) =>
+            {
+                if (IsCubicWindowFocused())
+                {
+                    isRightDragging = true;
+                    lastMousePos = pos;
+                }
+            };
+
+            mouseHook.OnMouseMove += (Point pos) =>
+            {
+                if (isRightDragging)
+                {
+                    int dx = pos.X - lastMousePos.X;
+                    int dy = pos.Y - lastMousePos.Y;
+
+                    float sensitivity = 0.2f;
+                    currentCameraYaw += dx * sensitivity;
+                    currentCameraPitch += dy * sensitivity;
+                    currentCameraPitch = Clamp(currentCameraPitch, -89f, 89f);
+                    targetCameraYaw = currentCameraYaw;
+                    targetCameraPitch = currentCameraPitch;
+
+                    lastMousePos = pos;
+                }
+            };
+
+            mouseHook.OnRightUp += (Point pos) =>
+            {
+                isRightDragging = false;
+            };
+        }
+
         // This function gets called in the main update loop
         // It handles the movement and rotation of the camera when freecam is activated
         // Here starts the code edited by Hispano
@@ -70,7 +111,9 @@ namespace Silicon
             if (!IsCubicWindowFocused())
                 return false;
 
+            Console.WriteLine("ihgowehg");
             return (GetAsyncKeyState(Keys.RButton) & 0x8000) != 0;
+            
         }
 
         private void HandleKeyDown(Keys key)

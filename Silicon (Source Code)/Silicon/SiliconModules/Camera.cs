@@ -235,10 +235,8 @@ namespace Silicon
             if (pressedKeys.Contains(Keys.E))
                 currentCameraRoll += 1;
 
-            Console.WriteLine(
-                $@"Pitch: {currentCameraPitch:F2}, Yaw: {currentCameraYaw:F2}, Roll: {currentCameraRoll:F2}");
             upVector = ComputeUpVectorFromYawRoll((float)currentCameraRoll);
-            Console.WriteLine($@"Up: {upVector.X:F2}, {upVector.Y:F2}, {upVector.Z:F2}");
+            
         }
 
         private void ResetCameraRoll()

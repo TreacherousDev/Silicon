@@ -198,6 +198,7 @@ namespace Silicon
                     CameraFOVSlider.Value = Math.Max(10, CameraFOVSlider.Value - 1);
                 }
             };
+            InitMouseDrag();
 
 
         }

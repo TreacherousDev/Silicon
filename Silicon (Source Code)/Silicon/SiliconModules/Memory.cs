@@ -93,19 +93,18 @@ namespace Silicon
 
         private void CheckAndUpdateMemory()
         {
-
             HandleCameraController(currentCameraYaw);
             //UpdateCameraRoll();
 
             uint intRotationAddress = m.ReadUInt("Cubic.exe+E2103E");
             string pitchAddress = (intRotationAddress + 4).ToString("X");
             string yawAddress = (intRotationAddress).ToString("X");
-            string lookAtXAddress = (intRotationAddress - 16).ToString("X");
-            string lookAtYAddress = (intRotationAddress - 12).ToString("X");
-            string lookAtZAddress = (intRotationAddress - 8).ToString("X");
+            //string lookAtXAddress = (intRotationAddress - 16).ToString("X");
+            //string lookAtYAddress = (intRotationAddress - 12).ToString("X");
+            //string lookAtZAddress = (intRotationAddress - 8).ToString("X");
 
-            InterpolateCameraMovement(lookAtXAddress, lookAtYAddress, lookAtZAddress);
-            InterpolateCameraRotation(pitchAddress, yawAddress);
+            InterpolateCameraMovement();
+            InterpolateCameraRotation();
             InterpolateCameraFOV("Cubic.exe+E20E25");
 
             isChatting = m.ReadInt("Cubic.exe+34E48C") != 0;
@@ -199,10 +198,6 @@ namespace Silicon
                 m.WriteMemory("Cubic.exe+2FFEC8", "float", GameFogSlider.Value.ToString());
             }
 
-            // Overwrite camera pitch and yaw using Silicon as the new controller
-            m.WriteMemory(pitchAddress, "bytes", ConvertDoubleToFloatBytes(currentCameraPitch));
-            m.WriteMemory(yawAddress, "bytes", ConvertDoubleToFloatBytes(currentCameraYaw));
-
             if (FreecamSwitch.Switched == false)
             {
                 // Look at Player
@@ -219,6 +214,9 @@ namespace Silicon
                 m.WriteMemory("Cubic.exe+E2103A", "bytes", ConvertDoubleToFloatBytes(currentCameraLookAtZ)); 
             }
 
+            // Overwrite camera pitch and yaw using Silicon as the new controller
+            m.WriteMemory(pitchAddress, "bytes", ConvertDoubleToFloatBytes(currentCameraPitch));
+            m.WriteMemory(yawAddress, "bytes", ConvertDoubleToFloatBytes(currentCameraYaw));
             // FOV editing enabled even with freecam disabled
             m.WriteMemory("Cubic.exe+E20E25", "bytes", ConvertDoubleToFloatBytes(currentCameraFOV));
             // Up vector override for camera roll

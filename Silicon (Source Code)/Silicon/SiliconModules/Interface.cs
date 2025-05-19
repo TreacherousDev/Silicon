@@ -155,6 +155,14 @@ namespace Silicon
                 targetCameraRoll = firstFrame[5];
                 targetCameraFOV = firstFrame[7];
 
+                //
+                startCameraLookAtX = (float)firstFrame[0];
+                startCameraLookAtY = (float)firstFrame[1];
+                startCameraLookAtZ = (float)firstFrame[2];
+                startCameraPitch = (float)firstFrame[3];
+                startCameraYaw = (float)firstFrame[4];
+                startCameraRoll = (float)firstFrame[5];
+
                 // Update FOV Slider
                 CameraFOVSlider.Value = (int)firstFrame[7];
                 cameraFOVSliderValue = (int)firstFrame[7];
@@ -166,8 +174,18 @@ namespace Silicon
                     if (token.IsCancellationRequested)
                         break;
 
+                    
+
                     List<double> startFrame = animationFrames[i];
                     List<double> endFrame = animationFrames[i + 1];
+
+                    //
+                    startCameraLookAtX = (float)startFrame[0];
+                    startCameraLookAtY = (float)startFrame[1];
+                    startCameraLookAtZ = (float)startFrame[2];
+                    startCameraPitch = (float)startFrame[3];
+                    startCameraYaw = (float)startFrame[4];
+                    startCameraRoll = (float)startFrame[5];
 
                     double startX = startFrame[0], startY = startFrame[1], startZ = startFrame[2];
                     double startPitch = startFrame[3], startYaw = startFrame[4], startRoll = startFrame[5];
@@ -401,6 +419,13 @@ namespace Silicon
             targetCameraYaw = goToFrame[4];
             targetCameraRoll = goToFrame[5];
             targetCameraFOV = goToFrame[7];
+
+            startCameraLookAtX = (float)goToFrame[0];
+            startCameraLookAtY = (float)goToFrame[1];
+            startCameraLookAtZ = (float)goToFrame[2];
+            startCameraPitch = (float)goToFrame[3];
+            startCameraYaw = (float)goToFrame[4];
+            startCameraRoll = (float)goToFrame[5];
 
             // Update FOV slider
             CameraFOVSlider.Value = (int)goToFrame[7];

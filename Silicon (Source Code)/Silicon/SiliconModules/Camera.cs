@@ -22,6 +22,13 @@ namespace Silicon
         private double targetCameraRoll;
         private double targetCameraFOV = 33;
 
+        private float startCameraLookAtX = 0;
+        private float startCameraLookAtY = 0;
+        private float startCameraLookAtZ = 0;
+        private float startCameraPitch = 0;
+        private float startCameraYaw = 0;
+        private float startCameraRoll = 0;
+
         private Vector3 upVector = new Vector3(0, 0, -1);
 
 
@@ -121,7 +128,7 @@ namespace Silicon
             return value;
         }
 
-        private void InterpolateCameraMovement(string lookAtXAddress, string lookAtYAddress, string lookAtZAddress)
+        private void InterpolateCameraMovement()
         {
             double elapsedTime = (Environment.TickCount / 100.0) - animationStartTime;
             double alpha = elapsedTime / animationDuration;
@@ -136,15 +143,16 @@ namespace Silicon
             }
             else
             {
-                currentCameraLookAtX = _interpolator(m.ReadFloat(lookAtXAddress), targetCameraLookAtX, alpha);
-                currentCameraLookAtY = _interpolator(m.ReadFloat(lookAtYAddress), targetCameraLookAtY, alpha);
-                currentCameraLookAtZ = _interpolator(m.ReadFloat(lookAtZAddress), targetCameraLookAtZ, alpha);
+                currentCameraLookAtX = _interpolator(startCameraLookAtX, targetCameraLookAtX, alpha);
+                currentCameraLookAtY = _interpolator(startCameraLookAtY, targetCameraLookAtY, alpha);
+                currentCameraLookAtZ = _interpolator(startCameraLookAtZ, targetCameraLookAtZ, alpha);
             }
         }
 
-        private void InterpolateCameraRotation(string pitchAddress, string yawAddress)
+        private void InterpolateCameraRotation()
         {
-            double elapsedTime = (Environment.TickCount / 100.0) - animationStartTime;
+            
+            double elapsedTime = (Environment.TickCount / 1000.0) - animationStartTime;
             double alpha = elapsedTime / animationDuration;
             alpha = Clamp(alpha, 0.0, 1.0);
 
@@ -157,16 +165,17 @@ namespace Silicon
             }
             else
             {
-                currentCameraPitch = _interpolator(currentCameraPitch, targetCameraPitch, alpha);
-                currentCameraYaw = _interpolator(currentCameraYaw, targetCameraYaw, alpha);
-                currentCameraRoll = _interpolator(currentCameraRoll, targetCameraRoll, alpha);
+                currentCameraPitch = _interpolator(startCameraPitch, targetCameraPitch, alpha);
+                currentCameraYaw = _interpolator(startCameraYaw, targetCameraYaw, alpha);
+                currentCameraRoll = _interpolator(startCameraRoll, targetCameraRoll, alpha);
             }
             upVector = ComputeUpVectorFromRoll((float)currentCameraRoll);
+
         }
 
         private void InterpolateCameraFOV(string FOVAddress)
         {
-            double elapsedTime = (Environment.TickCount / 100.0) - animationStartTime;
+            double elapsedTime = (Environment.TickCount / 1000.0) - animationStartTime;
             double alpha = elapsedTime / animationDuration;
             alpha = Clamp(alpha, 0.0, 1.0);
 

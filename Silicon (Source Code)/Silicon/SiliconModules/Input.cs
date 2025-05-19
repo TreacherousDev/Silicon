@@ -136,19 +136,28 @@ namespace Silicon
                     Preset3Button_Click(null, EventArgs.Empty);
                     break;
                 case Keys.F4:
-                    FreecamSwitch.Switched = !FreecamSwitch.Switched;
+                    Preset4Button_Click(null, EventArgs.Empty);
                     break;
                 case Keys.F5:
-                    AddAnimationFrameButton_Click(null, EventArgs.Empty);
+                    FreecamSwitch.Switched = !FreecamSwitch.Switched;
                     break;
                 case Keys.F6:
-                    GoToPreviousFrame();
+                    AddAnimationFrameButton_Click(null, EventArgs.Empty);
                     break;
                 case Keys.F7:
-                    GoToNextFrame();
+                    GoToPreviousFrame();
                     break;
                 case Keys.F8:
+                    GoToNextFrame();
+                    break;
+                case Keys.F9:
                     PlayAnimationButton_Click(null, EventArgs.Empty);
+                    break;
+                case Keys.F10:
+                    HideNametagsSwitch.Switched = !HideNametagsSwitch.Switched;
+                    break;
+                case Keys.F11:
+                    HideUserInterfaceSwitch.Switched = !HideUserInterfaceSwitch.Switched;
                     break;
             }
         }

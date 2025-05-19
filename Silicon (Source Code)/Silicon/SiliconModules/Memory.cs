@@ -87,6 +87,7 @@ namespace Silicon
 
         private void UpdateMemoryOnTimerTick(object sender, ElapsedEventArgs e)
         {
+            if (!wasConnected) return;
             CheckAndUpdateMemory();
         }
 

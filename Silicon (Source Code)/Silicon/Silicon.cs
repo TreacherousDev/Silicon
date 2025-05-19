@@ -128,7 +128,7 @@ namespace Silicon
             Hispano.ForeColor = Color.Gray;
             proID.ForeColor = Color.White;
             Status.ForeColor = Color.White;
-            HotkeysLabel.ForeColor = Color.White;
+            //HotkeysLabel.ForeColor = Color.White;
             procIDLabel.ForeColor = Color.Red;
             getStatus.ForeColor = Color.Red;
             List<MetroSet_UI.Controls.MetroSetButton> interfaceButtons = new List<MetroSet_UI.Controls.MetroSetButton>

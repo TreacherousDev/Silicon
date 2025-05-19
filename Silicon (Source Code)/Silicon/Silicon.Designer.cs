@@ -36,7 +36,6 @@ namespace Silicon
             this.CubicWindows = new System.Windows.Forms.FlowLayoutPanel();
             this.uiLabel14 = new Sunny.UI.UILabel();
             this.VersionLabel = new Sunny.UI.UILabel();
-            this.HotkeysLabel = new MetroSet_UI.Controls.MetroSetLabel();
             this.Status = new MetroSet_UI.Controls.MetroSetLabel();
             this.ToolTipLabel = new Sunny.UI.UILabel();
             this.getStatus = new MetroSet_UI.Controls.MetroSetLabel();
@@ -44,6 +43,7 @@ namespace Silicon
             this.proID = new MetroSet_UI.Controls.MetroSetLabel();
             this.procIDLabel = new MetroSet_UI.Controls.MetroSetLabel();
             this.Utility = new System.Windows.Forms.TabPage();
+            this.Preset4Button = new MetroSet_UI.Controls.MetroSetButton();
             this.Preset3Button = new MetroSet_UI.Controls.MetroSetButton();
             this.Preset2Button = new MetroSet_UI.Controls.MetroSetButton();
             this.Preset1Button = new MetroSet_UI.Controls.MetroSetButton();
@@ -94,7 +94,6 @@ namespace Silicon
             this.Speed = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.FOV = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.metroSetSetToolTip1 = new MetroSet_UI.Components.MetroSetSetToolTip();
-            this.Preset4Button = new MetroSet_UI.Controls.MetroSetButton();
             this.Information.SuspendLayout();
             this.Utility.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -138,7 +137,6 @@ namespace Silicon
             this.Information.Controls.Add(this.CubicWindows);
             this.Information.Controls.Add(this.uiLabel14);
             this.Information.Controls.Add(this.VersionLabel);
-            this.Information.Controls.Add(this.HotkeysLabel);
             this.Information.Controls.Add(this.Status);
             this.Information.Controls.Add(this.ToolTipLabel);
             this.Information.Controls.Add(this.getStatus);
@@ -146,9 +144,9 @@ namespace Silicon
             this.Information.Controls.Add(this.proID);
             this.Information.Controls.Add(this.procIDLabel);
             this.Information.ForeColor = System.Drawing.Color.White;
-            this.Information.Location = new System.Drawing.Point(0, 40);
+            this.Information.Location = new System.Drawing.Point(0, 30);
             this.Information.Name = "Information";
-            this.Information.Size = new System.Drawing.Size(200, 60);
+            this.Information.Size = new System.Drawing.Size(482, 272);
             this.Information.TabIndex = 1;
             this.Information.Text = "Information";
             // 
@@ -156,10 +154,11 @@ namespace Silicon
             // 
             this.CubicWindows.AutoScroll = true;
             this.CubicWindows.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.CubicWindows.Location = new System.Drawing.Point(-1, 67);
+            this.CubicWindows.Dock = System.Windows.Forms.DockStyle.Top;
+            this.CubicWindows.Location = new System.Drawing.Point(0, 0);
             this.CubicWindows.Name = "CubicWindows";
             this.CubicWindows.Padding = new System.Windows.Forms.Padding(10);
-            this.CubicWindows.Size = new System.Drawing.Size(482, 204);
+            this.CubicWindows.Size = new System.Drawing.Size(480, 231);
             this.CubicWindows.TabIndex = 40;
             // 
             // uiLabel14
@@ -168,9 +167,9 @@ namespace Silicon
             this.uiLabel14.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.uiLabel14.Font = new System.Drawing.Font("Leelawadee UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.uiLabel14.ForeColor = System.Drawing.Color.White;
-            this.uiLabel14.Location = new System.Drawing.Point(243, 88);
+            this.uiLabel14.Location = new System.Drawing.Point(243, 34);
             this.uiLabel14.Name = "uiLabel14";
-            this.uiLabel14.Size = new System.Drawing.Size(224, 149);
+            this.uiLabel14.Size = new System.Drawing.Size(224, 192);
             this.uiLabel14.TabIndex = 39;
             this.uiLabel14.Text = resources.GetString("uiLabel14.Text");
             // 
@@ -184,22 +183,7 @@ namespace Silicon
             this.VersionLabel.Name = "VersionLabel";
             this.VersionLabel.Size = new System.Drawing.Size(51, 20);
             this.VersionLabel.TabIndex = 38;
-            this.VersionLabel.Text = "v2.6.0";
-            // 
-            // HotkeysLabel
-            // 
-            this.HotkeysLabel.Font = new System.Drawing.Font("Impact", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.HotkeysLabel.IsDerivedStyle = true;
-            this.HotkeysLabel.Location = new System.Drawing.Point(12, 67);
-            this.HotkeysLabel.Name = "HotkeysLabel";
-            this.HotkeysLabel.Size = new System.Drawing.Size(77, 23);
-            this.HotkeysLabel.Style = MetroSet_UI.Enums.Style.Light;
-            this.HotkeysLabel.StyleManager = null;
-            this.HotkeysLabel.TabIndex = 27;
-            this.HotkeysLabel.Text = "HOTKEYS";
-            this.HotkeysLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.HotkeysLabel.ThemeAuthor = "Narwin";
-            this.HotkeysLabel.ThemeName = "MetroLite";
+            this.VersionLabel.Text = "v2.7.0";
             // 
             // Status
             // 
@@ -207,7 +191,7 @@ namespace Silicon
             this.Status.IsDerivedStyle = true;
             this.Status.Location = new System.Drawing.Point(12, 37);
             this.Status.Name = "Status";
-            this.Status.Size = new System.Drawing.Size(77, 23);
+            this.Status.Size = new System.Drawing.Size(61, 23);
             this.Status.Style = MetroSet_UI.Enums.Style.Light;
             this.Status.StyleManager = null;
             this.Status.TabIndex = 5;
@@ -222,7 +206,7 @@ namespace Silicon
             this.ToolTipLabel.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.ToolTipLabel.Font = new System.Drawing.Font("Leelawadee UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ToolTipLabel.ForeColor = System.Drawing.Color.White;
-            this.ToolTipLabel.Location = new System.Drawing.Point(13, 88);
+            this.ToolTipLabel.Location = new System.Drawing.Point(13, 70);
             this.ToolTipLabel.Name = "ToolTipLabel";
             this.ToolTipLabel.Size = new System.Drawing.Size(224, 149);
             this.ToolTipLabel.TabIndex = 26;
@@ -324,6 +308,33 @@ namespace Silicon
             this.Utility.Size = new System.Drawing.Size(482, 272);
             this.Utility.TabIndex = 0;
             this.Utility.Text = "Utility";
+            // 
+            // Preset4Button
+            // 
+            this.Preset4Button.DisabledBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.Preset4Button.DisabledBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.Preset4Button.DisabledForeColor = System.Drawing.Color.Gray;
+            this.Preset4Button.Font = new System.Drawing.Font("Impact", 9F, System.Drawing.FontStyle.Bold);
+            this.Preset4Button.HoverBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
+            this.Preset4Button.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
+            this.Preset4Button.HoverTextColor = System.Drawing.Color.White;
+            this.Preset4Button.IsDerivedStyle = true;
+            this.Preset4Button.Location = new System.Drawing.Point(252, 237);
+            this.Preset4Button.Name = "Preset4Button";
+            this.Preset4Button.NormalBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.Preset4Button.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.Preset4Button.NormalTextColor = System.Drawing.Color.White;
+            this.Preset4Button.PressBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
+            this.Preset4Button.PressColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
+            this.Preset4Button.PressTextColor = System.Drawing.Color.White;
+            this.Preset4Button.Size = new System.Drawing.Size(29, 22);
+            this.Preset4Button.Style = MetroSet_UI.Enums.Style.Light;
+            this.Preset4Button.StyleManager = null;
+            this.Preset4Button.TabIndex = 54;
+            this.Preset4Button.Text = "4";
+            this.Preset4Button.ThemeAuthor = "Narwin";
+            this.Preset4Button.ThemeName = "MetroLite";
+            this.Preset4Button.Click += new System.EventHandler(this.Preset4Button_Click);
             // 
             // Preset3Button
             // 
@@ -1181,33 +1192,6 @@ namespace Silicon
             this.metroSetSetToolTip1.ThemeAuthor = "Narwin";
             this.metroSetSetToolTip1.ThemeName = "MetroLite";
             // 
-            // Preset4Button
-            // 
-            this.Preset4Button.DisabledBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
-            this.Preset4Button.DisabledBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
-            this.Preset4Button.DisabledForeColor = System.Drawing.Color.Gray;
-            this.Preset4Button.Font = new System.Drawing.Font("Impact", 9F, System.Drawing.FontStyle.Bold);
-            this.Preset4Button.HoverBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
-            this.Preset4Button.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
-            this.Preset4Button.HoverTextColor = System.Drawing.Color.White;
-            this.Preset4Button.IsDerivedStyle = true;
-            this.Preset4Button.Location = new System.Drawing.Point(252, 237);
-            this.Preset4Button.Name = "Preset4Button";
-            this.Preset4Button.NormalBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
-            this.Preset4Button.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
-            this.Preset4Button.NormalTextColor = System.Drawing.Color.White;
-            this.Preset4Button.PressBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
-            this.Preset4Button.PressColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
-            this.Preset4Button.PressTextColor = System.Drawing.Color.White;
-            this.Preset4Button.Size = new System.Drawing.Size(29, 22);
-            this.Preset4Button.Style = MetroSet_UI.Enums.Style.Light;
-            this.Preset4Button.StyleManager = null;
-            this.Preset4Button.TabIndex = 54;
-            this.Preset4Button.Text = "4";
-            this.Preset4Button.ThemeAuthor = "Narwin";
-            this.Preset4Button.ThemeName = "MetroLite";
-            this.Preset4Button.Click += new System.EventHandler(this.Preset4Button_Click);
-            // 
             // SiliconForm
             // 
             this.AllowResize = false;
@@ -1308,7 +1292,6 @@ namespace Silicon
         private Sunny.UI.UILabel uiLabel12;
         private MetroSet_UI.Controls.MetroSetTextBox CinematicSpeedTextBox;
         private Sunny.UI.UILabel uiLabel13;
-        private MetroSet_UI.Controls.MetroSetLabel HotkeysLabel;
         private Sunny.UI.UILabel VersionLabel;
         private System.Windows.Forms.ColumnHeader FOV;
         private Sunny.UI.UILabel uiLabel14;

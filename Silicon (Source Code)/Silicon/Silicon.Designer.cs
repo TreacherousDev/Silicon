@@ -145,9 +145,9 @@ namespace Silicon
             this.Information.Controls.Add(this.proID);
             this.Information.Controls.Add(this.procIDLabel);
             this.Information.ForeColor = System.Drawing.Color.White;
-            this.Information.Location = new System.Drawing.Point(0, 40);
+            this.Information.Location = new System.Drawing.Point(0, 30);
             this.Information.Name = "Information";
-            this.Information.Size = new System.Drawing.Size(200, 60);
+            this.Information.Size = new System.Drawing.Size(482, 272);
             this.Information.TabIndex = 1;
             this.Information.Text = "Information";
             // 
@@ -225,9 +225,7 @@ namespace Silicon
             this.ToolTipLabel.Name = "ToolTipLabel";
             this.ToolTipLabel.Size = new System.Drawing.Size(224, 149);
             this.ToolTipLabel.TabIndex = 26;
-            this.ToolTipLabel.Text = "DEFAULT PRESETS\r\nF1: Realm Camera\r\nF2: Overworld Camera\r\nF3: 1st Person POV Camer" +
-    "a\r\n\r\nCAMERA\r\nMouse Scrollwheel to change FOV\r\nAlt + Mouse Schrollwheel to change" +
-    "\r\nDistance to Focal Point";
+            this.ToolTipLabel.Text = resources.GetString("ToolTipLabel.Text");
             // 
             // getStatus
             // 

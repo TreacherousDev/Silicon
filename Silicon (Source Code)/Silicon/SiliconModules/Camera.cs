@@ -39,6 +39,7 @@ namespace Silicon
         private void HandleCameraController(double yawRotation)
         {
             if (!IsCubicWindowFocused()) return;
+            if (isChatting) return;
 
             double moveX = 0, moveY = 0, moveZ = 0;
             double rotatePitch = 0, rotateYaw = 0;
@@ -228,6 +229,7 @@ namespace Silicon
             //     ResetCameraRoll();
             //     return;
             // }
+            if (isChatting) return;
 
             if (pressedKeys.Contains(Keys.E))
                 currentCameraRoll -= 1;
@@ -235,8 +237,7 @@ namespace Silicon
             if (pressedKeys.Contains(Keys.Q))
                 currentCameraRoll += 1;
 
-            upVector = ComputeUpVectorFromYawRoll((float)currentCameraRoll);
-            
+            upVector = ComputeUpVectorFromYawRoll((float)currentCameraRoll);  
         }
 
         private void ResetCameraRoll()

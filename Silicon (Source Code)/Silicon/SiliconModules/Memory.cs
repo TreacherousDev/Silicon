@@ -34,6 +34,9 @@ namespace Silicon
         readonly string overrideArrowHotkeysFunction = "90 90 90 90 90 90 90 90";
         readonly string overrideRightClickDragFunction = "90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90";
 
+        readonly string isChattingFunctionInjection = "50 E8 00 00 00 00 58 88 48 10 58 88 88 A8 11 00 00 E9 A2 58 3A FF 01 00 00 00 FF FF FF FF";
+        readonly string isChattingFunctionEntry = "E9 49 A7 C5 00 90";
+
         // Revertable functions (Optional switch states available)
         readonly string cameraLookAtEditorInjection = "50 E8 00 00 00 00 58 F3 0F 11 58 5D F3 0F 11 48 61 F3 0F 11 40 65 F3 0F 10 58 4D F3 0F 10 48 51 F3 0F 10 40 55 58 50 E8 00 00 00 00 58 F3 0F 11 58 37 F3 0F 11 48 3B F3 0F 11 40 3F 53 8D 5E 10 89 58 33 5B 58 F3 0F 11 1E F3 0F 11 4E 04 E9 B1 80 39 FF 00 00 00 00 00 00 00 00 00 00 8C 42 40 D8 7D 10 00 00 00 00 00 00 00 00 00 00 8C 42 FF FF FF FF";
         readonly string cameraLookAtEditorFunctionEntry = "E9 00 7F C6 00 0F 1F 40 00";
@@ -77,6 +80,9 @@ namespace Silicon
             m.WriteMemory("Cubic.exe+1B8B0E", "bytes", overrideArrowHotkeysFunction);
             m.WriteMemory("Cubic.exe+1CA21A", "bytes", overrideRightClickDragFunction);
 
+            m.WriteMemory("Cubic.exe+1C69D9", "bytes", isChattingFunctionEntry);
+            m.WriteMemory("Cubic.exe+E21127", "bytes", isChattingFunctionInjection);
+
             //Revertable, injections only as set to false by default
             m.WriteMemory("Cubic.exe+E20ED7", "bytes", hidePlayerAvatarInjection);
         }
@@ -89,10 +95,7 @@ namespace Silicon
         private void CheckAndUpdateMemory()
         {
 
-            //if (isFreecamEnabled)
-            //{
-                HandleCameraController(currentCameraYaw);
-            //}
+            HandleCameraController(currentCameraYaw);
             UpdateCameraRoll();
 
             uint intRotationAddress = m.ReadUInt("Cubic.exe+E2103E");
@@ -105,6 +108,8 @@ namespace Silicon
             InterpolateCameraMovement(lookAtXAddress, lookAtYAddress, lookAtZAddress);
             InterpolateCameraRotation(pitchAddress, yawAddress);
             InterpolateCameraFOV("Cubic.exe+E20E25");
+
+            isChatting = m.ReadByte("Cubic.exe+E2113D") == 1;
 
 
             if (FreecamSwitch.Switched != isFreecamEnabled)

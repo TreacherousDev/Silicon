@@ -30,6 +30,7 @@ namespace Silicon
         private HashSet<Keys> pressedKeys = new HashSet<Keys>();
         private Thread keyPollingThread;
         private bool isRunning = true;
+        private bool isChatting = false;
 
         private const float equalityTolerance = 5e-5f;
 

@@ -117,7 +117,7 @@ namespace Silicon
             targetCameraPitch = 0;
             currentCameraYaw = 0;
             targetCameraYaw = 0;
-            CheckAndUpdateMemory();
+            //CheckAndUpdateMemory();
         }
 
         private double CatmullRom(double p0, double p1, double p2, double p3, double t)

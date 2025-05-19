@@ -94,6 +94,7 @@ namespace Silicon
             this.Speed = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.FOV = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.metroSetSetToolTip1 = new MetroSet_UI.Components.MetroSetSetToolTip();
+            this.Preset4Button = new MetroSet_UI.Controls.MetroSetButton();
             this.Information.SuspendLayout();
             this.Utility.SuspendLayout();
             this.TabControl.SuspendLayout();
@@ -145,9 +146,9 @@ namespace Silicon
             this.Information.Controls.Add(this.proID);
             this.Information.Controls.Add(this.procIDLabel);
             this.Information.ForeColor = System.Drawing.Color.White;
-            this.Information.Location = new System.Drawing.Point(0, 30);
+            this.Information.Location = new System.Drawing.Point(0, 40);
             this.Information.Name = "Information";
-            this.Information.Size = new System.Drawing.Size(482, 272);
+            this.Information.Size = new System.Drawing.Size(200, 60);
             this.Information.TabIndex = 1;
             this.Information.Text = "Information";
             // 
@@ -291,6 +292,7 @@ namespace Silicon
             // 
             this.Utility.BackColor = System.Drawing.Color.Transparent;
             this.Utility.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Utility.Controls.Add(this.Preset4Button);
             this.Utility.Controls.Add(this.Preset3Button);
             this.Utility.Controls.Add(this.Preset2Button);
             this.Utility.Controls.Add(this.Preset1Button);
@@ -1179,6 +1181,33 @@ namespace Silicon
             this.metroSetSetToolTip1.ThemeAuthor = "Narwin";
             this.metroSetSetToolTip1.ThemeName = "MetroLite";
             // 
+            // Preset4Button
+            // 
+            this.Preset4Button.DisabledBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.Preset4Button.DisabledBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.Preset4Button.DisabledForeColor = System.Drawing.Color.Gray;
+            this.Preset4Button.Font = new System.Drawing.Font("Impact", 9F, System.Drawing.FontStyle.Bold);
+            this.Preset4Button.HoverBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
+            this.Preset4Button.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
+            this.Preset4Button.HoverTextColor = System.Drawing.Color.White;
+            this.Preset4Button.IsDerivedStyle = true;
+            this.Preset4Button.Location = new System.Drawing.Point(252, 237);
+            this.Preset4Button.Name = "Preset4Button";
+            this.Preset4Button.NormalBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.Preset4Button.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.Preset4Button.NormalTextColor = System.Drawing.Color.White;
+            this.Preset4Button.PressBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
+            this.Preset4Button.PressColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
+            this.Preset4Button.PressTextColor = System.Drawing.Color.White;
+            this.Preset4Button.Size = new System.Drawing.Size(29, 22);
+            this.Preset4Button.Style = MetroSet_UI.Enums.Style.Light;
+            this.Preset4Button.StyleManager = null;
+            this.Preset4Button.TabIndex = 54;
+            this.Preset4Button.Text = "4";
+            this.Preset4Button.ThemeAuthor = "Narwin";
+            this.Preset4Button.ThemeName = "MetroLite";
+            this.Preset4Button.Click += new System.EventHandler(this.Preset4Button_Click);
+            // 
             // SiliconForm
             // 
             this.AllowResize = false;
@@ -1284,6 +1313,7 @@ namespace Silicon
         private System.Windows.Forms.ColumnHeader FOV;
         private Sunny.UI.UILabel uiLabel14;
         private System.Windows.Forms.FlowLayoutPanel CubicWindows;
+        private MetroSet_UI.Controls.MetroSetButton Preset4Button;
     }
 }
 

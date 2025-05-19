@@ -1,5 +1,8 @@
 using System;
+using System.Numerics;
 using System.Windows.Forms;
+using Silicon.CameraEffect;
+using Silicon.Helpers;
 
 namespace Silicon
 {
@@ -43,32 +46,34 @@ namespace Silicon
                 moveX += Math.Cos(radians);
                 moveY += Math.Sin(radians);
             }
+
             if (pressedKeys.Contains(Keys.S))
             {
                 double radians = (yawRotation + 90) * Math.PI / 180;
                 moveX += Math.Cos(radians);
                 moveY += Math.Sin(radians);
             }
+
             if (pressedKeys.Contains(Keys.A))
             {
                 double radians = yawRotation * Math.PI / 180;
                 moveX -= Math.Cos(radians);
                 moveY -= Math.Sin(radians);
             }
+
             if (pressedKeys.Contains(Keys.D))
             {
                 double radians = yawRotation * Math.PI / 180;
                 moveX += Math.Cos(radians);
                 moveY += Math.Sin(radians);
             }
+
             if (pressedKeys.Contains(Keys.ShiftKey)) moveZ -= 1;
             if (pressedKeys.Contains(Keys.ControlKey)) moveZ += 1;
             if (pressedKeys.Contains(Keys.Up)) rotatePitch -= 1;
             if (pressedKeys.Contains(Keys.Down)) rotatePitch += 1;
             if (pressedKeys.Contains(Keys.Left)) rotateYaw -= 1;
             if (pressedKeys.Contains(Keys.Right)) rotateYaw += 1;
-
-
 
             double moveMagnitude = Math.Sqrt(moveX * moveX + moveY * moveY + moveZ * moveZ);
             if (moveMagnitude > 0.05)
@@ -96,24 +101,15 @@ namespace Silicon
             targetCameraPitch += rotatePitch * cameraRotateSpeed;
             targetCameraYaw += rotateYaw * cameraRotateSpeed;
 
-            // Limit pitch angle using the custom Clamp
-            targetCameraPitch = Clamp(targetCameraPitch, -89, 89);
-        }
-
-        public static double Clamp(double value, double min, double max)
-        {
-            if (value < min) return min;
-            if (value > max) return max;
-            return value;
+            targetCameraPitch = targetCameraPitch.Clamp(-89, 89);
         }
 
         private void InterpolateCameraMovement(string lookAtXAddress, string lookAtYAddress, string lookAtZAddress)
         {
-            double elapsedTime = (Environment.TickCount / 100.0) - animationStartTime;
+            double elapsedTime = (Environment.TickCount - animationStartTime) / 1000.0;
             double alpha = elapsedTime / animationDuration;
-            alpha = Clamp(alpha, 0.0, 1.0);
+            alpha = alpha.Clamp(0.0, 1.0);
 
-            // Stop interpolation when alpha reaches 1
             if (alpha >= 1.0 - equalityTolerance)
             {
                 currentCameraLookAtX = targetCameraLookAtX;
@@ -130,11 +126,10 @@ namespace Silicon
 
         private void InterpolateCameraRotation(string pitchAddress, string yawAddress)
         {
-            double elapsedTime = (Environment.TickCount / 100.0) - animationStartTime;
+            double elapsedTime = (Environment.TickCount - animationStartTime) / 1000.0;
             double alpha = elapsedTime / animationDuration;
-            alpha = Clamp(alpha, 0.0, 1.0);
+            alpha = alpha.Clamp(0.0, 1.0);
 
-            // Stop interpolation when alpha reaches 1
             if (alpha >= 1.0 - equalityTolerance)
             {
                 currentCameraPitch = targetCameraPitch;
@@ -149,11 +144,10 @@ namespace Silicon
 
         private void InterpolateCameraFOV(string FOVAddress)
         {
-            double elapsedTime = (Environment.TickCount / 100.0) - animationStartTime;
+            double elapsedTime = (Environment.TickCount - animationStartTime) / 1000.0;
             double alpha = elapsedTime / animationDuration;
-            alpha = Clamp(alpha, 0.0, 1.0);
+            alpha = alpha.Clamp(0.0, 1.0);
 
-            // Stop interpolation when alpha reaches 1
             if (alpha >= 1.0 - equalityTolerance)
             {
                 currentCameraFOV = targetCameraFOV;
@@ -162,8 +156,23 @@ namespace Silicon
             {
                 currentCameraFOV = _interpolator(m.ReadFloat(FOVAddress), targetCameraFOV, alpha);
             }
-            
         }
 
+        private void ApplyCameraEffects(double deltaTime)
+        {
+            ProjectiveEffector shake = _effectManager.ComputeDelta(deltaTime);
+
+            Vector3 xyz = shake.EffectAffineMat.GetXYZ();
+            Vector3 pry = shake.EffectAffineMat.GetPitchRollYaw();
+
+            currentCameraLookAtX += xyz.X;
+            currentCameraLookAtY += xyz.Y;
+            currentCameraLookAtZ += xyz.Z;
+
+            currentCameraPitch += pry.X;
+            currentCameraYaw += pry.Z;
+
+            currentCameraFOV += shake.FovDelta;
+        }
     }
 }

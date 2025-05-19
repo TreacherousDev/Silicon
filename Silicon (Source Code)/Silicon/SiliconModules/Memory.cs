@@ -12,27 +12,41 @@ namespace Silicon
         readonly string cameraCoordinatesFunction = "90 90 90 90 90 90 90 90 90 90 90 90";
         readonly string adjustFogFunction = "90 90 90 90 90 90 90 90";
 
-        readonly string cameraHeightInjection = "53 E8 00 00 00 00 5B F3 0F 5C 43 1B F3 0F 11 40 08 5B F3 0F 5C CB 8D 85 FC FE FF FF E9 CB BA 39 FF 66 66 A6 3F 00 00 00 00";
+        readonly string cameraHeightInjection =
+            "53 E8 00 00 00 00 5B F3 0F 5C 43 1B F3 0F 11 40 08 5B F3 0F 5C CB 8D 85 FC FE FF FF E9 CB BA 39 FF 66 66 A6 3F 00 00 00 00";
+
         readonly string cameraHeightFunctionEntry = "E9 19 45 C6 00 0F 1F 44 00 00";
 
-        readonly string unlockCameraArrowsInjection = "50 E8 00 00 00 00 58 F3 0F 10 58 1F 0F 2F D8 58 0F 86 04 7E 39 FF C7 86 EC 09 00 00 00 00 B2 C2 E9 F5 7D 39 FF 00 00 B2 C2 00 00 00";
+        readonly string unlockCameraArrowsInjection =
+            "50 E8 00 00 00 00 58 F3 0F 10 58 1F 0F 2F D8 58 0F 86 04 7E 39 FF C7 86 EC 09 00 00 00 00 B2 C2 E9 F5 7D 39 FF 00 00 B2 C2 00 00 00";
+
         readonly string unlockCameraArrowsFunctionEntry = "E9 ED 81 C6 00";
 
-        readonly string unlockCameraRMBInjection = "50 E8 00 00 00 00 58 F3 0F 10 70 1F 0F 2F F1 58 0F 86 AA 94 3A FF C7 80 EC 09 00 00 00 00 B2 C2 E9 9B 94 3A FF 00 00 B2 C2 00 00 00";
+        readonly string unlockCameraRMBInjection =
+            "50 E8 00 00 00 00 58 F3 0F 10 70 1F 0F 2F F1 58 0F 86 AA 94 3A FF C7 80 EC 09 00 00 00 00 B2 C2 E9 9B 94 3A FF 00 00 B2 C2 00 00 00";
+
         readonly string unlockCameraRMBFunctionEntry = "E9 47 6B C5 00";
 
-        readonly string unlockCameraFOVInjection = "50 E8 00 00 00 00 58 F3 0F 10 40 12 58 8D 85 D8 FE FF FF E9 30 BA 39 FF 00 00 96 42 FF FF FF FF";
+        readonly string unlockCameraFOVInjection =
+            "50 E8 00 00 00 00 58 F3 0F 10 40 12 58 8D 85 D8 FE FF FF E9 30 BA 39 FF 00 00 96 42 FF FF FF FF";
+
         readonly string unlockCameraFOVFunctionEntry = "E9 B9 45 C6 00 90";
 
-        readonly string adjustCameraDistanceInjection = "50 E8 00 00 00 00 58 F3 0F 59 40 24 F3 0F 59 58 24 F3 0F 59 60 24 58 E9 00 00 00 00 F3 0F 5C D0 F3 0F 10 40 08 E9 67 B8 39 FF 00 00 C8 41 FF FF FF FF";
+        readonly string adjustCameraDistanceInjection =
+            "50 E8 00 00 00 00 58 F3 0F 59 40 24 F3 0F 59 58 24 F3 0F 59 60 24 58 E9 00 00 00 00 F3 0F 5C D0 F3 0F 10 40 08 E9 67 B8 39 FF 00 00 C8 41 FF FF FF FF";
+
         readonly string adjustCameraDistanceFunctionEntry = "E9 73 47 C6 00 0F 1F 40 00";
 
         // Revertable functions (Optional switch states available)
-        readonly string cameraLookAtEditorInjection = "50 E8 00 00 00 00 58 F3 0F 11 58 5D F3 0F 11 48 61 F3 0F 11 40 65 F3 0F 10 58 4D F3 0F 10 48 51 F3 0F 10 40 55 58 50 E8 00 00 00 00 58 F3 0F 11 58 37 F3 0F 11 48 3B F3 0F 11 40 3F 53 8D 5E 10 89 58 33 5B 58 F3 0F 11 1E F3 0F 11 4E 04 E9 B1 80 39 FF 00 00 00 00 00 00 00 00 00 00 8C 42 40 D8 7D 10 00 00 00 00 00 00 00 00 00 00 8C 42 FF FF FF FF";
+        readonly string cameraLookAtEditorInjection =
+            "50 E8 00 00 00 00 58 F3 0F 11 58 5D F3 0F 11 48 61 F3 0F 11 40 65 F3 0F 10 58 4D F3 0F 10 48 51 F3 0F 10 40 55 58 50 E8 00 00 00 00 58 F3 0F 11 58 37 F3 0F 11 48 3B F3 0F 11 40 3F 53 8D 5E 10 89 58 33 5B 58 F3 0F 11 1E F3 0F 11 4E 04 E9 B1 80 39 FF 00 00 00 00 00 00 00 00 00 00 8C 42 40 D8 7D 10 00 00 00 00 00 00 00 00 00 00 8C 42 FF FF FF FF";
+
         readonly string cameraLookAtEditorFunctionEntry = "E9 00 7F C6 00 0F 1F 40 00";
         readonly string cameraLookAtEditorFunctionOriginal = "E9 26 7F C6 00 0F 1F 40 00";
 
-        readonly string hidePlayerAvatarInjection = "53 E8 00 00 00 00 5B F3 0F 10 7D 08 F3 0F 5C BB 65 01 00 00 50 F3 0F 11 7B 6B 8B 43 6B 23 43 63 66 0F 6E F8 58 0F 2E 7B 67 0F 83 2F 00 00 00 F3 0F 10 7D 0C F3 0F 5C BB 69 01 00 00 50 F3 0F 11 7B 6B 8B 43 6B 23 43 63 66 0F 6E F8 58 0F 2E 7B 67 0F 83 07 00 00 00 C7 45 10 00 00 C8 C2 5B F3 0F 10 45 10 E9 18 EB 37 FF FF FF FF 7F 9A 99 99 3E 8C 10 C1 40 AA AA AA AA";
+        readonly string hidePlayerAvatarInjection =
+            "53 E8 00 00 00 00 5B F3 0F 10 7D 08 F3 0F 5C BB 65 01 00 00 50 F3 0F 11 7B 6B 8B 43 6B 23 43 63 66 0F 6E F8 58 0F 2E 7B 67 0F 83 2F 00 00 00 F3 0F 10 7D 0C F3 0F 5C BB 69 01 00 00 50 F3 0F 11 7B 6B 8B 43 6B 23 43 63 66 0F 6E F8 58 0F 2E 7B 67 0F 83 07 00 00 00 C7 45 10 00 00 C8 C2 5B F3 0F 10 45 10 E9 18 EB 37 FF FF FF FF 7F 9A 99 99 3E 8C 10 C1 40 AA AA AA AA";
+
         readonly string hidePlayerAvatarFunctionEntry = "E9 7F 14 C8 00";
         readonly string hidePlayerAvatarFunctionOriginal = "F3 0F 10 45 10";
 
@@ -91,6 +105,8 @@ namespace Silicon
             InterpolateCameraRotation(pitchAddress, yawAddress);
             InterpolateCameraFOV("Cubic.exe+E20E1D");
 
+            // value of 5 from Silicon.cs/SiliconWorker_DoWork()
+            ApplyCameraEffects(deltaTime: 5);
 
             if (FreecamSwitch.Switched != isFreecamEnabled)
             {
@@ -104,7 +120,6 @@ namespace Silicon
                     m.WriteMemory("Cubic.exe+21AE7A", "bytes", disableMovement1Function);
                     m.WriteMemory("Cubic.exe+21ADE1", "bytes", disableMovement2Function);
                     m.WriteMemory("Cubic.exe+21AE18", "bytes", disableMovement2Function);
-
                 }
                 else
                 {
@@ -195,9 +210,10 @@ namespace Silicon
                     m.WriteMemory(pitchAddress, "bytes", ConvertDoubleToFloatBytes(currentCameraPitch));
                     m.WriteMemory(yawAddress, "bytes", ConvertDoubleToFloatBytes(currentCameraYaw));
                 }
+
                 m.WriteMemory("Cubic.exe+E21032", "bytes", ConvertDoubleToFloatBytes(currentCameraLookAtX));
                 m.WriteMemory("Cubic.exe+E21036", "bytes", ConvertDoubleToFloatBytes(currentCameraLookAtY));
-                m.WriteMemory("Cubic.exe+E2103A", "bytes", ConvertDoubleToFloatBytes(currentCameraLookAtZ)); 
+                m.WriteMemory("Cubic.exe+E2103A", "bytes", ConvertDoubleToFloatBytes(currentCameraLookAtZ));
             }
             else
             {
@@ -207,6 +223,8 @@ namespace Silicon
                 targetCameraPitch = m.ReadFloat(pitchAddress);
                 targetCameraYaw = m.ReadFloat(yawAddress);
             }
+
+
             // FOV editing enabled even with freecam disabled
             m.WriteMemory("Cubic.exe+E20E1D", "bytes", ConvertDoubleToFloatBytes(currentCameraFOV));
 
@@ -221,11 +239,26 @@ namespace Silicon
             }
 
             //UpdateLabel(CameraPositionDataLabel, $"X: {currentCameraLookAtX:F2} Y: {currentCameraLookAtY:F2} Z: {currentCameraLookAtZ:F2} Pitch: {currentCameraPitch:F2} Yaw: {currentCameraYaw:F2}", Color.Red);
-            UpdateLabel(CameraLookAtInfoLabel, $"X: {currentCameraLookAtX:F2}\nY: {currentCameraLookAtY:F2}\nZ: {currentCameraLookAtZ:F2}", Color.White);
-            UpdateLabel(CameraLookAtInfoLabel2, $"X: {currentCameraLookAtX:F2}\nY: {currentCameraLookAtY:F2}\nZ: {currentCameraLookAtZ:F2}", Color.White);
-            UpdateLabel(CameraRotationInfoLabel, $"Pitch: {currentCameraPitch:F2}\nYaw: {currentCameraYaw:F2}\n🔎:  {cameraDistanceSliderValue} | {cameraFOVSliderValue}", Color.White);
-            UpdateLabel(CameraRotationInfoLabel2, $"Pitch: {currentCameraPitch:F2}\nYaw: {currentCameraYaw:F2}\n🔎:  {cameraDistanceSliderValue} | {cameraFOVSliderValue}", Color.White);
-
+            UpdateLabel(
+                CameraLookAtInfoLabel,
+                $"X: {currentCameraLookAtX:F2}\nY: {currentCameraLookAtY:F2}\nZ: {currentCameraLookAtZ:F2}",
+                Color.White
+            );
+            UpdateLabel(
+                CameraLookAtInfoLabel2,
+                $"X: {currentCameraLookAtX:F2}\nY: {currentCameraLookAtY:F2}\nZ: {currentCameraLookAtZ:F2}",
+                Color.White
+            );
+            UpdateLabel(
+                CameraRotationInfoLabel,
+                $"Pitch: {currentCameraPitch:F2}\nYaw: {currentCameraYaw:F2}\n🔎:  {cameraDistanceSliderValue} | {cameraFOVSliderValue}",
+                Color.White
+            );
+            UpdateLabel(
+                CameraRotationInfoLabel2,
+                $"Pitch: {currentCameraPitch:F2}\nYaw: {currentCameraYaw:F2}\n🔎:  {cameraDistanceSliderValue} | {cameraFOVSliderValue}",
+                Color.White
+            );
         }
     }
 }

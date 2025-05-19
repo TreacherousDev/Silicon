@@ -162,6 +162,14 @@
     <Compile Include="Silicon\SiliconModules\Camera.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Silicon\SiliconModules\CameraEffect\ProjectiveEffector.cs" />
+    <Compile Include="Silicon\SiliconModules\CameraEffect\ICameraEffect.cs" />
+    <Compile Include="Silicon\SiliconModules\CameraEffect\CameraEffectManager.cs" />
+    <Compile Include="Silicon\SiliconModules\CameraEffect\Shake\OrnsteinUhlenbeckShakeFx.cs" />
+    <Compile Include="Silicon\SiliconModules\CameraEffect\Shake\AnisotropicPerlinShakeFx.cs" />
+    <Compile Include="Silicon\SiliconModules\Helpers\Mathematical.cs" />
+    <Compile Include="Silicon\SiliconModules\Helpers\Perlin1D.cs" />
+    <Compile Include="Silicon\SiliconModules\Helpers\TranslateRotate.cs" />
     <Compile Include="Silicon\SiliconModules\Input.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -13,7 +13,8 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Text;
 using System.Linq;
-
+using System.Numerics;
+using Silicon.CameraEffect;
 
 
 namespace Silicon
@@ -36,6 +37,10 @@ namespace Silicon
         private Interpolator.MethodDelegate _interpolator = Interpolator.GetMethodWithIndex(0);
         private double animationStartTime;
         private double animationDuration;
+
+        private readonly CameraEffectManager _effectManager = new CameraEffectManager();
+        private bool _cameraShakeToggle = false;
+
         private GlobalMouseHook mouseHook;
 
         [DllImport("user32.dll")]
@@ -106,8 +111,6 @@ namespace Silicon
         static extern bool GetClientRect(IntPtr hWnd, out RECT lpRect);
 
 
-
-
         public SiliconForm()
         {
             InitializeComponent();
@@ -149,7 +152,6 @@ namespace Silicon
                 button.PressBorderColor = Color.FromArgb(64, 128, 204);
                 button.PressColor = Color.FromArgb(64, 128, 204);
             }
-
         }
 
         private void SiliconWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -198,8 +200,6 @@ namespace Silicon
                     CameraFOVSlider.Value = Math.Max(10, CameraFOVSlider.Value - 1);
                 }
             };
-
-
         }
 
         private void StartProcessCheckTimer()
@@ -316,10 +316,8 @@ namespace Silicon
         }
 
 
-
         private void UpdateLabel(Label label, string text, Color color)
         {
-
             if (label.InvokeRequired)
             {
                 label.Invoke((MethodInvoker)delegate
@@ -343,7 +341,6 @@ namespace Silicon
             mouseHook?.Dispose();
         }
         // Here ends the code edited by Hispano
-
 
 
         private bool IsCubicWindowFocused()
@@ -489,7 +486,19 @@ namespace Silicon
             return picBox;
         }
 
-
-
+        private void CameraShakeSwitch_SwitchedChanged(object sender)
+        {
+            if (_cameraShakeToggle)
+            {
+                // _cameraShakeToggle = false;
+            }
+            else
+            {
+                _effectManager.AddEffect(new AnisotropicPerlinShakeFx(
+                    amplitudes: new Vector3(0.14f, 0.14f, 0.14f)
+                ));
+                _cameraShakeToggle = true;
+            }
+        }
     }
 }

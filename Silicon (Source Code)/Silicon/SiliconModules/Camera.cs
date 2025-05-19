@@ -47,24 +47,28 @@ namespace Silicon
                 moveX += Math.Cos(radians);
                 moveY += Math.Sin(radians);
             }
+
             if (pressedKeys.Contains(Keys.S))
             {
                 double radians = (yawRotation + 90) * Math.PI / 180;
                 moveX += Math.Cos(radians);
                 moveY += Math.Sin(radians);
             }
+
             if (pressedKeys.Contains(Keys.A))
             {
                 double radians = yawRotation * Math.PI / 180;
                 moveX -= Math.Cos(radians);
                 moveY -= Math.Sin(radians);
             }
+
             if (pressedKeys.Contains(Keys.D))
             {
                 double radians = yawRotation * Math.PI / 180;
                 moveX += Math.Cos(radians);
                 moveY += Math.Sin(radians);
             }
+
             if (pressedKeys.Contains(Keys.ShiftKey)) moveZ -= 1;
             if (pressedKeys.Contains(Keys.ControlKey)) moveZ += 1;
             if (pressedKeys.Contains(Keys.Up)) rotatePitch -= 1;
@@ -73,12 +77,9 @@ namespace Silicon
             if (pressedKeys.Contains(Keys.Right)) rotateYaw += 1;
 
 
-            
-
             //// Optional: re-orthogonalize the basis
             //Vector3 right = Vector3.Normalize(Vector3.Cross(forward, up));
             //up = Vector3.Normalize(Vector3.Cross(right, forward));
-
 
 
             double moveMagnitude = Math.Sqrt(moveX * moveX + moveY * moveY + moveZ * moveZ);
@@ -173,61 +174,74 @@ namespace Silicon
             {
                 currentCameraFOV = _interpolator(m.ReadFloat(FOVAddress), targetCameraFOV, alpha);
             }
-            
         }
 
-        private Vector3 GetForwardVector(float pitchDeg, float yawDeg)
+        private Vector3 GetForwardVector(double pitchDeg, double yawDeg)
         {
-            float pitch = (float)Math.PI / 180f * pitchDeg;
-            float yaw = (float)Math.PI / 180f * yawDeg;
+            double pitch = Math.PI / 180f * pitchDeg;
+            double yaw = Math.PI / 180f * yawDeg;
 
-            float x = (float)Math.Cos(pitch) * (float)Math.Sin(yaw);
-            float y = (float)Math.Cos(pitch) * (float)Math.Cos(yaw);
-            float z = (float)Math.Sin(pitch);
+            double x = Math.Cos(pitch) * Math.Sin(yaw);
+            double y = Math.Cos(pitch) * Math.Cos(yaw);
+            double z = Math.Sin(pitch);
 
-            Vector3 forward = new Vector3(x, y, z);
+            Vector3 forward = new Vector3((float)x, (float)y, (float)z);
             return Vector3.Normalize(forward);
         }
 
 
-        private Vector3 ComputeUpVectorFromYawRoll(float yawDegrees, float rollDegrees)
+        private Vector3 ComputeUpVectorFromYawRoll(float rollDegrees)
         {
             // Convert angles to radians
-            float yawRad = (float)Math.PI / 180f * yawDegrees;
-            float rollRad = (float)Math.PI / 180f * rollDegrees;
+            double rollRad = rollDegrees * (Math.PI / 180f);
 
+            // Get forward vector
+            Vector3 forward = GetForwardVector(-currentCameraPitch, -currentCameraYaw);
+            Vector3 forwardAxis = Vector3.Normalize(forward);
 
-            Vector3 forward = GetForwardVector((float)currentCameraPitch, (float)currentCameraYaw);
-
-            // Right vector (perpendicular to forward and world up)
+            // Pre-existing world up vector
             Vector3 worldUp = new Vector3(0, 0, -1);
-            Vector3 right = Vector3.Normalize(Vector3.Cross(worldUp, forward));
 
-            // Compute roll-adjusted up vector:
+            // Orthogonalize worldUp against forward
+            Vector3 projUpAxis = worldUp - forwardAxis * Vector3.Dot(worldUp, forwardAxis);
+            projUpAxis = Vector3.Normalize(projUpAxis);
+            // Computing this new up axis before computing the right vector avoids numerical instability near the pole
+
+            // Construct new orthonormal basis
+            Vector3 v = projUpAxis;
+            Vector3 kCrossV = Vector3.Cross(forwardAxis, projUpAxis);
+            // Vector3 v = forwardAxis;
+
+            // Compute coefficients for linear combination
             // This rotates the up vector around the flat forward direction
-            Vector3 up = worldUp * (float)Math.Cos(rollRad) + right * (float)Math.Sin(rollRad);
-                
-            return Vector3.Normalize(up);
+            float c1 = (float)Math.Cos(rollRad);
+            float c2 = (float)Math.Sin(rollRad);
+            // Remaining term in Rodrigues' formula, but we don't need it because it's always 0
+            // float c3 = (float)(Vector3.Dot(forwardAxis, projUpAxis) * (1 - Math.Cos(rollRad)));
+
+            return Vector3.Normalize(c1 * v + c2 * kCrossV);
         }
 
+
         private void UpdateCameraRoll()
-        {  
-            if (pressedKeys.Contains(Keys.Up) || pressedKeys.Contains(Keys.Down) || pressedKeys.Contains(Keys.Left) 
+        {
+            if (pressedKeys.Contains(Keys.Up) || pressedKeys.Contains(Keys.Down) || pressedKeys.Contains(Keys.Left)
                 || pressedKeys.Contains(Keys.Right) || IsRightMouseButtonDown())
             {
                 ResetCameraRoll();
                 return;
             }
 
-            Vector3 forward = GetForwardVector((float)currentCameraPitch, (float)currentCameraYaw);
             if (pressedKeys.Contains(Keys.Q))
-                currentCameraRoll -= 1;
-            
-            if (pressedKeys.Contains(Keys.E))
-                currentCameraRoll += 1;
+                currentCameraRoll -= 2;
 
-            upVector = ComputeUpVectorFromYawRoll((float)currentCameraYaw, (float)currentCameraRoll);
-            Console.WriteLine($"Up: {upVector.X:F2}, {upVector.Y:F2}, {upVector.Z:F2}");
+            if (pressedKeys.Contains(Keys.E))
+                currentCameraRoll += 2;
+
+            Console.WriteLine(
+                $@"Pitch: {currentCameraPitch:F2}, Yaw: {currentCameraYaw:F2}, Roll: {currentCameraRoll:F2}");
+            upVector = ComputeUpVectorFromYawRoll((float)currentCameraRoll);
+            Console.WriteLine($@"Up: {upVector.X:F2}, {upVector.Y:F2}, {upVector.Z:F2}");
         }
 
         private void ResetCameraRoll()
@@ -235,7 +249,5 @@ namespace Silicon
             upVector = new Vector3(0, 0, -1);
             currentCameraRoll = 0;
         }
-
-
     }
 }

@@ -21,6 +21,7 @@ namespace Silicon
         private double targetCameraLookAtZ;
         private double targetCameraPitch;
         private double targetCameraYaw;
+        private double targetCameraRoll;
         private double targetCameraFOV = 33;
 
         private Vector3 upVector = new Vector3(0, 0, -1);
@@ -41,9 +42,10 @@ namespace Silicon
         private void HandleCameraController(double yawRotation)
         {
             if (!IsCubicWindowFocused()) return;
+            if (isChatting) return;
 
             double moveX = 0, moveY = 0, moveZ = 0;
-            double rotatePitch = 0, rotateYaw = 0;
+            double rotatePitch = 0, rotateYaw = 0, rotateRoll = 0;
 
             if (pressedKeys.Contains(Keys.W))
             {
@@ -79,7 +81,8 @@ namespace Silicon
             if (pressedKeys.Contains(Keys.Down)) rotatePitch += 1;
             if (pressedKeys.Contains(Keys.Left)) rotateYaw -= 1;
             if (pressedKeys.Contains(Keys.Right)) rotateYaw += 1;
-
+            if (pressedKeys.Contains(Keys.E)) rotateRoll -= 1;
+            if (pressedKeys.Contains(Keys.Q)) rotateRoll += 1;
 
 
             double moveMagnitude = Math.Sqrt(moveX * moveX + moveY * moveY + moveZ * moveZ);
@@ -107,8 +110,18 @@ namespace Silicon
 
             targetCameraPitch += rotatePitch * cameraRotateSpeed;
             targetCameraYaw += rotateYaw * cameraRotateSpeed;
+            targetCameraRoll += rotateRoll * cameraRotateSpeed;
 
-            targetCameraPitch = targetCameraPitch.Clamp(-89, 89);
+            // Limit pitch angle using the custom Clamp
+            targetCameraPitch = Clamp(targetCameraPitch, -89, 89);
+            //upVector = ComputeUpVectorFromRoll((float)currentCameraRoll);
+        }
+
+        public static double Clamp(double value, double min, double max)
+        {
+            if (value < min) return min;
+            if (value > max) return max;
+            return value;
         }
 
         private void InterpolateCameraMovement(string lookAtXAddress, string lookAtYAddress, string lookAtZAddress)
@@ -141,12 +154,15 @@ namespace Silicon
             {
                 currentCameraPitch = targetCameraPitch;
                 currentCameraYaw = targetCameraYaw;
+                currentCameraRoll = targetCameraRoll;
             }
             else
             {
-                currentCameraPitch = _interpolator(m.ReadFloat(pitchAddress), targetCameraPitch, alpha);
-                currentCameraYaw = _interpolator(m.ReadFloat(yawAddress), targetCameraYaw, alpha);
+                currentCameraPitch = _interpolator(currentCameraPitch, targetCameraPitch, alpha);
+                currentCameraYaw = _interpolator(currentCameraYaw, targetCameraYaw, alpha);
+                currentCameraRoll = _interpolator(currentCameraRoll, targetCameraRoll, alpha);
             }
+            upVector = ComputeUpVectorFromRoll((float)currentCameraRoll);
         }
 
         private void InterpolateCameraFOV(string FOVAddress)
@@ -178,8 +194,7 @@ namespace Silicon
             return Vector3.Normalize(forward);
         }
 
-
-        private Vector3 ComputeUpVectorFromYawRoll(float rollDegrees)
+        private Vector3 ComputeUpVectorFromRoll(float rollDegrees)
         {
             // Convert angles to radians
             double rollRad = rollDegrees * (Math.PI / 180f);
@@ -212,31 +227,11 @@ namespace Silicon
         }
 
 
-        private void UpdateCameraRoll()
-        {
-            // if (pressedKeys.Contains(Keys.Up) || pressedKeys.Contains(Keys.Down) || pressedKeys.Contains(Keys.Left)
-            //     || pressedKeys.Contains(Keys.Right) || IsRightMouseButtonDown())
-            // {
-            //     ResetCameraRoll();
-            //     return;
-            // }
-
-            if (pressedKeys.Contains(Keys.Q))
-                currentCameraRoll -= 1;
-
-            if (pressedKeys.Contains(Keys.E))
-                currentCameraRoll += 1;
-
-            Console.WriteLine(
-                $@"Pitch: {currentCameraPitch:F2}, Yaw: {currentCameraYaw:F2}, Roll: {currentCameraRoll:F2}");
-            upVector = ComputeUpVectorFromYawRoll((float)currentCameraRoll);
-            Console.WriteLine($@"Up: {upVector.X:F2}, {upVector.Y:F2}, {upVector.Z:F2}");
-        }
-
         private void ResetCameraRoll()
         {
             upVector = new Vector3(0, 0, -1);
             currentCameraRoll = 0;
+            targetCameraRoll = 0;
         }
 
         private void ApplyCameraEffects(double deltaTime)

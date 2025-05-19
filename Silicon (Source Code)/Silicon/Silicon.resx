@@ -125,16 +125,34 @@
   </metadata>
   <data name="uiLabel14.Text" xml:space="preserve">
     <value>FREECAM
-F4: Toggle Freecam
+F5: Toggle Freecam
 W A S D + Ctrl + Shift to move camera
 Arrow Keys or Right Click to look around
 
 CINEMATIC
-F5: Add Frame
-F6: Go to Previous Frame
-F7: Go to Next Frame
-F8: Play / Stop Animation
+F6: Add Frame
+F7: Go to Previous Frame
+F8: Go to Next Frame
+F9: Play / Stop Animation
+
+EXTRA
+F10: Toggle Hide Name
+F11: Toggle Hide UI
+
 </value>
+  </data>
+  <data name="ToolTipLabel.Text" xml:space="preserve">
+    <value>DEFAULT PRESETS
+F1: Realm Camera
+F2: Overworld Camera
+F3: 1st Person POV Camera
+F4: /skycam
+
+CAMERA
+Mouse Scrollwheel to change FOV
+Alt + Mouse Schrollwheel to change
+Distance to Focal Point
+Q, E to Tilt Camera</value>
   </data>
   <metadata name="metroSetSetToolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>283, 17</value>

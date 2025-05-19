@@ -32,6 +32,10 @@ namespace Silicon
         readonly string upVectorFunctionEntry = "E8 21 48 C6 00";
 
         readonly string overrideArrowHotkeysFunction = "90 90 90 90 90 90 90 90";
+        readonly string overrideRightClickDragFunction = "90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90";
+
+        //readonly string isChattingFunctionInjection = "50 E8 00 00 00 00 58 88 48 10 58 88 88 A8 11 00 00 E9 A2 58 3A FF 01 00 00 00 FF FF FF FF";
+        //readonly string isChattingFunctionEntry = "E9 49 A7 C5 00 90";
 
         // Revertable functions (Optional switch states available)
         readonly string cameraLookAtEditorInjection = "50 E8 00 00 00 00 58 F3 0F 11 58 5D F3 0F 11 48 61 F3 0F 11 40 65 F3 0F 10 58 4D F3 0F 10 48 51 F3 0F 10 40 55 58 50 E8 00 00 00 00 58 F3 0F 11 58 37 F3 0F 11 48 3B F3 0F 11 40 3F 53 8D 5E 10 89 58 33 5B 58 F3 0F 11 1E F3 0F 11 4E 04 E9 B1 80 39 FF 00 00 00 00 00 00 00 00 00 00 8C 42 40 D8 7D 10 00 00 00 00 00 00 00 00 00 00 8C 42 FF FF FF FF";
@@ -72,24 +76,26 @@ namespace Silicon
             m.WriteMemory("Cubic.exe+E21097", "bytes", upVectorInjection);
             m.WriteMemory("Cubic.exe+1BC871", "bytes", upVectorFunctionEntry);
 
-            
+            m.WriteMemory("Cubic.exe+1B8AD2", "bytes", overrideArrowHotkeysFunction);
+            m.WriteMemory("Cubic.exe+1B8B0E", "bytes", overrideArrowHotkeysFunction);
+            m.WriteMemory("Cubic.exe+1CA21A", "bytes", overrideRightClickDragFunction);
+
+
             //Revertable, injections only as set to false by default
             m.WriteMemory("Cubic.exe+E20ED7", "bytes", hidePlayerAvatarInjection);
         }
 
         private void UpdateMemoryOnTimerTick(object sender, ElapsedEventArgs e)
         {
+            if (!wasConnected) return;
             CheckAndUpdateMemory();
         }
 
         private void CheckAndUpdateMemory()
         {
 
-            //if (isFreecamEnabled)
-            //{
-                HandleCameraController(currentCameraYaw);
-            //}
-            UpdateCameraRoll();
+            HandleCameraController(currentCameraYaw);
+            //UpdateCameraRoll();
 
             uint intRotationAddress = m.ReadUInt("Cubic.exe+E2103E");
             string pitchAddress = (intRotationAddress + 4).ToString("X");
@@ -101,6 +107,8 @@ namespace Silicon
             InterpolateCameraMovement(lookAtXAddress, lookAtYAddress, lookAtZAddress);
             InterpolateCameraRotation(pitchAddress, yawAddress);
             InterpolateCameraFOV("Cubic.exe+E20E25");
+
+            isChatting = m.ReadInt("Cubic.exe+34E48C") != 0;
 
             // value of 5 from Silicon.cs/SiliconWorker_DoWork()
             ApplyCameraEffects(deltaTime: 5);
@@ -183,7 +191,7 @@ namespace Silicon
             if (CameraDistanceSlider.Value != cameraDistanceSliderValue)
             {
                 cameraDistanceSliderValue = CameraDistanceSlider.Value;
-                m.WriteMemory("Cubic.exe+E20FAC", "float", CameraDistanceSlider.Value.ToString());
+                m.WriteMemory("Cubic.exe+E20FAC", "float", ((float)CameraDistanceSlider.Value / 2).ToString());
             }
 
             if (GameFogSlider.Value != gameFogSliderValue)
@@ -234,9 +242,10 @@ namespace Silicon
             //UpdateLabel(CameraPositionDataLabel, $"X: {currentCameraLookAtX:F2} Y: {currentCameraLookAtY:F2} Z: {currentCameraLookAtZ:F2} Pitch: {currentCameraPitch:F2} Yaw: {currentCameraYaw:F2}", Color.Red);
             UpdateLabel(CameraLookAtInfoLabel, $"X: {currentCameraLookAtX:F2}\nY: {currentCameraLookAtY:F2}\nZ: {currentCameraLookAtZ:F2}", Color.White);
             UpdateLabel(CameraLookAtInfoLabel2, $"X: {currentCameraLookAtX:F2}\nY: {currentCameraLookAtY:F2}\nZ: {currentCameraLookAtZ:F2}", Color.White);
-            UpdateLabel(CameraRotationInfoLabel, $"Pitch: {currentCameraPitch:F2}\nYaw: {currentCameraYaw:F2}\n🔎:  {cameraDistanceSliderValue} | {cameraFOVSliderValue}", Color.White);
-            UpdateLabel(CameraRotationInfoLabel2, $"Pitch: {currentCameraPitch:F2}\nYaw: {currentCameraYaw:F2}\n🔎:  {cameraDistanceSliderValue} | {cameraFOVSliderValue}", Color.White);
-
+            UpdateLabel(CameraRotationInfoLabel, $"Pitch: {currentCameraPitch:F2}\nYaw: {currentCameraYaw:F2}\nRoll: {currentCameraRoll:F2}", Color.White);
+            UpdateLabel(CameraRotationInfoLabel2, $"Pitch: {currentCameraPitch:F2}\nYaw: {currentCameraYaw:F2}\nRoll: {currentCameraRoll:F2}", Color.White);
+            UpdateLabel(CameraZoomInfoLabel, $"Zoom: {(float)cameraDistanceSliderValue / 2}\nFOV: {cameraFOVSliderValue}", Color.White);
+            UpdateLabel(CameraZoomInfoLabel2, $"Zoom: {(float)cameraDistanceSliderValue / 2}\nFOV: {cameraFOVSliderValue}", Color.White);
         }
     }
 }

@@ -31,6 +31,7 @@ namespace Silicon
         private HashSet<Keys> pressedKeys = new HashSet<Keys>();
         private Thread keyPollingThread;
         private bool isRunning = true;
+        private bool isChatting = false;
 
         private const float equalityTolerance = 5e-5f;
 
@@ -130,7 +131,7 @@ namespace Silicon
             Hispano.ForeColor = Color.Gray;
             proID.ForeColor = Color.White;
             Status.ForeColor = Color.White;
-            HotkeysLabel.ForeColor = Color.White;
+            //HotkeysLabel.ForeColor = Color.White;
             procIDLabel.ForeColor = Color.Red;
             getStatus.ForeColor = Color.Red;
             List<MetroSet_UI.Controls.MetroSetButton> interfaceButtons = new List<MetroSet_UI.Controls.MetroSetButton>
@@ -138,6 +139,7 @@ namespace Silicon
                 Preset1Button,
                 Preset2Button,
                 Preset3Button,
+                Preset4Button,
                 AddAnimationFrameButton,
                 PlayAnimationButton,
                 DeleteAnimationFrameButton,
@@ -178,7 +180,7 @@ namespace Silicon
 
                 if ((Control.ModifierKeys & Keys.Alt) == Keys.Alt)
                 {
-                    CameraDistanceSlider.Value = Math.Min(100, CameraDistanceSlider.Value + 1);
+                    CameraDistanceSlider.Value = Math.Min(300, CameraDistanceSlider.Value + 1);
                 }
                 else
                 {
@@ -193,13 +195,16 @@ namespace Silicon
 
                 if ((Control.ModifierKeys & Keys.Alt) == Keys.Alt)
                 {
-                    CameraDistanceSlider.Value = Math.Max(1, CameraDistanceSlider.Value - 1);
+                    CameraDistanceSlider.Value = Math.Max(2, CameraDistanceSlider.Value - 1);
                 }
                 else
                 {
                     CameraFOVSlider.Value = Math.Max(10, CameraFOVSlider.Value - 1);
                 }
             };
+            InitMouseDrag();
+
+
         }
 
         private void StartProcessCheckTimer()
@@ -367,66 +372,6 @@ namespace Silicon
             return foregroundPID == currentPID;
         }
 
-
-        private void PopulateCubicWindowThumbnails()
-        {
-            CubicWindows.Controls.Clear();
-
-            List<IntPtr> cubicWindows = new List<IntPtr>();
-
-            EnumWindows((hWnd, lParam) =>
-            {
-                if (!IsWindowVisible(hWnd))
-                    return true;
-
-                GetWindowThreadProcessId(hWnd, out uint pid);
-
-                try
-                {
-                    Process proc = Process.GetProcessById((int)pid);
-                    string exeName = Path.GetFileName(proc.MainModule.FileName);
-
-                    if (string.Equals(exeName, "Cubic.exe", StringComparison.OrdinalIgnoreCase))
-                    {
-                        cubicWindows.Add(hWnd);
-                    }
-                }
-                catch
-                {
-                    // Ignore inaccessible/exited processes
-                }
-
-                return true;
-            }, IntPtr.Zero);
-
-            if (cubicWindows.Count == 0)
-            {
-                CubicWindows.Visible = false;
-                return;
-            }
-
-            if (cubicWindows.Count == 1)
-            {
-                // Auto-connect to the only one
-                ConnectToCubicWindow(cubicWindows[0]);
-                CubicWindows.Visible = false;
-                return;
-            }
-
-            // Multiple Cubic windows: Show panel
-            CubicWindows.Visible = true;
-
-            foreach (var hWnd in cubicWindows)
-            {
-                StringBuilder sb = new StringBuilder(256);
-                GetWindowText(hWnd, sb, sb.Capacity);
-                string title = sb.ToString();
-
-                PictureBox thumbnail = CreateWindowThumbnail(hWnd, title);
-                CubicWindows.Controls.Add(thumbnail);
-            }
-        }
-
         private void ConnectToCubicWindow(IntPtr hWnd)
         {
             GetWindowThreadProcessId(hWnd, out uint pid);
@@ -445,7 +390,6 @@ namespace Silicon
                 MessageBox.Show("Failed to connect to PID " + pid);
             }
         }
-
 
         private PictureBox CreateWindowThumbnail(IntPtr hWnd, string title)
         {
@@ -492,6 +436,246 @@ namespace Silicon
 
 
             return picBox;
+        }
+
+        private void PopulateCubicWindowThumbnails()
+        {
+            CubicWindows.Controls.Clear();
+
+            // Create a list to store found windows
+            currentCubicWindows.Clear();
+
+            // Use a background thread to find windows
+            ThreadPool.QueueUserWorkItem(state =>
+            {
+                // Find all Cubic windows
+                List<IntPtr> cubicWindows = FindCubicWindows();
+
+                this.Invoke(new Action(() =>
+                {
+                    if (cubicWindows.Count == 0)
+                    {
+                        CubicWindows.Visible = false;
+                        return;
+                    }
+
+                    if (cubicWindows.Count == 1)
+                    {
+                        // Auto-connect to the only one
+                        ConnectToCubicWindow(cubicWindows[0]);
+                        CubicWindows.Visible = false;
+                        return;
+                    }
+
+                    // Multiple Cubic windows: Show panel
+                    CubicWindows.Visible = true;
+                    currentCubicWindows = cubicWindows;
+
+                    // Create thumbnails asynchronously
+                    foreach (var hWnd in cubicWindows)
+                    {
+                        // Create a placeholder initially
+                        PictureBox thumbnail = CreatePlaceholderThumbnail(hWnd);
+                        CubicWindows.Controls.Add(thumbnail);
+
+                        // Then load the real screenshot asynchronously
+                        LoadThumbnailAsync(thumbnail, hWnd);
+                    }
+                }));
+            });
+        }
+
+        private List<IntPtr> FindCubicWindows()
+        {
+            List<IntPtr> cubicWindows = new List<IntPtr>();
+
+            EnumWindows((hWnd, lParam) =>
+            {
+                if (!IsWindowVisible(hWnd))
+                    return true;
+
+                GetWindowThreadProcessId(hWnd, out uint pid);
+
+                try
+                {
+                    using (Process proc = Process.GetProcessById((int)pid))
+                    {
+                        string exeName = Path.GetFileName(proc.MainModule.FileName);
+
+                        if (string.Equals(exeName, "Cubic.exe", StringComparison.OrdinalIgnoreCase))
+                        {
+                            cubicWindows.Add(hWnd);
+                        }
+                    }
+                }
+                catch
+                {
+                    // Ignore inaccessible/exited processes
+                }
+
+                return true;
+            }, IntPtr.Zero);
+
+            return cubicWindows;
+        }
+
+        private PictureBox CreatePlaceholderThumbnail(IntPtr hWnd)
+        {
+            // Get window title for display
+            StringBuilder sb = new StringBuilder(256);
+            GetWindowText(hWnd, sb, sb.Capacity);
+            string title = sb.ToString();
+
+            // Create a simple placeholder
+            Bitmap placeholderBmp = new Bitmap(200, 120);
+            using (Graphics g = Graphics.FromImage(placeholderBmp))
+            {
+                g.Clear(Color.FromArgb(40, 40, 40));
+                g.DrawString("Loading...", SystemFonts.DefaultFont, Brushes.White, 10, 50);
+                g.DrawString(title, SystemFonts.DefaultFont, Brushes.LightGray, 10, 70);
+            }
+
+            PictureBox picBox = new PictureBox
+            {
+                Image = placeholderBmp,
+                Width = 200,
+                Height = 120,
+                SizeMode = PictureBoxSizeMode.Zoom,
+                Margin = new Padding(10),
+                Cursor = Cursors.Hand,
+                Tag = hWnd
+            };
+
+            picBox.Click += (s, e) =>
+            {
+                IntPtr selectedHwnd = (IntPtr)((PictureBox)s).Tag;
+                ConnectToCubicWindow(selectedHwnd);
+            };
+
+            return picBox;
+        }
+
+        private void LoadThumbnailAsync(PictureBox pictureBox, IntPtr hWnd)
+        {
+            // Create a unique handler for this particular window
+            ThreadPool.QueueUserWorkItem(state =>
+            {
+                try
+                {
+                    // Create screenshot - now this will properly capture the full window and resize it
+                    Bitmap bmp = CaptureWindow(hWnd, 200, 120);
+
+                    // Update UI on the main thread
+                    if (!IsDisposed && pictureBox != null && !pictureBox.IsDisposed)
+                    {
+                        pictureBox.Invoke(new Action(() =>
+                        {
+                            try
+                            {
+                                // Dispose of old image
+                                if (pictureBox.Image != null)
+                                {
+                                    Image oldImage = pictureBox.Image;
+                                    pictureBox.Image = bmp;
+                                    oldImage.Dispose();
+                                }
+                                else
+                                {
+                                    pictureBox.Image = bmp;
+                                }
+
+                                // Add or update the window title label
+                                StringBuilder sb = new StringBuilder(256);
+                                GetWindowText(hWnd, sb, sb.Capacity);
+                                string title = sb.ToString();
+
+                                // We could add a label showing the title if needed
+                                // pictureBox.Text = title;
+                            }
+                            catch (Exception ex)
+                            {
+                                Debug.WriteLine("Error updating thumbnail: " + ex.Message);
+                            }
+                        }));
+                    }
+                    else
+                    {
+                        // If the control was disposed while we were working, clean up the bitmap
+                        bmp.Dispose();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("Error creating thumbnail: " + ex.Message);
+                }
+            });
+        }
+
+        private Bitmap CaptureWindow(IntPtr hWnd, int width, int height)
+        {
+            // Get window size to maintain aspect ratio
+            RECT rect;
+            GetClientRect(hWnd, out rect);
+            int winWidth = Math.Max(rect.Right - rect.Left, 1);
+            int winHeight = Math.Max(rect.Bottom - rect.Top, 1);
+
+            // First capture at full size
+            Bitmap fullSizeBmp = new Bitmap(winWidth, winHeight);
+
+            using (Graphics gfx = Graphics.FromImage(fullSizeBmp))
+            {
+                IntPtr hdc = gfx.GetHdc();
+
+                try
+                {
+                    // Use the PrintWindow API to capture the window
+                    bool success = PrintWindow(hWnd, hdc, 0);
+
+                    if (!success)
+                    {
+                        // If PrintWindow fails, create a simple error indicator
+                        gfx.ReleaseHdc(hdc);
+                        gfx.Clear(Color.Black);
+                        gfx.DrawString("Preview not available", SystemFonts.DefaultFont, Brushes.White, 10, 40);
+                        return fullSizeBmp; // Return the error bitmap
+                    }
+                }
+                finally
+                {
+                    gfx.ReleaseHdc(hdc);
+                }
+            }
+
+            // Calculate target size with proper aspect ratio
+            double aspectRatio = (double)winWidth / winHeight;
+            int targetWidth = width;
+            int targetHeight = (int)(width / aspectRatio);
+
+            // Adjust if height exceeds target
+            if (targetHeight > height)
+            {
+                targetHeight = height;
+                targetWidth = (int)(height * aspectRatio);
+            }
+
+            // Create a properly sized thumbnail by scaling down the full capture
+            Bitmap thumbnailBmp = new Bitmap(targetWidth, targetHeight);
+            using (Graphics g = Graphics.FromImage(thumbnailBmp))
+            {
+                // Use high quality settings for better looking thumbnails
+                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+                g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+                g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+
+                // Draw the full bitmap scaled down to our target size
+                g.DrawImage(fullSizeBmp, 0, 0, targetWidth, targetHeight);
+            }
+
+            // Dispose of the full-size bitmap since we no longer need it
+            fullSizeBmp.Dispose();
+
+            return thumbnailBmp;
         }
 
         private void CameraShakeSwitch_SwitchedChanged(object sender)

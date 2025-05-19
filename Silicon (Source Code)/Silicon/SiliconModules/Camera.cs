@@ -187,7 +187,6 @@ namespace Silicon
             return Vector3.Normalize(forward);
         }
 
-
         private Vector3 ComputeUpVectorFromYawRoll(float rollDegrees)
         {
             // Convert angles to radians
@@ -220,15 +219,8 @@ namespace Silicon
             return Vector3.Normalize(c1 * v + c2 * kCrossV);
         }
 
-
         private void UpdateCameraRoll()
         {
-            // if (pressedKeys.Contains(Keys.Up) || pressedKeys.Contains(Keys.Down) || pressedKeys.Contains(Keys.Left)
-            //     || pressedKeys.Contains(Keys.Right) || IsRightMouseButtonDown())
-            // {
-            //     ResetCameraRoll();
-            //     return;
-            // }
             if (isChatting) return;
 
             if (pressedKeys.Contains(Keys.E))

@@ -25,18 +25,10 @@ namespace Silicon
 
         private void Preset1Button_Click(object sender, EventArgs e)
         {
-            //cameraFOVSliderValue = 33;
             CameraFOVSlider.Value = 33;
-            //m.WriteMemory("Cubic.exe+E20E25", "float", cameraFOVSliderValue.ToString());
-            targetCameraFOV = 33;
-
-            //cameraDistanceSliderValue = 45;
             CameraDistanceSlider.Value = 45;
-            //m.WriteMemory("Cubic.exe+E20FAC", "float", cameraDistanceSliderValue.ToString());
-
-            //gameFogSliderValue = 110;
             GameFogSlider.Value = 110;
-            //m.WriteMemory("Cubic.exe+2FFEC8", "float", GameFogSlider.Value.ToString());
+            targetCameraFOV = 33;
 
             HidePlayerModelSwitch.Switched = false;
             HideUserInterfaceSwitch.Switched = false;
@@ -48,18 +40,10 @@ namespace Silicon
 
         private void Preset2Button_Click(object sender, EventArgs e)
         {
-           // cameraFOVSliderValue = 33;
             CameraFOVSlider.Value = 33;
-            //m.WriteMemory("Cubic.exe+E20E25", "float", cameraFOVSliderValue.ToString());
-            targetCameraFOV = 33;
-
-            //cameraDistanceSliderValue = 90;
             CameraDistanceSlider.Value = 90;
-            //m.WriteMemory("Cubic.exe+E20FAC", "float", cameraDistanceSliderValue.ToString());
-
-            //gameFogSliderValue = 110;
             GameFogSlider.Value = 110;
-            //m.WriteMemory("Cubic.exe+2FFEC8", "float", GameFogSlider.Value.ToString());
+            targetCameraFOV = 33;
 
             HidePlayerModelSwitch.Switched = false;
             HideUserInterfaceSwitch.Switched = false;
@@ -71,18 +55,10 @@ namespace Silicon
 
         private void Preset3Button_Click(object sender, EventArgs e)
         {
-            //cameraFOVSliderValue = 70;
             CameraFOVSlider.Value = 70;
-            //m.WriteMemory("Cubic.exe+E20E25", "float", cameraFOVSliderValue.ToString());
-            targetCameraFOV = 70;
-
-            //cameraDistanceSliderValue = 2;
             CameraDistanceSlider.Value = 2;
-            //m.WriteMemory("Cubic.exe+E20FAC", "float", cameraDistanceSliderValue.ToString());
-
-            //gameFogSliderValue = 110;
             GameFogSlider.Value = 110;
-            //m.WriteMemory("Cubic.exe+2FFEC8", "float", GameFogSlider.Value.ToString());
+            targetCameraFOV = 70;
 
             HidePlayerModelSwitch.Switched = true;
             HideUserInterfaceSwitch.Switched = false;
@@ -94,18 +70,10 @@ namespace Silicon
 
         private void Preset4Button_Click(object sender, EventArgs e)
         {
-            cameraFOVSliderValue = 45;
             CameraFOVSlider.Value = 45;
-            //m.WriteMemory("Cubic.exe+E20E25", "float", cameraFOVSliderValue.ToString());
-            targetCameraFOV = 45;
-
-            //cameraDistanceSliderValue = 90;
             CameraDistanceSlider.Value = 90;
-            m.WriteMemory("Cubic.exe+E20FAC", "float", cameraDistanceSliderValue.ToString());
-
-            //gameFogSliderValue = 110;
             GameFogSlider.Value = 110;
-            //m.WriteMemory("Cubic.exe+2FFEC8", "float", GameFogSlider.Value.ToString());
+            targetCameraFOV = 45;
 
             HidePlayerModelSwitch.Switched = false;
             HideUserInterfaceSwitch.Switched = true;
@@ -117,7 +85,6 @@ namespace Silicon
             targetCameraPitch = 0;
             currentCameraYaw = 0;
             targetCameraYaw = 0;
-            //CheckAndUpdateMemory();
         }
 
         private double CatmullRom(double p0, double p1, double p2, double p3, double t)

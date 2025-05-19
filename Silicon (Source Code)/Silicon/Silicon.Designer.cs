@@ -665,7 +665,7 @@ namespace Silicon
             this.CameraDistanceSlider.Text = "metroSetTrackBar6";
             this.CameraDistanceSlider.ThemeAuthor = "Narwin";
             this.CameraDistanceSlider.ThemeName = "MetroLite";
-            this.CameraDistanceSlider.Value = 22;
+            this.CameraDistanceSlider.Value = 45;
             this.CameraDistanceSlider.ValueColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
             // 
             // uiLabel3

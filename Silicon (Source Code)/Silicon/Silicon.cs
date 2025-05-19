@@ -178,7 +178,7 @@ namespace Silicon
 
                 if ((Control.ModifierKeys & Keys.Alt) == Keys.Alt)
                 {
-                    CameraDistanceSlider.Value = Math.Min(100, CameraDistanceSlider.Value + 1);
+                    CameraDistanceSlider.Value = Math.Min(300, CameraDistanceSlider.Value + 1);
                 }
                 else
                 {
@@ -193,7 +193,7 @@ namespace Silicon
 
                 if ((Control.ModifierKeys & Keys.Alt) == Keys.Alt)
                 {
-                    CameraDistanceSlider.Value = Math.Max(1, CameraDistanceSlider.Value - 1);
+                    CameraDistanceSlider.Value = Math.Max(2, CameraDistanceSlider.Value - 1);
                 }
                 else
                 {

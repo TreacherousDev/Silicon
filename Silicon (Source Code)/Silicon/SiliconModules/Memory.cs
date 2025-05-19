@@ -32,6 +32,7 @@ namespace Silicon
         readonly string upVectorFunctionEntry = "E8 21 48 C6 00";
 
         readonly string overrideArrowHotkeysFunction = "90 90 90 90 90 90 90 90";
+        readonly string overrideRightClickDragFunction = "90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90";
 
         // Revertable functions (Optional switch states available)
         readonly string cameraLookAtEditorInjection = "50 E8 00 00 00 00 58 F3 0F 11 58 5D F3 0F 11 48 61 F3 0F 11 40 65 F3 0F 10 58 4D F3 0F 10 48 51 F3 0F 10 40 55 58 50 E8 00 00 00 00 58 F3 0F 11 58 37 F3 0F 11 48 3B F3 0F 11 40 3F 53 8D 5E 10 89 58 33 5B 58 F3 0F 11 1E F3 0F 11 4E 04 E9 B1 80 39 FF 00 00 00 00 00 00 00 00 00 00 8C 42 40 D8 7D 10 00 00 00 00 00 00 00 00 00 00 8C 42 FF FF FF FF";
@@ -74,6 +75,7 @@ namespace Silicon
 
             m.WriteMemory("Cubic.exe+1B8AD2", "bytes", overrideArrowHotkeysFunction);
             m.WriteMemory("Cubic.exe+1B8B0E", "bytes", overrideArrowHotkeysFunction);
+            m.WriteMemory("Cubic.exe+1CA21A", "bytes", overrideRightClickDragFunction);
 
             //Revertable, injections only as set to false by default
             m.WriteMemory("Cubic.exe+E20ED7", "bytes", hidePlayerAvatarInjection);

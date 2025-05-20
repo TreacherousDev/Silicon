@@ -121,149 +121,150 @@ namespace Silicon
                 return;
             }
 
-            if (playButtonState == PlayButtonState.Play)
-            {
-                FreecamSwitch.Switched = true;
-                playButtonState = PlayButtonState.Stop;
-                PlayAnimationButton.Text = "◼";
-                animationCancellationTokenSource = new CancellationTokenSource();
-                CancellationToken token = animationCancellationTokenSource.Token;
-
-                // Play from selected frame (from first if there are multiple)
-                int startIndex = 0;
-                if (listViewFrames.SelectedItems.Count > 0)
-                {
-                    startIndex = listViewFrames.SelectedItems
-                        .Cast<ListViewItem>()
-                        .Min(item => item.Index);
-                }
-
-                // Teleport immediately to start frame
-                List<double> firstFrame = animationFrames[startIndex];
-                currentCameraLookAtX = firstFrame[0];
-                currentCameraLookAtY = firstFrame[1];
-                currentCameraLookAtZ = firstFrame[2];
-                currentCameraPitch = firstFrame[3];
-                currentCameraYaw = firstFrame[4];
-                currentCameraRoll = firstFrame[5];
-                currentCameraFOV = firstFrame[7];
-                targetCameraLookAtX = firstFrame[0];
-                targetCameraLookAtY = firstFrame[1];
-                targetCameraLookAtZ = firstFrame[2];
-                targetCameraPitch = firstFrame[3];
-                targetCameraYaw = firstFrame[4];
-                targetCameraRoll = firstFrame[5];
-                targetCameraFOV = firstFrame[7];
-
-                //
-                startCameraLookAtX = (float)firstFrame[0];
-                startCameraLookAtY = (float)firstFrame[1];
-                startCameraLookAtZ = (float)firstFrame[2];
-                startCameraPitch = (float)firstFrame[3];
-                startCameraYaw = (float)firstFrame[4];
-                startCameraRoll = (float)firstFrame[5];
-
-                // Update FOV Slider
-                CameraFOVSlider.Value = (int)firstFrame[7];
-                cameraFOVSliderValue = (int)firstFrame[7];
-
-                await Task.Delay(20);
-
-                for (int i = startIndex; i < animationFrames.Count - 1; i++)
-                {
-                    if (token.IsCancellationRequested)
-                        break;
-
-                    
-
-                    List<double> startFrame = animationFrames[i];
-                    List<double> endFrame = animationFrames[i + 1];
-
-                    //
-                    startCameraLookAtX = (float)startFrame[0];
-                    startCameraLookAtY = (float)startFrame[1];
-                    startCameraLookAtZ = (float)startFrame[2];
-                    startCameraPitch = (float)startFrame[3];
-                    startCameraYaw = (float)startFrame[4];
-                    startCameraRoll = (float)startFrame[5];
-
-                    double startX = startFrame[0], startY = startFrame[1], startZ = startFrame[2];
-                    double startPitch = startFrame[3], startYaw = startFrame[4], startRoll = startFrame[5];
-                    double startFOV = startFrame[7];
-                    double moveSpeed = endFrame[6];
-
-                    double endX = endFrame[0], endY = endFrame[1], endZ = endFrame[2];
-                    double endPitch = endFrame[3], endYaw = endFrame[4], endRoll = endFrame[5];
-                    double endFOV = endFrame[7];
-                    Interpolator.MethodDelegate frameInterpolation = _interpolator;
-
-                    double distance = Math.Sqrt(
-                        Math.Pow(endX - startX, 2) +
-                        Math.Pow(endY - startY, 2) +
-                        Math.Pow(endZ - startZ, 2));
-
-                    double duration = distance / moveSpeed;
-                    double startTime = Environment.TickCount;
-
-                    while (true)
-                    {
-                        if (token.IsCancellationRequested)
-                            return;
-
-                        double elapsedTime = (Environment.TickCount - startTime) / 1000.0;
-                        double alpha = elapsedTime / duration;
-                        alpha = Clamp(alpha, 0.0, 1.0);
-
-                        if (InterpolationComboBox.Text == "Catmull-Rom")
-                        {
-                            int lastIndex = animationFrames.Count - 1;
-                            List<double> p1 = animationFrames[i];
-                            List<double> p2 = animationFrames[i + 1];
-                            List<double> p0 = (i - 1) >= 0 ? animationFrames[i - 1] : p1;
-                            List<double> p3 = (i + 2) <= lastIndex ? animationFrames[i + 2] : p2;
-
-                            targetCameraLookAtX = CatmullRom(p0[0], p1[0], p2[0], p3[0], alpha);
-                            targetCameraLookAtY = CatmullRom(p0[1], p1[1], p2[1], p3[1], alpha);
-                            targetCameraLookAtZ = CatmullRom(p0[2], p1[2], p2[2], p3[2], alpha);
-                            targetCameraPitch = CatmullRom(p0[3], p1[3], p2[3], p3[3], alpha);
-                            targetCameraYaw = CatmullRom(p0[4], p1[4], p2[4], p3[4], alpha);
-                            targetCameraRoll = CatmullRom(p0[5], p1[5], p2[5], p3[5], alpha);
-                            targetCameraFOV = CatmullRom(p0[7], p1[7], p2[7], p3[7], alpha);
-                        }
-                        else
-                        {
-                            targetCameraLookAtX = frameInterpolation(startX, endX, alpha);
-                            targetCameraLookAtY = frameInterpolation(startY, endY, alpha);
-                            targetCameraLookAtZ = frameInterpolation(startZ, endZ, alpha);
-                            targetCameraPitch = frameInterpolation(startPitch, endPitch, alpha);
-                            targetCameraYaw = frameInterpolation(startYaw, endYaw, alpha);
-                            targetCameraRoll = frameInterpolation(startRoll, endRoll, alpha);
-                            targetCameraFOV = frameInterpolation(startFOV, endFOV, alpha);
-                        }
-                        upVector = ComputeUpVectorFromRoll((float)currentCameraRoll);
-
-                        // Update FOV slider after each keyframe pass
-                        CameraFOVSlider.Value = (int)endFrame[7];
-                        cameraFOVSliderValue = (int)endFrame[7];
-
-                        if (alpha >= 1.0)
-                            break;
-
-                        await Task.Delay(5);
-                    }
-                }
-
-                playButtonState = PlayButtonState.Play;
-                PlayAnimationButton.Text = " ►";
-                PlayAnimationButton.Refresh();
-            }
-            else if (playButtonState == PlayButtonState.Stop)
+            if (playButtonState == PlayButtonState.Stop)
             {
                 StopAnimation();
                 playButtonState = PlayButtonState.Play;
                 PlayAnimationButton.Text = " ►";
                 PlayAnimationButton.Refresh();
+                return;
             }
+
+            FreecamSwitch.Switched = true;
+            playButtonState = PlayButtonState.Stop;
+            PlayAnimationButton.Text = "◼";
+            animationCancellationTokenSource = new CancellationTokenSource();
+            CancellationToken token = animationCancellationTokenSource.Token;
+
+            // Play from selected frame (from first if there are multiple)
+            int startIndex = 0;
+            if (listViewFrames.SelectedItems.Count > 0)
+            {
+                startIndex = listViewFrames.SelectedItems
+                    .Cast<ListViewItem>()
+                    .Min(item => item.Index);
+            }
+
+            // Teleport immediately to start frame
+            List<double> firstFrame = animationFrames[startIndex];
+            currentCameraLookAtX = firstFrame[0];
+            currentCameraLookAtY = firstFrame[1];
+            currentCameraLookAtZ = firstFrame[2];
+            currentCameraPitch = firstFrame[3];
+            currentCameraYaw = firstFrame[4];
+            currentCameraRoll = firstFrame[5];
+            currentCameraFOV = firstFrame[7];
+            targetCameraLookAtX = firstFrame[0];
+            targetCameraLookAtY = firstFrame[1];
+            targetCameraLookAtZ = firstFrame[2];
+            targetCameraPitch = firstFrame[3];
+            targetCameraYaw = firstFrame[4];
+            targetCameraRoll = firstFrame[5];
+            targetCameraFOV = firstFrame[7];
+
+            //
+            startCameraLookAtX = (float)firstFrame[0];
+            startCameraLookAtY = (float)firstFrame[1];
+            startCameraLookAtZ = (float)firstFrame[2];
+            startCameraPitch = (float)firstFrame[3];
+            startCameraYaw = (float)firstFrame[4];
+            startCameraRoll = (float)firstFrame[5];
+
+            // Update FOV Slider
+            CameraFOVSlider.Value = (int)firstFrame[7];
+            cameraFOVSliderValue = (int)firstFrame[7];
+
+            await Task.Delay(20);
+
+            for (int i = startIndex; i < animationFrames.Count - 1; i++)
+            {
+                if (token.IsCancellationRequested)
+                    break;
+
+                    
+
+                List<double> startFrame = animationFrames[i];
+                List<double> endFrame = animationFrames[i + 1];
+
+                //
+                startCameraLookAtX = (float)startFrame[0];
+                startCameraLookAtY = (float)startFrame[1];
+                startCameraLookAtZ = (float)startFrame[2];
+                startCameraPitch = (float)startFrame[3];
+                startCameraYaw = (float)startFrame[4];
+                startCameraRoll = (float)startFrame[5];
+
+                double startX = startFrame[0], startY = startFrame[1], startZ = startFrame[2];
+                double startPitch = startFrame[3], startYaw = startFrame[4], startRoll = startFrame[5];
+                double startFOV = startFrame[7];
+                double moveSpeed = endFrame[6];
+
+                double endX = endFrame[0], endY = endFrame[1], endZ = endFrame[2];
+                double endPitch = endFrame[3], endYaw = endFrame[4], endRoll = endFrame[5];
+                double endFOV = endFrame[7];
+                Interpolator.MethodDelegate frameInterpolation = _interpolator;
+
+                double distance = Math.Sqrt(
+                    Math.Pow(endX - startX, 2) +
+                    Math.Pow(endY - startY, 2) +
+                    Math.Pow(endZ - startZ, 2));
+
+                double duration = distance / moveSpeed;
+                double startTime = Environment.TickCount;
+
+                while (true)
+                {
+                    if (token.IsCancellationRequested)
+                        return;
+
+                    double elapsedTime = (Environment.TickCount - startTime) / 1000.0;
+                    double alpha = elapsedTime / duration;
+                    alpha = Clamp(alpha, 0.0, 1.0);
+
+                    if (InterpolationComboBox.Text == "Catmull-Rom")
+                    {
+                        int lastIndex = animationFrames.Count - 1;
+                        List<double> p1 = animationFrames[i];
+                        List<double> p2 = animationFrames[i + 1];
+                        List<double> p0 = (i - 1) >= 0 ? animationFrames[i - 1] : p1;
+                        List<double> p3 = (i + 2) <= lastIndex ? animationFrames[i + 2] : p2;
+
+                        targetCameraLookAtX = CatmullRom(p0[0], p1[0], p2[0], p3[0], alpha);
+                        targetCameraLookAtY = CatmullRom(p0[1], p1[1], p2[1], p3[1], alpha);
+                        targetCameraLookAtZ = CatmullRom(p0[2], p1[2], p2[2], p3[2], alpha);
+                        targetCameraPitch = CatmullRom(p0[3], p1[3], p2[3], p3[3], alpha);
+                        targetCameraYaw = CatmullRom(p0[4], p1[4], p2[4], p3[4], alpha);
+                        targetCameraRoll = CatmullRom(p0[5], p1[5], p2[5], p3[5], alpha);
+                        targetCameraFOV = CatmullRom(p0[7], p1[7], p2[7], p3[7], alpha);
+                    }
+                    else
+                    {
+                        targetCameraLookAtX = frameInterpolation(startX, endX, alpha);
+                        targetCameraLookAtY = frameInterpolation(startY, endY, alpha);
+                        targetCameraLookAtZ = frameInterpolation(startZ, endZ, alpha);
+                        targetCameraPitch = frameInterpolation(startPitch, endPitch, alpha);
+                        targetCameraYaw = frameInterpolation(startYaw, endYaw, alpha);
+                        targetCameraRoll = frameInterpolation(startRoll, endRoll, alpha);
+                        targetCameraFOV = frameInterpolation(startFOV, endFOV, alpha);
+                    }
+                    upVector = ComputeUpVectorFromRoll((float)currentCameraRoll);
+
+                    // Update FOV slider after each keyframe pass
+                    CameraFOVSlider.Value = (int)endFrame[7];
+                    cameraFOVSliderValue = (int)endFrame[7];
+
+                    if (alpha >= 1.0)
+                        break;
+
+                    await Task.Delay(5);
+                }
+            }
+
+            playButtonState = PlayButtonState.Play;
+            PlayAnimationButton.Text = " ►";
+            PlayAnimationButton.Refresh();
+            
+            
         }
 
         private void StopAnimation()

@@ -30,7 +30,7 @@ namespace Silicon
                     int dx = pos.X - lastMousePos.X;
                     int dy = pos.Y - lastMousePos.Y;
 
-                    float sensitivity = 0.2f;
+                    float sensitivity = 0.15f;
                     currentCameraYaw += dx * sensitivity;
                     currentCameraPitch += dy * sensitivity;
                     currentCameraPitch = Clamp(currentCameraPitch, -89f, 89f);

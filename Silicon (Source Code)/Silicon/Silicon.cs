@@ -31,6 +31,7 @@ namespace Silicon
         private Thread keyPollingThread;
         private bool isRunning = true;
         private bool isChatting = false;
+        private int cinematicLoadedCameraDistance;
 
         private const float equalityTolerance = 5e-5f;
 

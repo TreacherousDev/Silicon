@@ -145,6 +145,7 @@ namespace Silicon
                     .Min(item => item.Index);
             }
 
+            CameraDistanceSlider.Value = cinematicLoadedCameraDistance;
             // Teleport immediately to start frame
             List<double> firstFrame = animationFrames[startIndex];
             currentCameraLookAtX = firstFrame[0];
@@ -412,6 +413,7 @@ namespace Silicon
 
             List<double> goToFrame = animationFrames[selectedIndex];
 
+            CameraDistanceSlider.Value = cinematicLoadedCameraDistance;
             // Set new target
             targetCameraLookAtX = goToFrame[0];
             targetCameraLookAtY = goToFrame[1];
@@ -540,13 +542,20 @@ namespace Silicon
             {
                 try
                 {
+                    // Prepare data to save: frames + metadata
+                    var dataToSave = new
+                    {
+                        CameraDistance = CameraDistanceSlider.Value,
+                        Frames = animationFrames
+                    };
+
                     // Serialize with indentation
                     var options = new System.Text.Json.JsonSerializerOptions
                     {
                         WriteIndented = true
                     };
 
-                    string json = System.Text.Json.JsonSerializer.Serialize(animationFrames, options);
+                    string json = System.Text.Json.JsonSerializer.Serialize(dataToSave, options);
 
                     // Write to the selected file
                     File.WriteAllText(saveFileDialog.FileName, json);
@@ -562,7 +571,6 @@ namespace Silicon
             }
         }
 
-
         private void LoadAnimationButton_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
@@ -577,28 +585,48 @@ namespace Silicon
                 {
                     string json = File.ReadAllText(openFileDialog.FileName);
 
-                    // Deserialize to List<List<double>> even if the inner lists are incomplete
-                    var rawFrames = System.Text.Json.JsonSerializer.Deserialize<List<List<double>>>(json);
-                    if (rawFrames == null)
-                        throw new Exception("Invalid or empty JSON format.");
+                    List<List<double>> frames = null;
+                    cinematicLoadedCameraDistance = CameraDistanceSlider.Value; // Default fallback
+
+                    // Try to deserialize as new format
+                    try
+                    {
+                        var data = System.Text.Json.JsonSerializer.Deserialize<AnimationData>(json);
+                        if (data?.Frames != null)
+                        {
+                            frames = data.Frames;
+                            cinematicLoadedCameraDistance = data.CameraDistance;
+                        }
+                    }
+                    catch
+                    {
+                        // Ignore and try old format
+                    }
+
+                    // If new format failed, try old format
+                    if (frames == null)
+                    {
+                        frames = System.Text.Json.JsonSerializer.Deserialize<List<List<double>>>(json);
+                        if (frames == null)
+                            throw new Exception("Invalid or empty JSON format.");
+                    }
 
                     animationFrames.Clear();
                     listViewFrames.Items.Clear();
 
                     int i = 1;
-                    foreach (var rawFrame in rawFrames)
+                    foreach (var rawFrame in frames)
                     {
-                        // Fill missing or invalid values with defaults
                         List<double> frame = new List<double>
                         {
-                            rawFrame.Count > 0 ? rawFrame[0] : 50.0, // X
-                            rawFrame.Count > 1 ? rawFrame[1] : 50.0, // Y
-                            rawFrame.Count > 2 ? rawFrame[2] : 50.0, // Z
-                            rawFrame.Count > 3 ? rawFrame[3] : 0.0, // Pitch
-                            rawFrame.Count > 4 ? rawFrame[4] : 0.0, // Yaw
-                            rawFrame.Count > 5 ? rawFrame[5] : 0.0, // Roll
-                            rawFrame.Count > 6 ? rawFrame[6] : 10.0, // Speed
-                            rawFrame.Count > 7 ? rawFrame[7] : 70.0 // FOV
+                            rawFrame.Count > 0 ? rawFrame[0] : 50.0,
+                            rawFrame.Count > 1 ? rawFrame[1] : 50.0,
+                            rawFrame.Count > 2 ? rawFrame[2] : 50.0,
+                            rawFrame.Count > 3 ? rawFrame[3] : 0.0,
+                            rawFrame.Count > 4 ? rawFrame[4] : 0.0,
+                            rawFrame.Count > 5 ? rawFrame[5] : 0.0,
+                            rawFrame.Count > 6 ? rawFrame[6] : 10.0,
+                            rawFrame.Count > 7 ? rawFrame[7] : 70.0
                         };
 
                         animationFrames.Add(frame);
@@ -626,6 +654,14 @@ namespace Silicon
                 }
             }
         }
+
+
+        public class AnimationData
+        {
+            public int CameraDistance { get; set; }
+            public List<List<double>> Frames { get; set; }
+        }
+
 
 
         private void InterpolationComboBox_SelectedIndexChanged(object sender, EventArgs e)

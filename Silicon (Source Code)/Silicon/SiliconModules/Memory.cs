@@ -241,8 +241,8 @@ namespace Silicon
             UpdateLabel(CameraLookAtInfoLabel2, $"X: {currentCameraLookAtX:F2}\nY: {currentCameraLookAtY:F2}\nZ: {currentCameraLookAtZ:F2}", Color.White);
             UpdateLabel(CameraRotationInfoLabel, $"Pitch: {currentCameraPitch:F2}\nYaw: {currentCameraYaw:F2}\nRoll: {currentCameraRoll:F2}", Color.White);
             UpdateLabel(CameraRotationInfoLabel2, $"Pitch: {currentCameraPitch:F2}\nYaw: {currentCameraYaw:F2}\nRoll: {currentCameraRoll:F2}", Color.White);
-            UpdateLabel(CameraZoomInfoLabel, $"Zoom: {(float)cameraDistanceSliderValue / 2}\nFOV: {cameraFOVSliderValue}", Color.White);
-            UpdateLabel(CameraZoomInfoLabel2, $"Zoom: {(float)cameraDistanceSliderValue / 2}\nFOV: {cameraFOVSliderValue}", Color.White);
+            UpdateLabel(CameraZoomInfoLabel, $"Zoom: {(float)cameraDistanceSliderValue / 2}\nFOV: {currentCameraFOV:F1}", Color.White);
+            UpdateLabel(CameraZoomInfoLabel2, $"Zoom: {(float)cameraDistanceSliderValue / 2}\nFOV: {currentCameraFOV:F1}", Color.White);
         }
     }
 }

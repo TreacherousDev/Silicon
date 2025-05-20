@@ -105,17 +105,6 @@ namespace Silicon
             }
         }
 
-
-        private bool IsRightMouseButtonDown()
-        {
-            if (!IsCubicWindowFocused())
-                return false;
-
-            Console.WriteLine("ihgowehg");
-            return (GetAsyncKeyState(Keys.RButton) & 0x8000) != 0;
-            
-        }
-
         private void HandleKeyDown(Keys key)
         {
             if (FreecamSwitch.InvokeRequired)

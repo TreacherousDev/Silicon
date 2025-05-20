@@ -130,7 +130,7 @@ namespace Silicon
 
         private void InterpolateCameraMovement()
         {
-            double elapsedTime = (Environment.TickCount / 100.0) - animationStartTime;
+            double elapsedTime = (Environment.TickCount / 1000.0) - animationStartTime;
             double alpha = elapsedTime / animationDuration;
             alpha = Clamp(alpha, 0.0, 1.0);
 

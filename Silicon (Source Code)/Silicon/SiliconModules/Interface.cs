@@ -420,12 +420,12 @@ namespace Silicon
             targetCameraRoll = goToFrame[5];
             targetCameraFOV = goToFrame[7];
 
-            startCameraLookAtX = (float)goToFrame[0];
-            startCameraLookAtY = (float)goToFrame[1];
-            startCameraLookAtZ = (float)goToFrame[2];
-            startCameraPitch = (float)goToFrame[3];
-            startCameraYaw = (float)goToFrame[4];
-            startCameraRoll = (float)goToFrame[5];
+            startCameraLookAtX = (float)currentCameraLookAtX;
+            startCameraLookAtY = (float)currentCameraLookAtY;
+            startCameraLookAtZ = (float)currentCameraLookAtZ;
+            startCameraPitch = (float)currentCameraPitch;
+            startCameraYaw = (float)currentCameraYaw;
+            startCameraRoll = (float)currentCameraRoll;
 
             // Update FOV slider
             CameraFOVSlider.Value = (int)goToFrame[7];
@@ -446,8 +446,8 @@ namespace Silicon
             }
 
             double speed = double.TryParse(CinematicSpeedTextBox.Text, out var s) ? s : 10.0;
-            animationDuration = distance / (speed / 100);
-            animationStartTime = (Environment.TickCount / 100.0);
+            animationDuration = distance / (speed);
+            animationStartTime = (Environment.TickCount / 1000.0);
         }
 
         private void GoToNextFrame()

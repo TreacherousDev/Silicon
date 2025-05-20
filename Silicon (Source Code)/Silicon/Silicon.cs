@@ -173,7 +173,7 @@ namespace Silicon
             mouseHook = new GlobalMouseHook();
             mouseHook.OnScrollDown += () =>
             {
-                if (!IsCubicWindowFocused() && !IsSiliconWindowFocused())
+                if (!IsCubicWindowFocused())
                     return;
 
                 if ((Control.ModifierKeys & Keys.Alt) == Keys.Alt)
@@ -188,7 +188,7 @@ namespace Silicon
 
             mouseHook.OnScrollUp += () =>
             {
-                if (!IsCubicWindowFocused() && !IsSiliconWindowFocused())
+                if (!IsCubicWindowFocused())
                     return;
 
                 if ((Control.ModifierKeys & Keys.Alt) == Keys.Alt)

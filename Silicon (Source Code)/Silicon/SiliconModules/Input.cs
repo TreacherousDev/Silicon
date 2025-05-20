@@ -30,7 +30,7 @@ namespace Silicon
                     int dx = pos.X - lastMousePos.X;
                     int dy = pos.Y - lastMousePos.Y;
 
-                    float sensitivity = 0.15f;
+                    float sensitivity = (float)CameraRotateSpeedSlider.Value / 1000;
                     currentCameraYaw += dx * sensitivity;
                     currentCameraPitch += dy * sensitivity;
                     currentCameraPitch = Clamp(currentCameraPitch, -89f, 89f);

@@ -130,7 +130,7 @@ namespace Silicon
 
         private void InterpolateCameraMovement()
         {
-            double elapsedTime = (Environment.TickCount / 1000.0) - animationStartTime;
+            double elapsedTime = (Environment.TickCount / 10000.0) - animationStartTime;
             double alpha = elapsedTime / animationDuration;
             alpha = Clamp(alpha, 0.0, 1.0);
 
@@ -152,7 +152,7 @@ namespace Silicon
         private void InterpolateCameraRotation()
         {
             
-            double elapsedTime = (Environment.TickCount / 1000.0) - animationStartTime;
+            double elapsedTime = (Environment.TickCount / 10000.0) - animationStartTime;
             double alpha = elapsedTime / animationDuration;
             alpha = Clamp(alpha, 0.0, 1.0);
 
@@ -175,7 +175,7 @@ namespace Silicon
 
         private void InterpolateCameraFOV(string FOVAddress)
         {
-            double elapsedTime = (Environment.TickCount / 1000.0) - animationStartTime;
+            double elapsedTime = (Environment.TickCount / 10000.0) - animationStartTime;
             double alpha = elapsedTime / animationDuration;
             alpha = Clamp(alpha, 0.0, 1.0);
 

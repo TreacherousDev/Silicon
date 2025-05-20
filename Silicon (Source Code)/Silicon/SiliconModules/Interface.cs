@@ -217,7 +217,7 @@ namespace Silicon
                     if (token.IsCancellationRequested)
                         return;
 
-                    double elapsedTime = (Environment.TickCount - startTime) / 1000.0;
+                    double elapsedTime = (Environment.TickCount - startTime) / 10000.0;
                     double alpha = elapsedTime / duration;
                     alpha = Clamp(alpha, 0.0, 1.0);
 
@@ -448,7 +448,7 @@ namespace Silicon
 
             double speed = double.TryParse(CinematicSpeedTextBox.Text, out var s) ? s : 10.0;
             animationDuration = distance / (speed);
-            animationStartTime = (Environment.TickCount / 1000.0);
+            animationStartTime = (Environment.TickCount / 10000.0);
         }
 
         private void GoToNextFrame()

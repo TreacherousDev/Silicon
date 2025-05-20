@@ -147,9 +147,9 @@ namespace Silicon
             this.Information.Controls.Add(this.proID);
             this.Information.Controls.Add(this.procIDLabel);
             this.Information.ForeColor = System.Drawing.Color.White;
-            this.Information.Location = new System.Drawing.Point(0, 30);
+            this.Information.Location = new System.Drawing.Point(0, 40);
             this.Information.Name = "Information";
-            this.Information.Size = new System.Drawing.Size(482, 272);
+            this.Information.Size = new System.Drawing.Size(200, 60);
             this.Information.TabIndex = 1;
             this.Information.Text = "Information";
             // 
@@ -161,7 +161,7 @@ namespace Silicon
             this.CubicWindows.Location = new System.Drawing.Point(0, 0);
             this.CubicWindows.Name = "CubicWindows";
             this.CubicWindows.Padding = new System.Windows.Forms.Padding(10);
-            this.CubicWindows.Size = new System.Drawing.Size(480, 231);
+            this.CubicWindows.Size = new System.Drawing.Size(198, 231);
             this.CubicWindows.TabIndex = 40;
             // 
             // uiLabel14
@@ -900,9 +900,9 @@ namespace Silicon
             this.tabPage1.Controls.Add(this.PlayAnimationButton);
             this.tabPage1.Controls.Add(this.listViewFrames);
             this.tabPage1.Controls.Add(this.AddAnimationFrameButton);
-            this.tabPage1.Location = new System.Drawing.Point(0, 40);
+            this.tabPage1.Location = new System.Drawing.Point(0, 30);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(200, 60);
+            this.tabPage1.Size = new System.Drawing.Size(482, 272);
             this.tabPage1.TabIndex = 2;
             this.tabPage1.Text = "Cinematic";
             // 
@@ -977,7 +977,7 @@ namespace Silicon
             this.CinematicSpeedTextBox.Style = MetroSet_UI.Enums.Style.Light;
             this.CinematicSpeedTextBox.StyleManager = null;
             this.CinematicSpeedTextBox.TabIndex = 51;
-            this.CinematicSpeedTextBox.Text = "10.0";
+            this.CinematicSpeedTextBox.Text = "60.0";
             this.CinematicSpeedTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.CinematicSpeedTextBox.ThemeAuthor = "Narwin";
             this.CinematicSpeedTextBox.ThemeName = "MetroLite";

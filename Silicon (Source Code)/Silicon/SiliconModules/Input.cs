@@ -16,7 +16,6 @@ namespace Silicon
 
 
         private HashSet<Keys> pressedKeys = new HashSet<Keys>();      // currently held down
-        private HashSet<Keys> previouslyPressedKeys = new HashSet<Keys>();  // keys held down in previous frame
 
         private object keyMonitorLock = new object();
 
@@ -29,7 +28,6 @@ namespace Silicon
         }
 
         private static readonly Action NoOp = () => { };
-
 
         private Dictionary<Keys, (Action onPress, Action onRelease)> keyBindings;          // for single-press actions
 
@@ -65,15 +63,13 @@ namespace Silicon
                 [Keys.F3] = (() => Preset3Button_Click(null, EventArgs.Empty), NoOp),
                 [Keys.F4] = (() => Preset4Button_Click(null, EventArgs.Empty), NoOp),
                 [Keys.F5] = (() => FreecamSwitch.Switched = !FreecamSwitch.Switched, NoOp),
-                [Keys.F6] = (() => AddAnimationFrameButton_Click(null, EventArgs.Empty), NoOp),
-                [Keys.F7] = (GoToPreviousFrame, NoOp),
-                [Keys.F8] = (GoToNextFrame, NoOp),
-                [Keys.F9] = (() => PlayAnimationButton_Click(null, EventArgs.Empty), NoOp),
-                [Keys.F10] = (() => HideNametagsSwitch.Switched = !HideNametagsSwitch.Switched, NoOp),
-                [Keys.F11] = (() => HideUserInterfaceSwitch.Switched = !HideUserInterfaceSwitch.Switched, NoOp)
+                [Keys.F6] = (() => HideNametagsSwitch.Switched = !HideNametagsSwitch.Switched, NoOp),
+                [Keys.F7] = (() => HideUserInterfaceSwitch.Switched = !HideUserInterfaceSwitch.Switched, NoOp),
+                [Keys.F8] = (() => AddAnimationFrameButton_Click(null, EventArgs.Empty), NoOp),
+                [Keys.F9] = (GoToPreviousFrame, NoOp),
+                [Keys.F10] = (GoToNextFrame, NoOp),
+                [Keys.F11] = (() => PlayAnimationButton_Click(null, EventArgs.Empty), NoOp)   
             };
-
-
         }
 
         private void InitMouseDrag()
@@ -354,13 +350,21 @@ namespace Silicon
 
                     if (sender is TextBox tb && tb.Tag is KeyCaptureInfo info)
                     {
-                        // Skip modifier keys when pressed alone
-                        //if (e.KeyCode == Keys.ShiftKey || e.KeyCode == Keys.ControlKey ||e.KeyCode == Keys.Alt || e.KeyCode == Keys.Menu) return;
-
                         Keys newKey = e.KeyCode;
+
+                        // Prevent duplicate hotkey assignment
+                        if (keyBindings.ContainsKey(newKey))
+                        {   
+                        
+                                MessageBox.Show($"The key '{newKey}' is already assigned to '{GetNameForKey(newKey)}'.",
+                                                "Duplicate Hotkey",
+                                                MessageBoxButtons.OK,
+                                                MessageBoxIcon.Warning);
+                                //return;
+                        }
+
                         info.CurrentKey = newKey;
                         tb.Text = newKey.ToString();
-
                         UpdateHotkey(info.ActionName, info.CurrentKey);
                         HotkeyPanel.Focus();
                     }
@@ -435,11 +439,9 @@ namespace Silicon
 
 
 
-        // Optional: Method to save key bindings
         private void SaveKeyBindings()
         {
-            // Implement save logic here if needed
-            // This could save to user settings, a config file, etc.
+            //save to json, todo
         }
 
         private string GetActionNameFromDelegate(Action action)
@@ -461,58 +463,55 @@ namespace Silicon
             switch (key)
             {
                 case Keys.W:
-                    return "Move Forward";
+                    return "Camera Move Forward";
                 case Keys.S:
-                    return "Move Backward";
+                    return "Camera Move Backward";
                 case Keys.A:
-                    return "Move Left";
+                    return "Camera Move Left";
                 case Keys.D:
-                    return "Move Right";
+                    return "Camera Move Right";
                 case Keys.ShiftKey:
-                    return "Move Down";
+                    return "Camera Move Down";
                 case Keys.ControlKey:
-                    return "Move Up";
+                    return "Camera Move Up";
                 case Keys.Up:
-                    return "Pitch Up";
+                    return "Camera Pitch Up";
                 case Keys.Down:
-                    return "Pitch Down";
+                    return "Camera Pitch Down";
                 case Keys.Left:
-                    return "Yaw Left";
+                    return "Camera Yaw Left";
                 case Keys.Right:
-                    return "Yaw Right";
+                    return "Camera Yaw Right";
                 case Keys.E:
-                    return "Roll Left";
+                    return "Camera Roll Left";
                 case Keys.Q:
-                    return "Roll Right";
+                    return "Camera Roll Right";
 
                 case Keys.F1:
-                    return "Preset 1";
+                    return "Default Preset 1";
                 case Keys.F2:
-                    return "Preset 2";
+                    return "Default Preset 2";
                 case Keys.F3:
-                    return "Preset 3";
+                    return "Default Preset 3";
                 case Keys.F4:
-                    return "Preset 4";
+                    return "Default Preset 4";
                 case Keys.F5:
                     return "Toggle Freecam";
                 case Keys.F6:
-                    return "Add Frame";
-                case Keys.F7:
-                    return "Previous Frame";
-                case Keys.F8:
-                    return "Next Frame";
-                case Keys.F9:
-                    return "Play Animation";
-                case Keys.F10:
                     return "Toggle Hide Nametags";
-                case Keys.F11:
+                case Keys.F7:
                     return "Toggle Hide UI";
-
+                case Keys.F8:
+                    return "Add Frame";
+                case Keys.F9:
+                    return "Previous Frame";
+                case Keys.F10:
+                    return "Next Frame";
+                case Keys.F11:
+                    return "Play Animation";
                 default:
                     return key.ToString(); // fallback, shows key name like "F12"
             }
         }
-
-
     }
 }

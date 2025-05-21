@@ -105,7 +105,8 @@ namespace Silicon
 
             InterpolateCameraMovement();
             InterpolateCameraRotation();
-            InterpolateCameraFOV("Cubic.exe+E20E25");
+            InterpolateCameraFOV();
+            InterpolateCameraFog();
 
             isChatting = m.ReadInt("Cubic.exe+34E48C") != 0;
 
@@ -195,7 +196,8 @@ namespace Silicon
             if (GameFogSlider.Value != gameFogSliderValue)
             {
                 gameFogSliderValue = GameFogSlider.Value;
-                m.WriteMemory("Cubic.exe+2FFEC8", "float", GameFogSlider.Value.ToString());
+                targetCameraSightRange = GameFogSlider.Value;
+                //m.WriteMemory("Cubic.exe+2FFEC8", "float", GameFogSlider.Value.ToString());
             }
 
             if (FreecamSwitch.Switched == false)
@@ -214,16 +216,18 @@ namespace Silicon
                 m.WriteMemory("Cubic.exe+E2103A", "bytes", ConvertDoubleToFloatBytes(currentCameraLookAtZ)); 
             }
 
-            // Overwrite camera pitch and yaw using Silicon as the new controller
+            // Pitch, Yaw
             m.WriteMemory(pitchAddress, "bytes", ConvertDoubleToFloatBytes(currentCameraPitch));
             m.WriteMemory(yawAddress, "bytes", ConvertDoubleToFloatBytes(currentCameraYaw));
-            // FOV editing enabled even with freecam disabled
-            m.WriteMemory("Cubic.exe+E20E25", "bytes", ConvertDoubleToFloatBytes(currentCameraFOV));
-            // Up vector override for camera roll
+            // Up Vector -> Roll
             m.WriteMemory("Cubic.exe+E210D6", "float", upVector.X.ToString());
             m.WriteMemory("Cubic.exe+E210DA", "float", upVector.Y.ToString());
             m.WriteMemory("Cubic.exe+E210DE", "float", upVector.Z.ToString());
-            //Console.WriteLine($"Up: {upVector.X:F2}, {upVector.Y:F2}, {upVector.Z:F2}");
+
+            // FOV
+            m.WriteMemory("Cubic.exe+E20E25", "bytes", ConvertDoubleToFloatBytes(currentCameraFOV));
+            //Game Fog
+            m.WriteMemory("Cubic.exe+2FFEC8", "bytes", ConvertDoubleToFloatBytes(currentCameraSightRange));
 
 
             string ConvertDoubleToFloatBytes(double num)
@@ -236,7 +240,6 @@ namespace Silicon
                 return byteString;
             }
 
-            //UpdateLabel(CameraPositionDataLabel, $"X: {currentCameraLookAtX:F2} Y: {currentCameraLookAtY:F2} Z: {currentCameraLookAtZ:F2} Pitch: {currentCameraPitch:F2} Yaw: {currentCameraYaw:F2}", Color.Red);
             UpdateLabel(CameraLookAtInfoLabel, $"X: {currentCameraLookAtX:F2}\nY: {currentCameraLookAtY:F2}\nZ: {currentCameraLookAtZ:F2}", Color.White);
             UpdateLabel(CameraLookAtInfoLabel2, $"X: {currentCameraLookAtX:F2}\nY: {currentCameraLookAtY:F2}\nZ: {currentCameraLookAtZ:F2}", Color.White);
             UpdateLabel(CameraRotationInfoLabel, $"Pitch: {currentCameraPitch:F2}\nYaw: {currentCameraYaw:F2}\nRoll: {currentCameraRoll:F2}", Color.White);

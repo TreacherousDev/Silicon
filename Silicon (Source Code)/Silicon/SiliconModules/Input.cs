@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Windows.Forms;
 using System.Drawing;
+using System.Collections.Generic;
 
 
 namespace Silicon
@@ -11,6 +12,25 @@ namespace Silicon
 
         private bool isRightDragging = false;
         private Point lastMousePos;
+        private Dictionary<Keys, Action> keyBindings = new Dictionary<Keys, Action>();
+
+        private void InitializeKeyBindings()
+        {
+            keyBindings = new Dictionary<Keys, Action>
+            {
+                [Keys.F1] = () => Preset1Button_Click(null, EventArgs.Empty),
+                [Keys.F2] = () => Preset2Button_Click(null, EventArgs.Empty),
+                [Keys.F3] = () => Preset3Button_Click(null, EventArgs.Empty),
+                [Keys.F4] = () => Preset4Button_Click(null, EventArgs.Empty),
+                [Keys.F5] = () => FreecamSwitch.Switched = !FreecamSwitch.Switched,
+                [Keys.F6] = () => AddAnimationFrameButton_Click(null, EventArgs.Empty),
+                [Keys.F7] = GoToPreviousFrame,
+                [Keys.F8] = GoToNextFrame,
+                [Keys.F9] = () => PlayAnimationButton_Click(null, EventArgs.Empty),
+                [Keys.F10] = () => HideNametagsSwitch.Switched = !HideNametagsSwitch.Switched,
+                [Keys.F11] = () => HideUserInterfaceSwitch.Switched = !HideUserInterfaceSwitch.Switched
+            };
+        }
 
         private void InitMouseDrag()
         {
@@ -111,6 +131,21 @@ namespace Silicon
             {
                 FreecamSwitch.Invoke(new Action(() => HandleKeyDown(key)));
                 return;
+            }
+            if (HideNametagsSwitch.InvokeRequired)
+            {
+                HideNametagsSwitch.Invoke(new Action(() => HandleKeyDown(key)));
+                return;
+            }
+            if (HideUserInterfaceSwitch.InvokeRequired)
+            {
+                HideUserInterfaceSwitch.Invoke(new Action(() => HandleKeyDown(key)));
+                return;
+            }
+
+            if (keyBindings.TryGetValue(key, out Action action))
+            {
+                action.Invoke();
             }
 
             switch (key)

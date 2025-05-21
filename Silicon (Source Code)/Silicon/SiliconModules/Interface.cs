@@ -145,7 +145,7 @@ namespace Silicon
                     .Min(item => item.Index);
             }
 
-            CameraDistanceSlider.Value = cinematicLoadedCameraDistance;
+            //CameraDistanceSlider.Value = cinematicLoadedCameraDistance;
             // Teleport immediately to start frame
             List<double> firstFrame = animationFrames[startIndex];
             currentCameraLookAtX = firstFrame[0];
@@ -154,26 +154,33 @@ namespace Silicon
             currentCameraPitch = firstFrame[3];
             currentCameraYaw = firstFrame[4];
             currentCameraRoll = firstFrame[5];
-            currentCameraFOV = firstFrame[7];
+            currentCameraFOV = firstFrame[6];
+            currentCameraSightRange = firstFrame[7];
+
             targetCameraLookAtX = firstFrame[0];
             targetCameraLookAtY = firstFrame[1];
             targetCameraLookAtZ = firstFrame[2];
             targetCameraPitch = firstFrame[3];
             targetCameraYaw = firstFrame[4];
             targetCameraRoll = firstFrame[5];
-            targetCameraFOV = firstFrame[7];
+            targetCameraFOV = firstFrame[6];
+            targetCameraSightRange = firstFrame[7];
 
             //
-            startCameraLookAtX = (float)firstFrame[0];
-            startCameraLookAtY = (float)firstFrame[1];
-            startCameraLookAtZ = (float)firstFrame[2];
-            startCameraPitch = (float)firstFrame[3];
-            startCameraYaw = (float)firstFrame[4];
-            startCameraRoll = (float)firstFrame[5];
+            startCameraLookAtX = firstFrame[0];
+            startCameraLookAtY = firstFrame[1];
+            startCameraLookAtZ = firstFrame[2];
+            startCameraPitch = firstFrame[3];
+            startCameraYaw = firstFrame[4];
+            startCameraRoll = firstFrame[5];
+            startCameraFOV = firstFrame[6];
+            startCameraSightRange = firstFrame[7];
 
-            // Update FOV Slider
-            CameraFOVSlider.Value = (int)firstFrame[7];
-            cameraFOVSliderValue = (int)firstFrame[7];
+            // Update FOV and Sight Range Sliders
+            CameraFOVSlider.Value = (int)firstFrame[6];
+            cameraFOVSliderValue = (int)firstFrame[6];
+            GameFogSlider.Value = (int)firstFrame[7];
+            gameFogSliderValue = (int)firstFrame[7];
 
             await Task.Delay(20);
 
@@ -188,23 +195,24 @@ namespace Silicon
                 List<double> endFrame = animationFrames[i + 1];
 
                 //
-                startCameraLookAtX = (float)startFrame[0];
-                startCameraLookAtY = (float)startFrame[1];
-                startCameraLookAtZ = (float)startFrame[2];
-                startCameraPitch = (float)startFrame[3];
-                startCameraYaw = (float)startFrame[4];
-                startCameraRoll = (float)startFrame[5];
+                startCameraLookAtX = startFrame[0];
+                startCameraLookAtY = startFrame[1];
+                startCameraLookAtZ = startFrame[2];
+                startCameraPitch = startFrame[3];
+                startCameraYaw = startFrame[4];
+                startCameraRoll = startFrame[5];
+                startCameraFOV = startFrame[6];
+                startCameraSightRange = startFrame[7];
 
                 double startX = startFrame[0], startY = startFrame[1], startZ = startFrame[2];
                 double startPitch = startFrame[3], startYaw = startFrame[4], startRoll = startFrame[5];
-                double startFOV = startFrame[7];
-                double moveSpeed = endFrame[6];
-
+                double startFOV = startFrame[6], startSightRange = startFrame[7];
                 double endX = endFrame[0], endY = endFrame[1], endZ = endFrame[2];
                 double endPitch = endFrame[3], endYaw = endFrame[4], endRoll = endFrame[5];
-                double endFOV = endFrame[7];
+                double endFOV = endFrame[6], endSightRange = endFrame[7];
+                double moveSpeed = endFrame[8];
+                
                 Interpolator.MethodDelegate frameInterpolation = _interpolator;
-
                 double distance = Math.Sqrt(
                     Math.Pow(endX - startX, 2) +
                     Math.Pow(endY - startY, 2) +
@@ -236,7 +244,8 @@ namespace Silicon
                         targetCameraPitch = CatmullRom(p0[3], p1[3], p2[3], p3[3], alpha);
                         targetCameraYaw = CatmullRom(p0[4], p1[4], p2[4], p3[4], alpha);
                         targetCameraRoll = CatmullRom(p0[5], p1[5], p2[5], p3[5], alpha);
-                        targetCameraFOV = CatmullRom(p0[7], p1[7], p2[7], p3[7], alpha);
+                        targetCameraFOV = CatmullRom(p0[6], p1[6], p2[6], p3[6], alpha);
+                        targetCameraSightRange = CatmullRom(p0[7], p1[7], p2[7], p3[7], alpha);
                     }
                     else
                     {
@@ -247,12 +256,15 @@ namespace Silicon
                         targetCameraYaw = frameInterpolation(startYaw, endYaw, alpha);
                         targetCameraRoll = frameInterpolation(startRoll, endRoll, alpha);
                         targetCameraFOV = frameInterpolation(startFOV, endFOV, alpha);
+                        targetCameraSightRange = frameInterpolation(startSightRange, endSightRange, alpha);
                     }
                     upVector = ComputeUpVectorFromRoll((float)currentCameraRoll);
 
-                    // Update FOV slider after each keyframe pass
-                    CameraFOVSlider.Value = (int)endFrame[7];
-                    cameraFOVSliderValue = (int)endFrame[7];
+                    // Update FOV and Sight Range sliders after each keyframe pass
+                    CameraFOVSlider.Value = (int)endFrame[6];
+                    cameraFOVSliderValue = (int)endFrame[6];
+                    GameFogSlider.Value = (int)endFrame[7];
+                    gameFogSliderValue = (int)endFrame[7];
 
                     if (alpha >= 1.0)
                         break;
@@ -289,8 +301,10 @@ namespace Silicon
             frame.Add(currentCameraPitch);
             frame.Add(currentCameraYaw);
             frame.Add(currentCameraRoll);
-            frame.Add(double.TryParse(CinematicSpeedTextBox.Text, out double speed) ? speed : 10.0);
             frame.Add(currentCameraFOV);
+            frame.Add(currentCameraSightRange);
+            frame.Add(double.TryParse(CinematicSpeedTextBox.Text, out double speed) ? speed : 10.0);
+            
 
             // Insert frame after selected row
             int insertIndex;
@@ -335,8 +349,9 @@ namespace Silicon
                 item.SubItems.Add(frame[3].ToString("F1")); // Pitch
                 item.SubItems.Add(frame[4].ToString("F1")); // Yaw
                 item.SubItems.Add(frame[5].ToString("F1")); // Roll
-                item.SubItems.Add(frame[6].ToString("F1")); // Speed
-                item.SubItems.Add(frame[7].ToString("F0")); // FOV
+                item.SubItems.Add(frame[6].ToString("F0")); // FOV
+                item.SubItems.Add(frame[7].ToString("F0")); // Sight Range
+                item.SubItems.Add(frame[8].ToString("F1")); // Speed
                 listViewFrames.Items.Add(item);
                 i++;
             }
@@ -404,6 +419,13 @@ namespace Silicon
 
         private async void ActivateGoToFrame(int selectedIndex)
         {
+            if (playButtonState == PlayButtonState.Stop)
+            {
+                MessageBox.Show("Cannot go to frame while animation is in progress", "Go To Frame", MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
             if (selectedIndex >= animationFrames.Count) return;
 
             FreecamSwitch.Switched = true;
@@ -413,7 +435,7 @@ namespace Silicon
 
             List<double> goToFrame = animationFrames[selectedIndex];
 
-            CameraDistanceSlider.Value = cinematicLoadedCameraDistance;
+            //CameraDistanceSlider.Value = cinematicLoadedCameraDistance;
             // Set new target
             targetCameraLookAtX = goToFrame[0];
             targetCameraLookAtY = goToFrame[1];
@@ -421,18 +443,22 @@ namespace Silicon
             targetCameraPitch = goToFrame[3];
             targetCameraYaw = goToFrame[4];
             targetCameraRoll = goToFrame[5];
-            targetCameraFOV = goToFrame[7];
+            targetCameraFOV = goToFrame[6];
+            targetCameraSightRange = goToFrame[7];
 
-            startCameraLookAtX = (float)currentCameraLookAtX;
-            startCameraLookAtY = (float)currentCameraLookAtY;
-            startCameraLookAtZ = (float)currentCameraLookAtZ;
-            startCameraPitch = (float)currentCameraPitch;
-            startCameraYaw = (float)currentCameraYaw;
-            startCameraRoll = (float)currentCameraRoll;
+            startCameraLookAtX = currentCameraLookAtX;
+            startCameraLookAtY = currentCameraLookAtY;
+            startCameraLookAtZ = currentCameraLookAtZ;
+            startCameraPitch = currentCameraPitch;
+            startCameraYaw = currentCameraYaw;
+            startCameraRoll = currentCameraRoll;
+            startCameraFOV = currentCameraFOV;
 
-            // Update FOV slider
-            CameraFOVSlider.Value = (int)goToFrame[7];
-            cameraFOVSliderValue = (int)goToFrame[7];
+            // Update FOV and Sight Range sliders
+            CameraFOVSlider.Value = (int)goToFrame[6];
+            cameraFOVSliderValue = (int)goToFrame[6];
+            GameFogSlider.Value = (int)goToFrame[7];
+            gameFogSliderValue = (int)goToFrame[7];
 
             // Compute animation duration based on distance
             double distance = Math.Sqrt(
@@ -586,7 +612,8 @@ namespace Silicon
                     string json = File.ReadAllText(openFileDialog.FileName);
 
                     List<List<double>> frames = null;
-                    cinematicLoadedCameraDistance = CameraDistanceSlider.Value; // Default fallback
+                    //CameraDistanceSlider.Value = 
+                    //cinematicLoadedCameraDistance = CameraDistanceSlider.Value; // Default fallback
 
                     // Try to deserialize as new format
                     try
@@ -595,7 +622,7 @@ namespace Silicon
                         if (data?.Frames != null)
                         {
                             frames = data.Frames;
-                            cinematicLoadedCameraDistance = data.CameraDistance;
+                            CameraDistanceSlider.Value = data.CameraDistance;
                         }
                     }
                     catch
@@ -625,8 +652,9 @@ namespace Silicon
                             rawFrame.Count > 3 ? rawFrame[3] : 0.0,
                             rawFrame.Count > 4 ? rawFrame[4] : 0.0,
                             rawFrame.Count > 5 ? rawFrame[5] : 0.0,
-                            rawFrame.Count > 6 ? rawFrame[6] : 10.0,
-                            rawFrame.Count > 7 ? rawFrame[7] : 70.0
+                            rawFrame.Count > 6 ? rawFrame[6] : 70.0,
+                            rawFrame.Count > 7 ? rawFrame[7] : 100.0,
+                            rawFrame.Count > 7 ? rawFrame[8] : 60.0
                         };
 
                         animationFrames.Add(frame);
@@ -638,8 +666,9 @@ namespace Silicon
                         item.SubItems.Add(frame[3].ToString("F1"));
                         item.SubItems.Add(frame[4].ToString("F1"));
                         item.SubItems.Add(frame[5].ToString("F1"));
-                        item.SubItems.Add(frame[6].ToString("F1"));
+                        item.SubItems.Add(frame[6].ToString("F0"));
                         item.SubItems.Add(frame[7].ToString("F0"));
+                        item.SubItems.Add(frame[8].ToString("F1"));
                         listViewFrames.Items.Add(item);
                         i++;
                     }

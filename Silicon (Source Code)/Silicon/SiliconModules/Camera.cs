@@ -50,49 +50,46 @@ namespace Silicon
 
         private void HandleCameraController(double yawRotation)
         {
-            if (!IsCubicWindowFocused()) return;
-            if (isChatting) return;
+            if (!IsCubicWindowFocused() || isChatting) return;
 
             double moveX = 0, moveY = 0, moveZ = 0;
             double rotatePitch = 0, rotateYaw = 0, rotateRoll = 0;
 
-            if (pressedKeys.Contains(Keys.W))
+            if (movementState.Forward)
             {
                 double radians = (yawRotation - 90) * Math.PI / 180;
                 moveX += Math.Cos(radians);
                 moveY += Math.Sin(radians);
             }
-
-            if (pressedKeys.Contains(Keys.S))
+            if (movementState.Backward)
             {
                 double radians = (yawRotation + 90) * Math.PI / 180;
                 moveX += Math.Cos(radians);
                 moveY += Math.Sin(radians);
             }
-
-            if (pressedKeys.Contains(Keys.A))
+            if (movementState.Left)
             {
                 double radians = yawRotation * Math.PI / 180;
                 moveX -= Math.Cos(radians);
                 moveY -= Math.Sin(radians);
             }
-
-            if (pressedKeys.Contains(Keys.D))
+            if (movementState.Right)
             {
                 double radians = yawRotation * Math.PI / 180;
                 moveX += Math.Cos(radians);
                 moveY += Math.Sin(radians);
             }
 
-            if (pressedKeys.Contains(Keys.ShiftKey)) moveZ -= 1;
-            if (pressedKeys.Contains(Keys.ControlKey)) moveZ += 1;
-            if (pressedKeys.Contains(Keys.Up)) rotatePitch -= 1;
-            if (pressedKeys.Contains(Keys.Down)) rotatePitch += 1;
-            if (pressedKeys.Contains(Keys.Left)) rotateYaw -= 1;
-            if (pressedKeys.Contains(Keys.Right)) rotateYaw += 1;
-            if (pressedKeys.Contains(Keys.E)) rotateRoll -= 1;
-            if (pressedKeys.Contains(Keys.Q)) rotateRoll += 1;
+            if (movementState.Down) moveZ -= 1;
+            if (movementState.Up) moveZ += 1;
+            if (movementState.PitchUp) rotatePitch -= 1;
+            if (movementState.PitchDown) rotatePitch += 1;
+            if (movementState.YawLeft) rotateYaw -= 1;
+            if (movementState.YawRight) rotateYaw += 1;
+            if (movementState.RollLeft) rotateRoll -= 1;
+            if (movementState.RollRight) rotateRoll += 1;
 
+            // Normalize and apply speed
             double moveMagnitude = Math.Sqrt(moveX * moveX + moveY * moveY + moveZ * moveZ);
             if (moveMagnitude > 0.05)
             {
@@ -104,26 +101,14 @@ namespace Silicon
             targetCameraLookAtX += moveX * cameraMoveSpeed;
             targetCameraLookAtY += moveY * cameraMoveSpeed;
             targetCameraLookAtZ += moveZ * cameraMoveSpeed;
-
-
             if (targetCameraLookAtZ > 100) targetCameraLookAtZ = 100;
-
-
-            double rotateMagnitude = Math.Sqrt(rotatePitch * rotatePitch + rotateYaw * rotateYaw);
-            if (rotateMagnitude > 0.05)
-            {
-                rotatePitch /= rotateMagnitude;
-                rotateYaw /= rotateMagnitude;
-            }
 
             targetCameraPitch += rotatePitch * cameraRotateSpeed;
             targetCameraYaw += rotateYaw * cameraRotateSpeed;
             targetCameraRoll += rotateRoll * cameraRotateSpeed;
-
-            // Limit pitch angle using the custom Clamp
             targetCameraPitch = Clamp(targetCameraPitch, -89, 89);
-            //upVector = ComputeUpVectorFromRoll((float)currentCameraRoll);
         }
+
 
         public static double Clamp(double value, double min, double max)
         {

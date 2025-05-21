@@ -27,7 +27,6 @@ namespace Silicon
 
         public Mem m = new Mem();
         private System.Timers.Timer processCheckTimer;
-        private HashSet<Keys> pressedKeys = new HashSet<Keys>();
         private Thread keyPollingThread;
         private bool isRunning = true;
         private bool isChatting = false;

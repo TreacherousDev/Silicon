@@ -13,33 +13,67 @@ namespace Silicon
 
         private bool isRightDragging = false;
         private Point lastMousePos;
-        private Dictionary<Keys, Action> keyBindings = new Dictionary<Keys, Action>();
 
-        private readonly object keyMonitorLock = new object();
-        private HashSet<Keys> keysToMonitor = new HashSet<Keys>()
+
+        private HashSet<Keys> pressedKeys = new HashSet<Keys>();      // currently held down
+        private HashSet<Keys> previouslyPressedKeys = new HashSet<Keys>();  // keys held down in previous frame
+
+        private object keyMonitorLock = new object();
+
+        private static readonly Keys[] ALL_MONITORED_KEYS = GetAllMonitorableKeys();
+
+        private static Keys[] GetAllMonitorableKeys()
         {
-            Keys.W, Keys.S, Keys.A, Keys.D, Keys.Q, Keys.E,
-            Keys.ShiftKey, Keys.ControlKey,
-            Keys.Up, Keys.Down, Keys.Left, Keys.Right,
-            Keys.F1, Keys.F2, Keys.F3, Keys.F4, Keys.F5, Keys.F6, Keys.F7, Keys.F8, Keys.F9, Keys.F10, Keys.F11
-        };
+            var allKeys = Enum.GetValues(typeof(Keys)).Cast<Keys>().ToList();
+            return allKeys.ToArray();
+        }
+
+        private static readonly Action NoOp = () => { };
+
+
+        private Dictionary<Keys, (Action onPress, Action onRelease)> keyBindings;          // for single-press actions
+
+        public class MovementState
+        {
+            public bool Forward, Backward, Left, Right;
+            public bool Up, Down;
+            public bool YawLeft, YawRight, PitchUp, PitchDown;
+            public bool RollLeft, RollRight;
+        }
+        private MovementState movementState = new MovementState();
 
         private void InitializeKeyBindings()
         {
-            keyBindings = new Dictionary<Keys, Action>
+            keyBindings = new Dictionary<Keys, (Action onPress, Action onRelease)>
             {
-                [Keys.F1] = () => Preset1Button_Click(null, EventArgs.Empty),
-                [Keys.F2] = () => Preset2Button_Click(null, EventArgs.Empty),
-                [Keys.F3] = () => Preset3Button_Click(null, EventArgs.Empty),
-                [Keys.F4] = () => Preset4Button_Click(null, EventArgs.Empty),
-                [Keys.F5] = () => FreecamSwitch.Switched = !FreecamSwitch.Switched,
-                [Keys.F6] = () => AddAnimationFrameButton_Click(null, EventArgs.Empty),
-                [Keys.F7] = GoToPreviousFrame,
-                [Keys.F8] = GoToNextFrame,
-                [Keys.F9] = () => PlayAnimationButton_Click(null, EventArgs.Empty),
-                [Keys.F10] = () => HideNametagsSwitch.Switched = !HideNametagsSwitch.Switched,
-                [Keys.F11] = () => HideUserInterfaceSwitch.Switched = !HideUserInterfaceSwitch.Switched
+                [Keys.W] = (() => movementState.Forward = true, () => movementState.Forward = false),
+                [Keys.S] = (() => movementState.Backward = true, () => movementState.Backward = false),
+                [Keys.A] = (() => movementState.Left = true, () => movementState.Left = false),
+                [Keys.D] = (() => movementState.Right = true, () => movementState.Right = false),
+                [Keys.ShiftKey] = (() => movementState.Down = true, () => movementState.Down = false),
+                [Keys.ControlKey] = (() => movementState.Up = true, () => movementState.Up = false),
+                [Keys.Up] = (() => movementState.PitchUp = true, () => movementState.PitchUp = false),
+                [Keys.Down] = (() => movementState.PitchDown = true, () => movementState.PitchDown = false),
+                [Keys.Left] = (() => movementState.YawLeft = true, () => movementState.YawLeft = false),
+                [Keys.Right] = (() => movementState.YawRight = true, () => movementState.YawRight = false),
+                [Keys.E] = (() => movementState.RollLeft = true, () => movementState.RollLeft = false),
+                [Keys.Q] = (() => movementState.RollRight = true, () => movementState.RollRight = false),
+
+                // Instant/toggle actions – use NoOp for release
+                [Keys.F1] = (() => Preset1Button_Click(null, EventArgs.Empty), NoOp),
+                [Keys.F2] = (() => Preset2Button_Click(null, EventArgs.Empty), NoOp),
+                [Keys.F3] = (() => Preset3Button_Click(null, EventArgs.Empty), NoOp),
+                [Keys.F4] = (() => Preset4Button_Click(null, EventArgs.Empty), NoOp),
+                [Keys.F5] = (() => FreecamSwitch.Switched = !FreecamSwitch.Switched, NoOp),
+                [Keys.F6] = (() => AddAnimationFrameButton_Click(null, EventArgs.Empty), NoOp),
+                [Keys.F7] = (GoToPreviousFrame, NoOp),
+                [Keys.F8] = (GoToNextFrame, NoOp),
+                [Keys.F9] = (() => PlayAnimationButton_Click(null, EventArgs.Empty), NoOp),
+                [Keys.F10] = (() => HideNametagsSwitch.Switched = !HideNametagsSwitch.Switched, NoOp),
+                [Keys.F11] = (() => HideUserInterfaceSwitch.Switched = !HideUserInterfaceSwitch.Switched, NoOp)
             };
+
+
         }
 
         private void InitMouseDrag()
@@ -126,48 +160,46 @@ namespace Silicon
             keyPollingThread.Start();
         }
 
-        public void SetKeysToMonitor(IEnumerable<Keys> newKeys)
-        {
-            lock (keyMonitorLock)
-            {
-                keysToMonitor = new HashSet<Keys>(newKeys);
-            }
-        }
-
         private void UpdateKeyStates()
         {
+            // Check if our window has focus before processing keys
             if (!IsCubicWindowFocused() && !IsSiliconWindowFocused())
                 return;
 
-            HashSet<Keys> currentKeys;
-            lock (keyMonitorLock)
-            {
-                currentKeys = new HashSet<Keys>(keysToMonitor); // Copy to avoid locking during the loop
-            }
+            HashSet<Keys> currentPressedKeys = new HashSet<Keys>();
 
-            foreach (var key in currentKeys)
+            foreach (var key in ALL_MONITORED_KEYS)
             {
                 bool isPressed = (GetAsyncKeyState(key) & 0x8000) != 0;
 
                 if (isPressed)
                 {
+                    currentPressedKeys.Add(key);
+
+                    // Detect newly pressed key
                     if (!pressedKeys.Contains(key))
                     {
-                        pressedKeys.Add(key);
                         HandleKeyDown(key);
                     }
                 }
-                else
+            }
+
+            // Detect key releases
+            foreach (var key in pressedKeys)
+            {
+                if (!currentPressedKeys.Contains(key))
                 {
-                    if (pressedKeys.Contains(key))
-                    {
-                        pressedKeys.Remove(key);
-                        if (pressedKeys.Count == 0)
-                        {
-                            Thread.Sleep(10);
-                        }
-                    }
+                    HandleKeyUp(key);
                 }
+            }
+
+            // Update pressedKeys to current state
+            pressedKeys = currentPressedKeys;
+
+            // Small delay to prevent high CPU usage if no keys pressed
+            if (pressedKeys.Count == 0)
+            {
+                Thread.Sleep(10);
             }
         }
 
@@ -179,11 +211,26 @@ namespace Silicon
                 return;
             }
 
-            if (keyBindings.TryGetValue(key, out Action action))
+            if (keyBindings.TryGetValue(key, out var action))
             {
-                action.Invoke();
+                action.onPress();
             }
         }
+
+        void HandleKeyUp(Keys key)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action(() => HandleKeyUp(key)));
+                return;
+            }
+
+            if (keyBindings.TryGetValue(key, out var action))
+            {
+                action.onRelease();
+            }
+        }
+
 
         // Helper class to format key names nicely
         private class KeyItem
@@ -235,14 +282,13 @@ namespace Silicon
         private void PopulateHotkeyPanel()
         {
             HotkeyPanel.Controls.Clear();
-
             foreach (var kvp in keyBindings)
             {
                 Keys currentKey = kvp.Key;
-                Action action = kvp.Value;
-                string actionName = GetActionNameFromDelegate(action);
+                var (onPress, onRelease) = kvp.Value;
+                string actionName = GetActionNameFromDelegate(onPress);
 
-                // Label for action name
+                // Hotkey Label UI
                 Label lbl = new Label
                 {
                     Text = actionName,
@@ -252,7 +298,7 @@ namespace Silicon
                     Margin = new Padding(3, 6, 3, 3)
                 };
 
-                // TextBox for key capture
+                // Hotkey TextBox UI
                 TextBox txtKey = new TextBox
                 {
                     Width = 100,
@@ -263,14 +309,14 @@ namespace Silicon
                     Tag = actionName
                 };
 
-                // Add placeholders for storing data
+                // Placeholder
                 txtKey.Tag = new KeyCaptureInfo
                 {
                     ActionName = actionName,
                     CurrentKey = currentKey
                 };
 
-                // Add a small button for clearing the key assignment
+                // Clear Hotkey Button
                 Button btnClear = new Button
                 {
                     Text = "×",
@@ -282,7 +328,7 @@ namespace Silicon
                     TextAlign = ContentAlignment.TopCenter
                 };
 
-                // Setup event to capture keyboard input
+                // Select Hotkey Textbox
                 txtKey.Enter += (sender, e) =>
                 {
                     if (sender is TextBox tb)
@@ -301,6 +347,7 @@ namespace Silicon
                     }
                 };
 
+                // Change Hotkey
                 txtKey.KeyDown += (sender, e) =>
                 {
                     e.SuppressKeyPress = true; // Prevent beep sound
@@ -308,29 +355,22 @@ namespace Silicon
                     if (sender is TextBox tb && tb.Tag is KeyCaptureInfo info)
                     {
                         // Skip modifier keys when pressed alone
-                        if (e.KeyCode == Keys.ShiftKey || e.KeyCode == Keys.ControlKey ||
-                            e.KeyCode == Keys.Alt || e.KeyCode == Keys.Menu)
-                            return;
+                        //if (e.KeyCode == Keys.ShiftKey || e.KeyCode == Keys.ControlKey ||e.KeyCode == Keys.Alt || e.KeyCode == Keys.Menu) return;
 
                         Keys newKey = e.KeyCode;
-
-                        // Update the key capture info
                         info.CurrentKey = newKey;
                         tb.Text = newKey.ToString();
 
-                        // Update the key bindings dictionary
                         UpdateHotkey(info.ActionName, info.CurrentKey);
-
-                        // Remove focus from the textbox to indicate completion
                         HotkeyPanel.Focus();
                     }
                 };
 
+                // Clear Hotkey
                 btnClear.Click += (sender, e) =>
                 {
                     if (txtKey.Tag is KeyCaptureInfo info)
                     {
-                        // Clear the binding (set to None)
                         info.CurrentKey = Keys.None;
                         txtKey.Text = "None";
                         UpdateHotkey(info.ActionName, Keys.None);
@@ -363,16 +403,15 @@ namespace Silicon
             public Keys CurrentKey { get; set; }
         }
 
-        // Helper method to update a hotkey mapping
         private void UpdateHotkey(string actionName, Keys newKey)
         {
-            // Find the action in the dictionary by name
-            Action actionToUpdate = null;
+            // Find the tuple (onPress, onRelease) in the dictionary by name
+            (Action onPress, Action onRelease) actionToUpdate = default;
             Keys oldKey = Keys.None;
 
             foreach (var kvp in keyBindings)
             {
-                string currentActionName = GetActionNameFromDelegate(kvp.Value);
+                string currentActionName = GetActionNameFromDelegate(kvp.Value.onPress);
                 if (currentActionName == actionName)
                 {
                     actionToUpdate = kvp.Value;
@@ -381,45 +420,20 @@ namespace Silicon
                 }
             }
 
-            if (actionToUpdate != null)
+            if (actionToUpdate.onPress != null)
             {
-                // Remove the old mapping
-                keyBindings.Remove(oldKey);
-
-                // Add the new mapping if the key is not None
-                if (newKey != Keys.None)
+                // Only update if key is valid and not already bound
+                if (newKey != Keys.None && !keyBindings.ContainsKey(newKey))
                 {
-                    // Check if new key is already in use
-                    if (keyBindings.ContainsKey(newKey))
-                    {
-                        // Handle conflict - remove the previous action using this key
-                        keyBindings.Remove(newKey);
-
-                        // Update the UI to reflect this change
-                        // You might want to refresh the panel or update specific controls
-                        RefreshHotkeyPanel();
-                    }
-
+                    keyBindings.Remove(oldKey);
                     keyBindings[newKey] = actionToUpdate;
                 }
 
-                // Save the updated key bindings
                 SaveKeyBindings();
             }
         }
 
-        // Add this method to refresh the panel when needed
-        private void RefreshHotkeyPanel()
-        {
-            // Store the current scroll position
-            Point scrollPosition = HotkeyPanel.AutoScrollPosition;
 
-            // Repopulate the panel
-            PopulateHotkeyPanel();
-
-            // Restore scroll position (invert because AutoScrollPosition uses negative values)
-            HotkeyPanel.AutoScrollPosition = new Point(-scrollPosition.X, -scrollPosition.Y);
-        }
 
         // Optional: Method to save key bindings
         private void SaveKeyBindings()
@@ -434,17 +448,43 @@ namespace Silicon
 
             foreach (var kvp in keyBindings)
             {
-                if (kvp.Value == action)
+                if (kvp.Value.onPress == action || kvp.Value.onRelease == action)
                     return GetNameForKey(kvp.Key); // or a dictionary from Keys -> string
             }
 
             return "Unknown Action";
         }
 
+
         private string GetNameForKey(Keys key)
         {
             switch (key)
             {
+                case Keys.W:
+                    return "Move Forward";
+                case Keys.S:
+                    return "Move Backward";
+                case Keys.A:
+                    return "Move Left";
+                case Keys.D:
+                    return "Move Right";
+                case Keys.ShiftKey:
+                    return "Move Down";
+                case Keys.ControlKey:
+                    return "Move Up";
+                case Keys.Up:
+                    return "Pitch Up";
+                case Keys.Down:
+                    return "Pitch Down";
+                case Keys.Left:
+                    return "Yaw Left";
+                case Keys.Right:
+                    return "Yaw Right";
+                case Keys.E:
+                    return "Roll Left";
+                case Keys.Q:
+                    return "Roll Right";
+
                 case Keys.F1:
                     return "Preset 1";
                 case Keys.F2:
@@ -467,74 +507,11 @@ namespace Silicon
                     return "Toggle Hide Nametags";
                 case Keys.F11:
                     return "Toggle Hide UI";
+
                 default:
                     return key.ToString(); // fallback, shows key name like "F12"
             }
         }
-
-
-        private void ApplyHotkeyChanges()
-        {
-            // Temporary dictionary to build new bindings
-            var newBindings = new Dictionary<Keys, Action>();
-
-            foreach (Panel panel in HotkeyPanel.Controls)
-            {
-                Label lbl = panel.Controls.OfType<Label>().FirstOrDefault();
-                ComboBox combo = panel.Controls.OfType<ComboBox>().FirstOrDefault();
-
-                if (lbl == null || combo == null)
-                    continue;
-
-                string actionName = lbl.Text;
-                Keys selectedKey = (Keys)combo.SelectedItem;
-
-                Action action = GetActionFromName(actionName);
-
-                if (action != null)
-                {
-                    // Check for duplicate keys - optional: you can warn user or overwrite
-                    if (!newBindings.ContainsKey(selectedKey))
-                        newBindings[selectedKey] = action;
-                    else
-                        MessageBox.Show($"Duplicate key {selectedKey} assigned to multiple actions.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-            }
-
-            keyBindings = newBindings;
-        }
-
-        private Action GetActionFromName(string name)
-        {
-            switch (name)
-            {
-                case "Preset 1":
-                    return () => Preset1Button_Click(null, EventArgs.Empty);
-                case "Preset 2":
-                    return () => Preset2Button_Click(null, EventArgs.Empty);
-                case "Preset 3":
-                    return () => Preset3Button_Click(null, EventArgs.Empty);
-                case "Preset 4":
-                    return () => Preset4Button_Click(null, EventArgs.Empty);
-                case "Add Frame":
-                    return () => AddAnimationFrameButton_Click(null, EventArgs.Empty);
-                case "Previous Frame":
-                    return GoToPreviousFrame;
-                case "Next Frame":
-                    return GoToNextFrame;
-                case "Play Animation":
-                    return () => PlayAnimationButton_Click(null, EventArgs.Empty);
-                case "FreecamSwitchToggle":
-                    return () => FreecamSwitch.Switched = !FreecamSwitch.Switched;
-                case "Hide Nametags":
-                    return () => HideNametagsSwitch.Switched = !HideNametagsSwitch.Switched;
-                case "Hide UI":
-                    return () => HideUserInterfaceSwitch.Switched = !HideUserInterfaceSwitch.Switched;
-                default:
-                    return null;
-            }
-        }
-
 
 
     }

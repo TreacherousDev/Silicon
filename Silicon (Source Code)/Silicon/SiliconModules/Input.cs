@@ -347,7 +347,6 @@ namespace Silicon
                 txtKey.KeyDown += (sender, e) =>
                 {
                     e.SuppressKeyPress = true; // Prevent beep sound
-
                     if (sender is TextBox tb && tb.Tag is KeyCaptureInfo info)
                     {
                         Keys newKey = e.KeyCode;
@@ -355,12 +354,8 @@ namespace Silicon
                         // Prevent duplicate hotkey assignment
                         if (keyBindings.ContainsKey(newKey))
                         {   
-                        
-                                MessageBox.Show($"The key '{newKey}' is already assigned to '{GetNameForKey(newKey)}'.",
-                                                "Duplicate Hotkey",
-                                                MessageBoxButtons.OK,
-                                                MessageBoxIcon.Warning);
-                                //return;
+                            MessageBox.Show($"The key '{newKey}' is already assigned to '{GetNameForKey(newKey)}'.",
+                            "Duplicate Hotkey", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         }
 
                         info.CurrentKey = newKey;

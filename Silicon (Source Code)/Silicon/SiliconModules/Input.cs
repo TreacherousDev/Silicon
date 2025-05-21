@@ -14,6 +14,16 @@ namespace Silicon
         private Point lastMousePos;
         private Dictionary<Keys, Action> keyBindings = new Dictionary<Keys, Action>();
 
+        private readonly object keyMonitorLock = new object();
+        private HashSet<Keys> keysToMonitor = new HashSet<Keys>()
+        {
+            Keys.W, Keys.S, Keys.A, Keys.D, Keys.Q, Keys.E,
+            Keys.ShiftKey, Keys.ControlKey,
+            Keys.Up, Keys.Down, Keys.Left, Keys.Right,
+            Keys.F1, Keys.F2, Keys.F3, Keys.F4, Keys.F5, Keys.F6, Keys.F7, Keys.F8, Keys.F9, Keys.F10, Keys.F11
+        };
+
+
         private void InitializeKeyBindings()
         {
             keyBindings = new Dictionary<Keys, Action>
@@ -67,6 +77,39 @@ namespace Silicon
             };
         }
 
+        private void InitMouseScroll()
+        {
+            mouseHook.OnScrollDown += () =>
+            {
+                if (!IsCubicWindowFocused())
+                    return;
+
+                if ((Control.ModifierKeys & Keys.Alt) == Keys.Alt)
+                {
+                    CameraDistanceSlider.Value = Math.Min(300, CameraDistanceSlider.Value + 1);
+                }
+                else
+                {
+                    CameraFOVSlider.Value = Math.Min(135, CameraFOVSlider.Value + 1);
+                }
+            };
+
+            mouseHook.OnScrollUp += () =>
+            {
+                if (!IsCubicWindowFocused())
+                    return;
+
+                if ((Control.ModifierKeys & Keys.Alt) == Keys.Alt)
+                {
+                    CameraDistanceSlider.Value = Math.Max(2, CameraDistanceSlider.Value - 1);
+                }
+                else
+                {
+                    CameraFOVSlider.Value = Math.Max(10, CameraFOVSlider.Value - 1);
+                }
+            };
+        }
+
         // This function gets called in the main update loop
         // It handles the movement and rotation of the camera when freecam is activated
         // Here starts the code edited by Hispano
@@ -77,7 +120,7 @@ namespace Silicon
                 while (isRunning)
                 {
                     UpdateKeyStates();
-                    Thread.Sleep(10);
+                    Thread.Sleep(5);
                 }
             })
             {
@@ -86,20 +129,26 @@ namespace Silicon
             keyPollingThread.Start();
         }
 
+        public void SetKeysToMonitor(IEnumerable<Keys> newKeys)
+        {
+            lock (keyMonitorLock)
+            {
+                keysToMonitor = new HashSet<Keys>(newKeys);
+            }
+        }
+
         private void UpdateKeyStates()
         {
             if (!IsCubicWindowFocused() && !IsSiliconWindowFocused())
                 return;
 
-            Keys[] keysToMonitor = new Keys[]
+            HashSet<Keys> currentKeys;
+            lock (keyMonitorLock)
             {
-                Keys.W, Keys.S, Keys.A, Keys.D, Keys.Q, Keys.E,
-                Keys.ShiftKey, Keys.ControlKey,
-                Keys.Up, Keys.Down, Keys.Left, Keys.Right,
-                Keys.F1, Keys.F2, Keys.F3, Keys.F4, Keys.F5, Keys.F6, Keys.F7, Keys.F8, Keys.F9, Keys.F10, Keys.F11
-            };
+                currentKeys = new HashSet<Keys>(keysToMonitor); // Copy to avoid locking during the loop
+            }
 
-            foreach (var key in keysToMonitor)
+            foreach (var key in currentKeys)
             {
                 bool isPressed = (GetAsyncKeyState(key) & 0x8000) != 0;
 
@@ -125,6 +174,7 @@ namespace Silicon
             }
         }
 
+
         private void HandleKeyDown(Keys key)
         {
             if (FreecamSwitch.InvokeRequired)
@@ -148,42 +198,42 @@ namespace Silicon
                 action.Invoke();
             }
 
-            switch (key)
-            {
-                case Keys.F1:
-                    Preset1Button_Click(null, EventArgs.Empty);
-                    break;
-                case Keys.F2:
-                    Preset2Button_Click(null, EventArgs.Empty);
-                    break;
-                case Keys.F3:
-                    Preset3Button_Click(null, EventArgs.Empty);
-                    break;
-                case Keys.F4:
-                    Preset4Button_Click(null, EventArgs.Empty);
-                    break;
-                case Keys.F5:
-                    FreecamSwitch.Switched = !FreecamSwitch.Switched;
-                    break;
-                case Keys.F6:
-                    AddAnimationFrameButton_Click(null, EventArgs.Empty);
-                    break;
-                case Keys.F7:
-                    GoToPreviousFrame();
-                    break;
-                case Keys.F8:
-                    GoToNextFrame();
-                    break;
-                case Keys.F9:
-                    PlayAnimationButton_Click(null, EventArgs.Empty);
-                    break;
-                case Keys.F10:
-                    HideNametagsSwitch.Switched = !HideNametagsSwitch.Switched;
-                    break;
-                case Keys.F11:
-                    HideUserInterfaceSwitch.Switched = !HideUserInterfaceSwitch.Switched;
-                    break;
-            }
+            //switch (key)
+            //{
+            //    case Keys.F1:
+            //        Preset1Button_Click(null, EventArgs.Empty);
+            //        break;
+            //    case Keys.F2:
+            //        Preset2Button_Click(null, EventArgs.Empty);
+            //        break;
+            //    case Keys.F3:
+            //        Preset3Button_Click(null, EventArgs.Empty);
+            //        break;
+            //    case Keys.F4:
+            //        Preset4Button_Click(null, EventArgs.Empty);
+            //        break;
+            //    case Keys.F5:
+            //        FreecamSwitch.Switched = !FreecamSwitch.Switched;
+            //        break;
+            //    case Keys.F6:
+            //        AddAnimationFrameButton_Click(null, EventArgs.Empty);
+            //        break;
+            //    case Keys.F7:
+            //        GoToPreviousFrame();
+            //        break;
+            //    case Keys.F8:
+            //        GoToNextFrame();
+            //        break;
+            //    case Keys.F9:
+            //        PlayAnimationButton_Click(null, EventArgs.Empty);
+            //        break;
+            //    case Keys.F10:
+            //        HideNametagsSwitch.Switched = !HideNametagsSwitch.Switched;
+            //        break;
+            //    case Keys.F11:
+            //        HideUserInterfaceSwitch.Switched = !HideUserInterfaceSwitch.Switched;
+            //        break;
+            //}
         }
 
 

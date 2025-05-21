@@ -132,83 +132,34 @@ namespace Silicon
             return value;
         }
 
-        private void InterpolateCameraMovement()
+        private void InterpolateCamera()
         {
-            double elapsedTime = (Environment.TickCount / 10000.0) - animationStartTime;
-            double alpha = elapsedTime / animationDuration;
-            alpha = Clamp(alpha, 0.0, 1.0);
-
-            // Stop interpolation when alpha reaches 1
-            if (alpha >= 1.0 - equalityTolerance)
-            {
-                currentCameraLookAtX = targetCameraLookAtX;
-                currentCameraLookAtY = targetCameraLookAtY;
-                currentCameraLookAtZ = targetCameraLookAtZ;
-            }
-            else
-            {
-                currentCameraLookAtX = _interpolator(startCameraLookAtX, targetCameraLookAtX, alpha);
-                currentCameraLookAtY = _interpolator(startCameraLookAtY, targetCameraLookAtY, alpha);
-                currentCameraLookAtZ = _interpolator(startCameraLookAtZ, targetCameraLookAtZ, alpha);
-            }
-        }
-
-        private void InterpolateCameraRotation()
-        {
-            
-            double elapsedTime = (Environment.TickCount / 10000.0) - animationStartTime;
-            double alpha = elapsedTime / animationDuration;
-            alpha = Clamp(alpha, 0.0, 1.0);
-
-            // Stop interpolation when alpha reaches 1
-            if (alpha >= 1.0 - equalityTolerance)
-            {
-                currentCameraPitch = targetCameraPitch;
-                currentCameraYaw = targetCameraYaw;
-                currentCameraRoll = targetCameraRoll;
-            }
-            else
-            {
-                currentCameraPitch = _interpolator(startCameraPitch, targetCameraPitch, alpha);
-                currentCameraYaw = _interpolator(startCameraYaw, targetCameraYaw, alpha);
-                currentCameraRoll = _interpolator(startCameraRoll, targetCameraRoll, alpha);
-            }
+            // Look at X, Y, Z
+            Interpolate(ref currentCameraLookAtX, startCameraLookAtX, targetCameraLookAtX);
+            Interpolate(ref currentCameraLookAtY, startCameraLookAtY, targetCameraLookAtY);
+            Interpolate(ref currentCameraLookAtZ, startCameraLookAtZ, targetCameraLookAtZ);
+            // Pitch, Yaw, Roll, Up Vector
+            Interpolate(ref currentCameraPitch, startCameraPitch, targetCameraPitch);
+            Interpolate(ref currentCameraYaw, startCameraYaw, targetCameraYaw);
+            Interpolate(ref currentCameraRoll, startCameraRoll, targetCameraRoll);
             upVector = ComputeUpVectorFromRoll((float)currentCameraRoll);
-
+            // FOV
+            Interpolate(ref currentCameraFOV, startCameraFOV, targetCameraFOV);
+            // Sight Range
+            Interpolate(ref currentCameraSightRange, startCameraSightRange, targetCameraSightRange);
         }
 
-        private void InterpolateCameraFOV()
+        private void Interpolate(ref double current, double start, double target)
+        {
+            double alpha = GetAlpha();
+            current = (alpha >= 1.0 - equalityTolerance) ? target : _interpolator(start, target, alpha);
+        }
+
+        private double GetAlpha()
         {
             double elapsedTime = (Environment.TickCount / 10000.0) - animationStartTime;
             double alpha = elapsedTime / animationDuration;
-            alpha = Clamp(alpha, 0.0, 1.0);
-
-            // Stop interpolation when alpha reaches 1
-            if (alpha >= 1.0 - equalityTolerance)
-            {
-                currentCameraFOV = targetCameraFOV;
-            }
-            else
-            {
-                currentCameraFOV = _interpolator(startCameraFOV, targetCameraFOV, alpha);
-            }
-        }
-
-        private void InterpolateCameraFog()
-        {
-            double elapsedTime = (Environment.TickCount / 10000.0) - animationStartTime;
-            double alpha = elapsedTime / animationDuration;
-            alpha = Clamp(alpha, 0.0, 1.0);
-
-            // Stop interpolation when alpha reaches 1
-            if (alpha >= 1.0 - equalityTolerance)
-            {
-                currentCameraSightRange = targetCameraSightRange;
-            }
-            else
-            {
-                currentCameraSightRange = _interpolator(startCameraSightRange, targetCameraSightRange, alpha);
-            }
+            return Clamp(alpha, 0.0, 1.0);
         }
 
         private Vector3 GetForwardVector(double pitchDeg, double yawDeg)

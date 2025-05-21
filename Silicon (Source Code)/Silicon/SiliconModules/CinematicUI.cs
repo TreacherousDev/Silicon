@@ -13,102 +13,59 @@ namespace Silicon
 {
     public partial class SiliconForm
     {
-        private void CameraMoveSpeedSlider_Scroll(object sender)
-        {
-            cameraMoveSpeed = (double)CameraMoveSpeedSlider.Value / 500;
-        }
-
-        private void CameraRotateSpeedSlider_Scroll(object sender)
-        {
-            cameraRotateSpeed = (double)CameraRotateSpeedSlider.Value / 100;
-        }
-
-        private void Preset1Button_Click(object sender, EventArgs e)
-        {
-            CameraFOVSlider.Value = 33;
-            CameraDistanceSlider.Value = 45;
-            GameFogSlider.Value = 110;
-            targetCameraFOV = 33;
-
-            HidePlayerModelSwitch.Switched = false;
-            HideUserInterfaceSwitch.Switched = false;
-            HideNametagsSwitch.Switched = false;
-            FreecamSwitch.Switched = false;
-
-            ResetCameraRoll();
-        }
-
-        private void Preset2Button_Click(object sender, EventArgs e)
-        {
-            CameraFOVSlider.Value = 33;
-            CameraDistanceSlider.Value = 90;
-            GameFogSlider.Value = 110;
-            targetCameraFOV = 33;
-
-            HidePlayerModelSwitch.Switched = false;
-            HideUserInterfaceSwitch.Switched = false;
-            HideNametagsSwitch.Switched = false;
-            FreecamSwitch.Switched = false;
-
-            ResetCameraRoll();
-        }
-
-        private void Preset3Button_Click(object sender, EventArgs e)
-        {
-            CameraFOVSlider.Value = 70;
-            CameraDistanceSlider.Value = 2;
-            GameFogSlider.Value = 110;
-            targetCameraFOV = 70;
-
-            HidePlayerModelSwitch.Switched = true;
-            HideUserInterfaceSwitch.Switched = false;
-            HideNametagsSwitch.Switched = true;
-            FreecamSwitch.Switched = false;
-
-            ResetCameraRoll();
-        }
-
-        private void Preset4Button_Click(object sender, EventArgs e)
-        {
-            CameraFOVSlider.Value = 60;
-            CameraDistanceSlider.Value = 220;
-            GameFogSlider.Value = 200;
-            targetCameraFOV = 45;
-
-            HidePlayerModelSwitch.Switched = false;
-            HideUserInterfaceSwitch.Switched = true;
-            HideNametagsSwitch.Switched = true;
-            FreecamSwitch.Switched = false;
-
-            ResetCameraRoll();
-            //currentCameraPitch = 0;
-            //targetCameraPitch = 0;
-            //currentCameraYaw = 0;
-            //targetCameraYaw = 0;
-        }
-
-        private double CatmullRom(double p0, double p1, double p2, double p3, double t)
-        {
-            return 0.5 * (
-                2 * p1 +
-                (-p0 + p2) * t +
-                (2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t +
-                (-p0 + 3 * p1 - 3 * p2 + p3) * t * t * t
-            );
-        }
-
         // Play button state, alternates between play and stop when clicked
-        private enum PlayButtonState
-        {
-            Play,
-            Stop
-        }
-
+        private enum PlayButtonState {Play, Stop}
         private PlayButtonState playButtonState = PlayButtonState.Play;
-
         // Animation stopping mechanism for when stop button is pressed or freecam is disabled
         private CancellationTokenSource animationCancellationTokenSource;
         List<List<double>> animationFrames = new List<List<double>>();
+
+        // Saved JSON Format
+        public class AnimationData
+        {
+            public int CameraDistance { get; set; }
+            public List<List<double>> Frames { get; set; }
+        }
+
+        private void AddAnimationFrameButton_Click(object sender, EventArgs e)
+        {
+            List<double> frame = new List<double>();
+            frame.Add(currentCameraLookAtX);
+            frame.Add(currentCameraLookAtY);
+            frame.Add(currentCameraLookAtZ);
+            frame.Add(currentCameraPitch);
+            frame.Add(currentCameraYaw);
+            frame.Add(currentCameraRoll);
+            frame.Add(currentCameraFOV);
+            frame.Add(currentCameraSightRange);
+            frame.Add(double.TryParse(CinematicSpeedTextBox.Text, out double speed) ? speed : 10.0);
+
+
+            // Insert frame after selected row
+            int insertIndex;
+            if (listViewFrames.SelectedItems.Count == 0)
+            {
+                // No selection, append to the end
+                insertIndex = animationFrames.Count;
+            }
+            else
+            {
+                // Insert after the bottommost row if multiple are selected
+                insertIndex = listViewFrames.SelectedItems.Cast<ListViewItem>().Max(item => item.Index) + 1;
+            }
+
+            animationFrames.Insert(insertIndex, frame);
+            UpdateListView();
+
+            // Auto-select the newly added frame
+            listViewFrames.SelectedItems.Clear();
+            if (insertIndex < listViewFrames.Items.Count)
+            {
+                listViewFrames.Items[insertIndex].Selected = true;
+                listViewFrames.Items[insertIndex].Focused = true;
+                listViewFrames.EnsureVisible(insertIndex);
+            }
+        }
 
         private async void PlayAnimationButton_Click(object sender, EventArgs e)
         {
@@ -280,6 +237,16 @@ namespace Silicon
             
         }
 
+        // Interpolation Helper Method
+        private double CatmullRom(double p0, double p1, double p2, double p3, double t)
+        {
+            return 0.5 * (
+                2 * p1 +
+                (-p0 + p2) * t +
+                (2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t +
+                (-p0 + 3 * p1 - 3 * p2 + p3) * t * t * t
+            );
+        }
         private void StopAnimation()
         {
             animationCancellationTokenSource?.Cancel();
@@ -290,50 +257,6 @@ namespace Silicon
             targetCameraYaw = currentCameraYaw;
             targetCameraFOV = currentCameraFOV;
         }
-
-
-        private void AddAnimationFrameButton_Click(object sender, EventArgs e)
-        {
-            List<double> frame = new List<double>();
-            frame.Add(currentCameraLookAtX);
-            frame.Add(currentCameraLookAtY);
-            frame.Add(currentCameraLookAtZ);
-            frame.Add(currentCameraPitch);
-            frame.Add(currentCameraYaw);
-            frame.Add(currentCameraRoll);
-            frame.Add(currentCameraFOV);
-            frame.Add(currentCameraSightRange);
-            frame.Add(double.TryParse(CinematicSpeedTextBox.Text, out double speed) ? speed : 10.0);
-            
-
-            // Insert frame after selected row
-            int insertIndex;
-            if (listViewFrames.SelectedItems.Count == 0)
-            {
-                // No selection, append to the end
-                insertIndex = animationFrames.Count;
-            }
-            else
-            {
-                // Insert after the bottommost row if multiple are selected
-                insertIndex = listViewFrames.SelectedItems
-                    .Cast<ListViewItem>()
-                    .Max(item => item.Index) + 1;
-            }
-
-            animationFrames.Insert(insertIndex, frame);
-            UpdateListView();
-
-            // Auto-select the newly added frame
-            listViewFrames.SelectedItems.Clear();
-            if (insertIndex < listViewFrames.Items.Count)
-            {
-                listViewFrames.Items[insertIndex].Selected = true;
-                listViewFrames.Items[insertIndex].Focused = true;
-                listViewFrames.EnsureVisible(insertIndex);
-            }
-        }
-
 
         private void UpdateListView()
         {
@@ -394,15 +317,13 @@ namespace Silicon
         {
             if (playButtonState == PlayButtonState.Stop)
             {
-                MessageBox.Show("Cannot delete while animation is in progress", "Delete Frame", MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                MessageBox.Show("Cannot delete while animation is in progress", "Delete Frame", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             if (listViewFrames.SelectedItems.Count == 0)
             {
-                MessageBox.Show("Please select a frame to delete.", "Delete Frame", MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                MessageBox.Show("Please select a frame to delete.", "Delete Frame", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -419,23 +340,19 @@ namespace Silicon
 
         private async void ActivateGoToFrame(int selectedIndex)
         {
+            // Cancel if too many selected
+            // Show warning if trying to go to frame while animation is playing
+            if (selectedIndex >= animationFrames.Count) return;
             if (playButtonState == PlayButtonState.Stop)
             {
-                MessageBox.Show("Cannot go to frame while animation is in progress", "Go To Frame", MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                MessageBox.Show("Cannot go to frame while animation is in progress", "Go To Frame", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-
-            if (selectedIndex >= animationFrames.Count) return;
-
+ 
             FreecamSwitch.Switched = true;
-
-
             await Task.Delay(20);
 
             List<double> goToFrame = animationFrames[selectedIndex];
-
-            //CameraDistanceSlider.Value = cinematicLoadedCameraDistance;
             // Set new target
             targetCameraLookAtX = goToFrame[0];
             targetCameraLookAtY = goToFrame[1];
@@ -453,6 +370,7 @@ namespace Silicon
             startCameraYaw = currentCameraYaw;
             startCameraRoll = currentCameraRoll;
             startCameraFOV = currentCameraFOV;
+            startCameraSightRange = currentCameraSightRange;
 
             // Update FOV and Sight Range sliders
             CameraFOVSlider.Value = (int)goToFrame[6];
@@ -481,8 +399,7 @@ namespace Silicon
 
         private void GoToNextFrame()
         {
-            if (listViewFrames.Items.Count == 0)
-                return;
+            if (listViewFrames.Items.Count == 0)return;
 
             int targetIndex;
 
@@ -492,9 +409,7 @@ namespace Silicon
             }
             else
             {
-                int maxIndex = listViewFrames.SelectedItems
-                    .Cast<ListViewItem>()
-                    .Max(item => item.Index);
+                int maxIndex = listViewFrames.SelectedItems.Cast<ListViewItem>().Max(item => item.Index);
                 targetIndex = (maxIndex + 1) % listViewFrames.Items.Count; // wrap around to 0
             }
 
@@ -503,22 +418,17 @@ namespace Silicon
 
         private void GoToPreviousFrame()
         {
-            if (listViewFrames.Items.Count == 0)
-                return;
+            if (listViewFrames.Items.Count == 0) return;
 
             int targetIndex;
-
             if (listViewFrames.SelectedItems.Count == 0)
             {
                 targetIndex = listViewFrames.Items.Count - 1; // Go to last frame
             }
             else
             {
-                int minIndex = listViewFrames.SelectedItems
-                    .Cast<ListViewItem>()
-                    .Min(item => item.Index);
-                targetIndex =
-                    (minIndex - 1 + listViewFrames.Items.Count) % listViewFrames.Items.Count; // wrap around to last
+                int minIndex = listViewFrames.SelectedItems.Cast<ListViewItem>().Min(item => item.Index);
+                targetIndex = (minIndex - 1 + listViewFrames.Items.Count) % listViewFrames.Items.Count; // wrap around to last
             }
 
             SelectAndGoToFrame(targetIndex);
@@ -533,20 +443,17 @@ namespace Silicon
             ActivateGoToFrame(index);
         }
 
-
         private void GoToAnnimationFrameButton_Click(object sender, EventArgs e)
         {
             if (listViewFrames.SelectedItems.Count == 0)
             {
-                MessageBox.Show("Please select a frame to view.", "Delete Frame", MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
+                MessageBox.Show("Please select a frame to view.", "Delete Frame", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             if (listViewFrames.SelectedItems.Count > 1)
             {
-                MessageBox.Show("multiple frames selected. Please select only one.", "Delete Frame",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("multiple frames selected. Please select only one.", "Delete Frame", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -586,13 +493,11 @@ namespace Silicon
                     // Write to the selected file
                     File.WriteAllText(saveFileDialog.FileName, json);
 
-                    MessageBox.Show("Animation frames saved successfully!", "Success", MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
+                    MessageBox.Show("Animation frames saved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Error saving file: {ex.Message}", "Error", MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
+                    MessageBox.Show($"Error saving file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -610,10 +515,7 @@ namespace Silicon
                 try
                 {
                     string json = File.ReadAllText(openFileDialog.FileName);
-
                     List<List<double>> frames = null;
-                    //CameraDistanceSlider.Value = 
-                    //cinematicLoadedCameraDistance = CameraDistanceSlider.Value; // Default fallback
 
                     // Try to deserialize as new format
                     try
@@ -625,17 +527,14 @@ namespace Silicon
                             CameraDistanceSlider.Value = data.CameraDistance;
                         }
                     }
-                    catch
-                    {
-                        // Ignore and try old format
-                    }
+                    catch // Ignore and try old format
+                    {  }
 
                     // If new format failed, try old format
                     if (frames == null)
                     {
                         frames = System.Text.Json.JsonSerializer.Deserialize<List<List<double>>>(json);
-                        if (frames == null)
-                            throw new Exception("Invalid or empty JSON format.");
+                        if (frames == null) throw new Exception("Invalid or empty JSON format.");
                     }
 
                     animationFrames.Clear();
@@ -673,25 +572,14 @@ namespace Silicon
                         i++;
                     }
 
-                    MessageBox.Show("Animation frames loaded successfully!", "Success", MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
+                    MessageBox.Show("Animation frames loaded successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Error loading file: {ex.Message}", "Error", MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
+                    MessageBox.Show($"Error loading file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
-
-
-        public class AnimationData
-        {
-            public int CameraDistance { get; set; }
-            public List<List<double>> Frames { get; set; }
-        }
-
-
 
         private void InterpolationComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {

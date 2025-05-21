@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Security.Policy;
 using System.Timers;
 using System.Windows.Forms;
 
@@ -34,8 +35,6 @@ namespace Silicon
         readonly string overrideArrowHotkeysFunction = "90 90 90 90 90 90 90 90";
         readonly string overrideRightClickDragFunction = "90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90";
 
-        //readonly string isChattingFunctionInjection = "50 E8 00 00 00 00 58 88 48 10 58 88 88 A8 11 00 00 E9 A2 58 3A FF 01 00 00 00 FF FF FF FF";
-        //readonly string isChattingFunctionEntry = "E9 49 A7 C5 00 90";
 
         // Revertable functions (Optional switch states available)
         readonly string cameraLookAtEditorInjection = "50 E8 00 00 00 00 58 F3 0F 11 58 5D F3 0F 11 48 61 F3 0F 11 40 65 F3 0F 10 58 4D F3 0F 10 48 51 F3 0F 10 40 55 58 50 E8 00 00 00 00 58 F3 0F 11 58 37 F3 0F 11 48 3B F3 0F 11 40 3F 53 8D 5E 10 89 58 33 5B 58 F3 0F 11 1E F3 0F 11 4E 04 E9 B1 80 39 FF 00 00 00 00 00 00 00 00 00 00 8C 42 40 D8 7D 10 00 00 00 00 00 00 00 00 00 00 8C 42 FF FF FF FF";
@@ -88,133 +87,20 @@ namespace Silicon
         private void UpdateMemoryOnTimerTick(object sender, ElapsedEventArgs e)
         {
             if (!wasConnected) return;
-            CheckAndUpdateMemory();
+            UpdateMemory();
+            UpdateUtilityUI();
+            InterpolateCamera();
         }
 
-        private void CheckAndUpdateMemory()
+        private void UpdateMemory()
         {
             HandleCameraController(currentCameraYaw);
-            //UpdateCameraRoll();
 
             uint intRotationAddress = m.ReadUInt("Cubic.exe+E2103E");
             string pitchAddress = (intRotationAddress + 4).ToString("X");
             string yawAddress = (intRotationAddress).ToString("X");
-            //string lookAtXAddress = (intRotationAddress - 16).ToString("X");
-            //string lookAtYAddress = (intRotationAddress - 12).ToString("X");
-            //string lookAtZAddress = (intRotationAddress - 8).ToString("X");
-
-            InterpolateCameraMovement();
-            InterpolateCameraRotation();
-            InterpolateCameraFOV();
-            InterpolateCameraFog();
 
             isChatting = m.ReadInt("Cubic.exe+34E48C") != 0;
-
-
-            if (FreecamSwitch.Switched != isFreecamEnabled)
-            {
-                isFreecamEnabled = FreecamSwitch.Switched;
-                if (isFreecamEnabled)
-                {
-                    // Start Freecam camera position and rotation at the current camera position and rotation
-                    m.WriteMemory("Cubic.exe+1B90DA", "bytes", cameraLookAtEditorFunctionEntry);
-
-                    m.WriteMemory("Cubic.exe+21AE4B", "bytes", disableMovement1Function);
-                    m.WriteMemory("Cubic.exe+21AE7A", "bytes", disableMovement1Function);
-                    m.WriteMemory("Cubic.exe+21ADE1", "bytes", disableMovement2Function);
-                    m.WriteMemory("Cubic.exe+21AE18", "bytes", disableMovement2Function);
-
-                }
-                else
-                {
-                    m.WriteMemory("Cubic.exe+1B90DA", "bytes", cameraLookAtEditorFunctionOriginal);
-                    m.WriteMemory("Cubic.exe+21AE4B", "bytes", disableMovement1Original);
-                    m.WriteMemory("Cubic.exe+21AE7A", "bytes", disableMovement1Original);
-                    m.WriteMemory("Cubic.exe+21ADE1", "bytes", disableMovement2Original);
-                    m.WriteMemory("Cubic.exe+21AE18", "bytes", disableMovement2Original);
-                    StopAnimation();
-                }
-            }
-
-            if (HidePlayerModelSwitch.Switched != isHidePlayerModelEnabled)
-            {
-                isHidePlayerModelEnabled = HidePlayerModelSwitch.Switched;
-                if (isHidePlayerModelEnabled == true)
-                {
-                    m.WriteMemory("Cubic.exe+19FA53", "bytes", hidePlayerAvatarFunctionEntry);
-                }
-                else
-                {
-                    m.WriteMemory("Cubic.exe+19FA53", "bytes", hidePlayerAvatarFunctionOriginal);
-                }
-            }
-
-
-            if (HideUserInterfaceSwitch.Switched != isHideUserInterfaceEnabled)
-            {
-                isHideUserInterfaceEnabled = HideUserInterfaceSwitch.Switched;
-                if (isHideUserInterfaceEnabled == true)
-                {
-                    m.WriteMemory("Cubic.exe+1BEB57", "bytes", "84");
-                    m.WriteMemory("Cubic.exe+230C0F", "bytes", "C7 82 38 02 00 00 00 40 1C C6 90 90 90 90 90 90");
-                }
-                else
-                {
-                    m.WriteMemory("Cubic.exe+1BEB57", "bytes", "85");
-                    m.WriteMemory("Cubic.exe+230C0F", "bytes", "F3 0F 11 82 38 02 00 00 F3 0F 58 8A 3C 02 00 00");
-                }
-            }
-
-
-            if (HideNametagsSwitch.Switched != isHideNametagsEnabled)
-            {
-                isHideNametagsEnabled = HideNametagsSwitch.Switched;
-                if (isHideNametagsEnabled == true)
-                {
-                    m.WriteMemory("Cubic.exe+1A7B37", "bytes", "E9 09 0F 00 00 90");
-                }
-                else
-                {
-                    m.WriteMemory("Cubic.exe+1A7B37", "bytes", "0F 85 08 0F 00 00");
-                }
-            }
-
-
-            if (CameraFOVSlider.Value != cameraFOVSliderValue)
-            {
-                cameraFOVSliderValue = CameraFOVSlider.Value;
-                targetCameraFOV = CameraFOVSlider.Value;
-                //m.WriteMemory("Cubic.exe+E20E25", "float", CameraFOVSlider.Value.ToString());
-            }
-
-            if (CameraDistanceSlider.Value != cameraDistanceSliderValue)
-            {
-                cameraDistanceSliderValue = CameraDistanceSlider.Value;
-                m.WriteMemory("Cubic.exe+E20FAC", "float", ((float)CameraDistanceSlider.Value / 2).ToString());
-            }
-
-            if (GameFogSlider.Value != gameFogSliderValue)
-            {
-                gameFogSliderValue = GameFogSlider.Value;
-                targetCameraSightRange = GameFogSlider.Value;
-                //m.WriteMemory("Cubic.exe+2FFEC8", "float", GameFogSlider.Value.ToString());
-            }
-
-            if (FreecamSwitch.Switched == false)
-            {
-                // Look at Player
-                targetCameraLookAtX = m.ReadFloat("Cubic.exe+E21042");
-                targetCameraLookAtY = m.ReadFloat("Cubic.exe+E21046");
-                targetCameraLookAtZ = m.ReadFloat("Cubic.exe+E2104A");
-            }
-            else 
-            { 
-                // Overwrite camera position using Silicon as the new controller
-                // Look at Silicon Controlled Position
-                m.WriteMemory("Cubic.exe+E21032", "bytes", ConvertDoubleToFloatBytes(currentCameraLookAtX));
-                m.WriteMemory("Cubic.exe+E21036", "bytes", ConvertDoubleToFloatBytes(currentCameraLookAtY));
-                m.WriteMemory("Cubic.exe+E2103A", "bytes", ConvertDoubleToFloatBytes(currentCameraLookAtZ)); 
-            }
 
             // Pitch, Yaw
             m.WriteMemory(pitchAddress, "bytes", ConvertDoubleToFloatBytes(currentCameraPitch));
@@ -229,6 +115,21 @@ namespace Silicon
             //Game Fog
             m.WriteMemory("Cubic.exe+2FFEC8", "bytes", ConvertDoubleToFloatBytes(currentCameraSightRange));
 
+            if (FreecamSwitch.Switched == false)
+            {
+                // Look at Player
+                targetCameraLookAtX = m.ReadFloat("Cubic.exe+E21042");
+                targetCameraLookAtY = m.ReadFloat("Cubic.exe+E21046");
+                targetCameraLookAtZ = m.ReadFloat("Cubic.exe+E2104A");
+            }
+            else
+            {
+                // Overwrite camera position using Silicon as the new controller
+                // Look at Silicon Controlled Position
+                m.WriteMemory("Cubic.exe+E21032", "bytes", ConvertDoubleToFloatBytes(currentCameraLookAtX));
+                m.WriteMemory("Cubic.exe+E21036", "bytes", ConvertDoubleToFloatBytes(currentCameraLookAtY));
+                m.WriteMemory("Cubic.exe+E2103A", "bytes", ConvertDoubleToFloatBytes(currentCameraLookAtZ));
+            }
 
             string ConvertDoubleToFloatBytes(double num)
             {
@@ -247,5 +148,67 @@ namespace Silicon
             UpdateLabel(CameraZoomInfoLabel, $"Zoom: {(float)cameraDistanceSliderValue / 2}\nFOV: {currentCameraFOV:F1}", Color.White);
             UpdateLabel(CameraZoomInfoLabel2, $"Zoom: {(float)cameraDistanceSliderValue / 2}\nFOV: {currentCameraFOV:F1}", Color.White);
         }
+
+        private void FreecamToggle(bool enabled)
+        {
+            if (enabled)
+            {
+                // Start Freecam camera position and rotation at the current camera position and rotation
+                m.WriteMemory("Cubic.exe+1B90DA", "bytes", cameraLookAtEditorFunctionEntry);
+                m.WriteMemory("Cubic.exe+21AE4B", "bytes", disableMovement1Function);
+                m.WriteMemory("Cubic.exe+21AE7A", "bytes", disableMovement1Function);
+                m.WriteMemory("Cubic.exe+21ADE1", "bytes", disableMovement2Function);
+                m.WriteMemory("Cubic.exe+21AE18", "bytes", disableMovement2Function);
+            }
+            else
+            {
+                m.WriteMemory("Cubic.exe+1B90DA", "bytes", cameraLookAtEditorFunctionOriginal);
+                m.WriteMemory("Cubic.exe+21AE4B", "bytes", disableMovement1Original);
+                m.WriteMemory("Cubic.exe+21AE7A", "bytes", disableMovement1Original);
+                m.WriteMemory("Cubic.exe+21ADE1", "bytes", disableMovement2Original);
+                m.WriteMemory("Cubic.exe+21AE18", "bytes", disableMovement2Original);
+                StopAnimation();
+            }
+
+        }
+        private void HidePlayerToggle(bool enabled)
+        {
+            if (enabled)
+            {
+                m.WriteMemory("Cubic.exe+19FA53", "bytes", hidePlayerAvatarFunctionEntry);
+            }
+            else
+            {
+                m.WriteMemory("Cubic.exe+19FA53", "bytes", hidePlayerAvatarFunctionOriginal);
+            }
+        }
+
+        private void HideUserInterfaceToggle(bool enabled)
+        {
+            if (enabled)
+            {
+                m.WriteMemory("Cubic.exe+1BEB57", "bytes", "84");
+                m.WriteMemory("Cubic.exe+230C0F", "bytes", "C7 82 38 02 00 00 00 40 1C C6 90 90 90 90 90 90");
+            }
+            else
+            {
+                m.WriteMemory("Cubic.exe+1BEB57", "bytes", "85");
+                m.WriteMemory("Cubic.exe+230C0F", "bytes", "F3 0F 11 82 38 02 00 00 F3 0F 58 8A 3C 02 00 00");
+            }
+        }
+
+        private void HideNametagsToggle(bool enabled)
+        {
+            if (enabled)
+            {
+                m.WriteMemory("Cubic.exe+1A7B37", "bytes", "E9 09 0F 00 00 90");
+            }
+            else
+            {
+                m.WriteMemory("Cubic.exe+1A7B37", "bytes", "0F 85 08 0F 00 00");
+            }   
+        }
+
     }
+
 }

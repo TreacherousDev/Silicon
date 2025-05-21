@@ -165,7 +165,7 @@
     <Compile Include="Silicon\SiliconModules\Input.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Silicon\SiliconModules\Interface.cs">
+    <Compile Include="Silicon\SiliconModules\CinematicUI.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Silicon\SiliconModules\Interpolation\AkimaSplineInterpolator.cs" />
@@ -183,6 +183,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Silicon\SiliconModules\MouseHook.cs" />
+    <Compile Include="Silicon\SiliconModules\UtilityUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <EmbeddedResource Include="Silicon\Silicon.resx">
       <DependentUpon>Silicon.cs</DependentUpon>
     </EmbeddedResource>

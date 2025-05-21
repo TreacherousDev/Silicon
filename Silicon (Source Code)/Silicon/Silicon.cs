@@ -163,6 +163,14 @@ namespace Silicon
             processCheckTimer.Enabled = true;
         }
 
+        private void UpdateMemoryOnTimerTick(object sender, ElapsedEventArgs e)
+        {
+            if (!wasConnected) return;
+            UpdateMemory();
+            UpdateUtilityUI();
+            InterpolateCamera();
+        }
+
         private void HandleManualProcess()
         {
             bool stillExists = Process.GetProcesses().Any(p => p.Id == connectedPID);

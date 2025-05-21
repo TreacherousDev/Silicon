@@ -911,7 +911,7 @@ namespace Silicon
             this.Cinematic.Controls.Add(this.AddAnimationFrameButton);
             this.Cinematic.Location = new System.Drawing.Point(0, 30);
             this.Cinematic.Name = "Cinematic";
-            this.Cinematic.Size = new System.Drawing.Size(200, 70);
+            this.Cinematic.Size = new System.Drawing.Size(483, 12);
             this.Cinematic.TabIndex = 2;
             this.Cinematic.Text = "Cinematic";
             // 
@@ -1246,9 +1246,9 @@ namespace Silicon
             // HotkeyPanel
             // 
             this.HotkeyPanel.AutoScroll = true;
-            this.HotkeyPanel.Location = new System.Drawing.Point(-1, 40);
+            this.HotkeyPanel.Location = new System.Drawing.Point(6, 2);
             this.HotkeyPanel.Name = "HotkeyPanel";
-            this.HotkeyPanel.Size = new System.Drawing.Size(480, 231);
+            this.HotkeyPanel.Size = new System.Drawing.Size(473, 269);
             this.HotkeyPanel.TabIndex = 0;
             // 
             // metroSetSetToolTip1

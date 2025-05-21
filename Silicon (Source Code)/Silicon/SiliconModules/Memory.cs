@@ -84,14 +84,6 @@ namespace Silicon
             m.WriteMemory("Cubic.exe+E20ED7", "bytes", hidePlayerAvatarInjection);
         }
 
-        private void UpdateMemoryOnTimerTick(object sender, ElapsedEventArgs e)
-        {
-            if (!wasConnected) return;
-            UpdateMemory();
-            UpdateUtilityUI();
-            InterpolateCamera();
-        }
-
         private void UpdateMemory()
         {
             HandleCameraController(currentCameraYaw);

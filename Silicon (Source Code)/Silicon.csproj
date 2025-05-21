@@ -169,6 +169,9 @@
     <Compile Include="Silicon\SiliconModules\Camera.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Silicon\SiliconModules\HotkeyUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Silicon\SiliconModules\Input.cs">
       <SubType>Form</SubType>
     </Compile>

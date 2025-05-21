@@ -99,12 +99,14 @@ namespace Silicon
             this.FOV = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Hotkeys = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.HotkeyPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.metroSetSetToolTip1 = new MetroSet_UI.Components.MetroSetSetToolTip();
             this.Information.SuspendLayout();
             this.Utility.SuspendLayout();
             this.TabControl.SuspendLayout();
             this.Cinematic.SuspendLayout();
             this.Hotkeys.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // metroSetControlBox1
@@ -555,7 +557,7 @@ namespace Silicon
             this.CameraRotationInfoLabel.ForeColor = System.Drawing.Color.White;
             this.CameraRotationInfoLabel.Location = new System.Drawing.Point(302, 211);
             this.CameraRotationInfoLabel.Name = "CameraRotationInfoLabel";
-            this.CameraRotationInfoLabel.Size = new System.Drawing.Size(70, 44);
+            this.CameraRotationInfoLabel.Size = new System.Drawing.Size(79, 44);
             this.CameraRotationInfoLabel.TabIndex = 39;
             this.CameraRotationInfoLabel.Text = "Pitch: 50.00\r\nYaw: 50.00\r\nRoll: 50.00";
             // 
@@ -1228,17 +1230,26 @@ namespace Silicon
             this.Hotkeys.Controls.Add(this.panel2);
             this.Hotkeys.Location = new System.Drawing.Point(0, 30);
             this.Hotkeys.Name = "Hotkeys";
-            this.Hotkeys.Size = new System.Drawing.Size(200, 70);
+            this.Hotkeys.Size = new System.Drawing.Size(483, 272);
             this.Hotkeys.TabIndex = 3;
             this.Hotkeys.Text = "Hotkeys";
             // 
             // panel2
             // 
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.HotkeyPanel);
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(480, 272);
             this.panel2.TabIndex = 57;
+            // 
+            // HotkeyPanel
+            // 
+            this.HotkeyPanel.AutoScroll = true;
+            this.HotkeyPanel.Location = new System.Drawing.Point(-1, 40);
+            this.HotkeyPanel.Name = "HotkeyPanel";
+            this.HotkeyPanel.Size = new System.Drawing.Size(480, 231);
+            this.HotkeyPanel.TabIndex = 0;
             // 
             // metroSetSetToolTip1
             // 
@@ -1288,6 +1299,7 @@ namespace Silicon
             this.TabControl.ResumeLayout(false);
             this.Cinematic.ResumeLayout(false);
             this.Hotkeys.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1364,6 +1376,7 @@ namespace Silicon
         private System.Windows.Forms.Panel TabBorder1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.FlowLayoutPanel HotkeyPanel;
     }
 }
 

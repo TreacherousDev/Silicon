@@ -102,13 +102,14 @@ namespace Silicon
 
             isChatting = m.ReadInt("Cubic.exe+34E48C") != 0;
 
-            // Pitch, Yaw
-            m.WriteMemory(pitchAddress, "bytes", ConvertDoubleToFloatBytes(currentCameraPitch));
-            m.WriteMemory(yawAddress, "bytes", ConvertDoubleToFloatBytes(currentCameraYaw));
             // Up Vector -> Roll
             m.WriteMemory("Cubic.exe+E210D6", "float", upVector.X.ToString());
             m.WriteMemory("Cubic.exe+E210DA", "float", upVector.Y.ToString());
             m.WriteMemory("Cubic.exe+E210DE", "float", upVector.Z.ToString());
+            // Pitch, Yaw
+            m.WriteMemory(pitchAddress, "bytes", ConvertDoubleToFloatBytes(currentCameraPitch));
+            m.WriteMemory(yawAddress, "bytes", ConvertDoubleToFloatBytes(currentCameraYaw));
+            
 
             // FOV
             m.WriteMemory("Cubic.exe+E20E25", "bytes", ConvertDoubleToFloatBytes(currentCameraFOV));

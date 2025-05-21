@@ -135,6 +135,7 @@ namespace Silicon
             InitializeKeyBindings();
             StartProcessCheckTimer();
             PopulateCubicWindowThumbnails();
+            PopulateHotkeyPanel();
 
             if (!SiliconWorker.IsBusy)
                 SiliconWorker.RunWorkerAsync();
@@ -152,6 +153,7 @@ namespace Silicon
             processCheckTimer.Enabled = true;
         }
 
+        // Called every 3000 ms, connects to Cubic or updates thumbnails
         private void ProcessCheckTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             processCheckTimer.Enabled = false;
@@ -318,52 +320,6 @@ namespace Silicon
             }
         }
 
-        private PictureBox CreateWindowThumbnail(IntPtr hWnd, string title)
-        {
-            RECT rect;
-            GetClientRect(hWnd, out rect);
-            int width = rect.Right - rect.Left;
-            int height = rect.Bottom - rect.Top;
-
-            Bitmap bmp = new Bitmap(Math.Max(width, 1), Math.Max(height, 1));
-            Graphics gfx = Graphics.FromImage(bmp);
-            IntPtr hdc = gfx.GetHdc();
-
-            bool success = PrintWindow(hWnd, hdc, 0);
-
-            gfx.ReleaseHdc(hdc);
-            gfx.Dispose();
-
-            if (!success)
-            {
-                bmp = new Bitmap(200, 100);
-                using (Graphics g = Graphics.FromImage(bmp))
-                {
-                    g.Clear(Color.Black);
-                    g.DrawString("Preview not available", SystemFonts.DefaultFont, Brushes.White, 10, 40);
-                }
-            }
-
-            PictureBox picBox = new PictureBox
-            {
-                Image = bmp,
-                Width = 200,
-                Height = 120,
-                SizeMode = PictureBoxSizeMode.Zoom,
-                Margin = new Padding(10),
-                Cursor = Cursors.Hand,
-                Tag = hWnd
-            };
-
-            picBox.Click += (s, e) =>
-            {
-                IntPtr selectedHwnd = (IntPtr)((PictureBox)s).Tag;
-                ConnectToCubicWindow(selectedHwnd);
-            };
-
-
-            return picBox;
-        } 
         private void PopulateCubicWindowThumbnails()
         {
             CubicWindows.Controls.Clear();
@@ -511,7 +467,6 @@ namespace Silicon
             });
         }
 
-
         private void UpdatePictureBoxImage(PictureBox pictureBox, Bitmap bmp)
         {
             Image oldImage = pictureBox.Image;
@@ -528,7 +483,6 @@ namespace Silicon
             // Placeholder: Use this string for labeling if needed
             // pictureBox.Text = title;
         }
-
 
         private Bitmap CaptureWindow(IntPtr hWnd, int width, int height)
         {

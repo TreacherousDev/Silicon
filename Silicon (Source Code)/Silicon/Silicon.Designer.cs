@@ -36,7 +36,6 @@ namespace Silicon
             this.CubicWindows = new System.Windows.Forms.FlowLayoutPanel();
             this.uiLabel14 = new Sunny.UI.UILabel();
             this.Status = new MetroSet_UI.Controls.MetroSetLabel();
-            this.ToolTipLabel = new Sunny.UI.UILabel();
             this.getStatus = new MetroSet_UI.Controls.MetroSetLabel();
             this.proID = new MetroSet_UI.Controls.MetroSetLabel();
             this.procIDLabel = new MetroSet_UI.Controls.MetroSetLabel();
@@ -101,8 +100,11 @@ namespace Silicon
             this.panel2 = new System.Windows.Forms.Panel();
             this.HotkeyPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.metroSetSetToolTip1 = new MetroSet_UI.Components.MetroSetSetToolTip();
+            this.metroSetLabel1 = new MetroSet_UI.Controls.MetroSetLabel();
             this.Information.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.Utility.SuspendLayout();
+            this.TabBorder1.SuspendLayout();
             this.TabControl.SuspendLayout();
             this.Cinematic.SuspendLayout();
             this.Hotkeys.SuspendLayout();
@@ -143,9 +145,7 @@ namespace Silicon
             // 
             this.Information.BackColor = System.Drawing.Color.Transparent;
             this.Information.Controls.Add(this.CubicWindows);
-            this.Information.Controls.Add(this.uiLabel14);
             this.Information.Controls.Add(this.Status);
-            this.Information.Controls.Add(this.ToolTipLabel);
             this.Information.Controls.Add(this.getStatus);
             this.Information.Controls.Add(this.proID);
             this.Information.Controls.Add(this.procIDLabel);
@@ -161,10 +161,10 @@ namespace Silicon
             // CubicWindows
             // 
             this.CubicWindows.AutoScroll = true;
-            this.CubicWindows.Location = new System.Drawing.Point(0, 0);
+            this.CubicWindows.Location = new System.Drawing.Point(0, 63);
             this.CubicWindows.Name = "CubicWindows";
             this.CubicWindows.Padding = new System.Windows.Forms.Padding(10);
-            this.CubicWindows.Size = new System.Drawing.Size(482, 272);
+            this.CubicWindows.Size = new System.Drawing.Size(480, 209);
             this.CubicWindows.TabIndex = 40;
             // 
             // uiLabel14
@@ -173,11 +173,10 @@ namespace Silicon
             this.uiLabel14.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.uiLabel14.Font = new System.Drawing.Font("Leelawadee UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.uiLabel14.ForeColor = System.Drawing.Color.White;
-            this.uiLabel14.Location = new System.Drawing.Point(243, 12);
+            this.uiLabel14.Location = new System.Drawing.Point(26, 26);
             this.uiLabel14.Name = "uiLabel14";
             this.uiLabel14.Size = new System.Drawing.Size(224, 192);
             this.uiLabel14.TabIndex = 39;
-            this.uiLabel14.Text = resources.GetString("uiLabel14.Text");
             // 
             // Status
             // 
@@ -193,18 +192,6 @@ namespace Silicon
             this.Status.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.Status.ThemeAuthor = "Narwin";
             this.Status.ThemeName = "MetroLite";
-            // 
-            // ToolTipLabel
-            // 
-            this.ToolTipLabel.BackColor = System.Drawing.Color.Transparent;
-            this.ToolTipLabel.Cursor = System.Windows.Forms.Cursors.Arrow;
-            this.ToolTipLabel.Font = new System.Drawing.Font("Leelawadee UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ToolTipLabel.ForeColor = System.Drawing.Color.White;
-            this.ToolTipLabel.Location = new System.Drawing.Point(13, 70);
-            this.ToolTipLabel.Name = "ToolTipLabel";
-            this.ToolTipLabel.Size = new System.Drawing.Size(224, 149);
-            this.ToolTipLabel.TabIndex = 26;
-            this.ToolTipLabel.Text = resources.GetString("ToolTipLabel.Text");
             // 
             // getStatus
             // 
@@ -269,6 +256,8 @@ namespace Silicon
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.metroSetLabel1);
+            this.panel1.Controls.Add(this.uiLabel14);
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(480, 272);
@@ -296,8 +285,6 @@ namespace Silicon
             this.Utility.Controls.Add(this.HidePlayerModelSwitch);
             this.Utility.Controls.Add(this.CameraFOVSlider);
             this.Utility.Controls.Add(this.uiLabel4);
-            this.Utility.Controls.Add(this.CameraDistanceSlider);
-            this.Utility.Controls.Add(this.uiLabel3);
             this.Utility.Controls.Add(this.CameraRotateSpeedSlider);
             this.Utility.Controls.Add(this.CameraMoveSpeedSlider);
             this.Utility.Controls.Add(this.uiLabel2);
@@ -666,7 +653,7 @@ namespace Silicon
             this.CameraDistanceSlider.DisabledValueColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))));
             this.CameraDistanceSlider.HandlerColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.CameraDistanceSlider.IsDerivedStyle = true;
-            this.CameraDistanceSlider.Location = new System.Drawing.Point(16, 32);
+            this.CameraDistanceSlider.Location = new System.Drawing.Point(16, 112);
             this.CameraDistanceSlider.Maximum = 300;
             this.CameraDistanceSlider.Minimum = 2;
             this.CameraDistanceSlider.Name = "CameraDistanceSlider";
@@ -686,7 +673,7 @@ namespace Silicon
             this.uiLabel3.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.uiLabel3.Font = new System.Drawing.Font("Impact", 10F);
             this.uiLabel3.ForeColor = System.Drawing.Color.White;
-            this.uiLabel3.Location = new System.Drawing.Point(12, 12);
+            this.uiLabel3.Location = new System.Drawing.Point(12, 92);
             this.uiLabel3.Name = "uiLabel3";
             this.uiLabel3.Size = new System.Drawing.Size(169, 16);
             this.uiLabel3.TabIndex = 32;
@@ -702,7 +689,7 @@ namespace Silicon
             this.CameraRotateSpeedSlider.DisabledValueColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))));
             this.CameraRotateSpeedSlider.HandlerColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.CameraRotateSpeedSlider.IsDerivedStyle = true;
-            this.CameraRotateSpeedSlider.Location = new System.Drawing.Point(15, 112);
+            this.CameraRotateSpeedSlider.Location = new System.Drawing.Point(16, 32);
             this.CameraRotateSpeedSlider.Maximum = 400;
             this.CameraRotateSpeedSlider.Minimum = 1;
             this.CameraRotateSpeedSlider.Name = "CameraRotateSpeedSlider";
@@ -748,7 +735,7 @@ namespace Silicon
             this.uiLabel2.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.uiLabel2.Font = new System.Drawing.Font("Impact", 10F);
             this.uiLabel2.ForeColor = System.Drawing.Color.White;
-            this.uiLabel2.Location = new System.Drawing.Point(12, 92);
+            this.uiLabel2.Location = new System.Drawing.Point(12, 12);
             this.uiLabel2.Name = "uiLabel2";
             this.uiLabel2.Size = new System.Drawing.Size(127, 17);
             this.uiLabel2.TabIndex = 30;
@@ -804,6 +791,8 @@ namespace Silicon
             // TabBorder1
             // 
             this.TabBorder1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.TabBorder1.Controls.Add(this.uiLabel3);
+            this.TabBorder1.Controls.Add(this.CameraDistanceSlider);
             this.TabBorder1.Location = new System.Drawing.Point(0, 0);
             this.TabBorder1.Name = "TabBorder1";
             this.TabBorder1.Size = new System.Drawing.Size(480, 272);
@@ -911,7 +900,7 @@ namespace Silicon
             this.Cinematic.Controls.Add(this.AddAnimationFrameButton);
             this.Cinematic.Location = new System.Drawing.Point(0, 30);
             this.Cinematic.Name = "Cinematic";
-            this.Cinematic.Size = new System.Drawing.Size(483, 12);
+            this.Cinematic.Size = new System.Drawing.Size(483, 183);
             this.Cinematic.TabIndex = 2;
             this.Cinematic.Text = "Cinematic";
             // 
@@ -1230,7 +1219,7 @@ namespace Silicon
             this.Hotkeys.Controls.Add(this.panel2);
             this.Hotkeys.Location = new System.Drawing.Point(0, 30);
             this.Hotkeys.Name = "Hotkeys";
-            this.Hotkeys.Size = new System.Drawing.Size(483, 272);
+            this.Hotkeys.Size = new System.Drawing.Size(483, 183);
             this.Hotkeys.TabIndex = 3;
             this.Hotkeys.Text = "Hotkeys";
             // 
@@ -1262,6 +1251,21 @@ namespace Silicon
             this.metroSetSetToolTip1.StyleManager = null;
             this.metroSetSetToolTip1.ThemeAuthor = "Narwin";
             this.metroSetSetToolTip1.ThemeName = "MetroLite";
+            // 
+            // metroSetLabel1
+            // 
+            this.metroSetLabel1.Font = new System.Drawing.Font("Impact", 9.75F);
+            this.metroSetLabel1.IsDerivedStyle = true;
+            this.metroSetLabel1.Location = new System.Drawing.Point(440, 249);
+            this.metroSetLabel1.Name = "metroSetLabel1";
+            this.metroSetLabel1.Size = new System.Drawing.Size(41, 21);
+            this.metroSetLabel1.Style = MetroSet_UI.Enums.Style.Light;
+            this.metroSetLabel1.StyleManager = null;
+            this.metroSetLabel1.TabIndex = 0;
+            this.metroSetLabel1.Text = "v2.8.0";
+            this.metroSetLabel1.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+            this.metroSetLabel1.ThemeAuthor = "Narwin";
+            this.metroSetLabel1.ThemeName = "MetroLite";
             // 
             // SiliconForm
             // 
@@ -1295,7 +1299,9 @@ namespace Silicon
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Silicon_OnFormClosing);
             this.Load += new System.EventHandler(this.Silicon_Load);
             this.Information.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
             this.Utility.ResumeLayout(false);
+            this.TabBorder1.ResumeLayout(false);
             this.TabControl.ResumeLayout(false);
             this.Cinematic.ResumeLayout(false);
             this.Hotkeys.ResumeLayout(false);
@@ -1318,7 +1324,6 @@ namespace Silicon
         private Sunny.UI.UITabControl TabControl;
         private MetroSet_UI.Controls.MetroSetSwitch FreecamSwitch;
         private Sunny.UI.UILabel FreecamLabel;
-        private Sunny.UI.UILabel ToolTipLabel;
         private MetroSet_UI.Controls.MetroSetTrackBar CameraRotateSpeedSlider;
         private MetroSet_UI.Controls.MetroSetTrackBar CameraMoveSpeedSlider;
         private Sunny.UI.UILabel uiLabel2;
@@ -1377,6 +1382,7 @@ namespace Silicon
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.FlowLayoutPanel HotkeyPanel;
+        private MetroSet_UI.Controls.MetroSetLabel metroSetLabel1;
     }
 }
 

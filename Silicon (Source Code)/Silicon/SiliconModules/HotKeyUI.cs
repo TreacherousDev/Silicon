@@ -52,10 +52,10 @@ namespace Silicon
             "Toggle Freecam",
             "Toggle Hide Nametags",
             "Toggle Hide UI",
-            "Add Frame",
-            "Previous Frame",
-            "Next Frame",
-            "Play Animation"
+            "Add New Frame",
+            "Go to Previous Frame",
+            "Go to Next Frame",
+            "Play / Stop Animation"
         };
 
         public void SaveKeyBindings()
@@ -134,6 +134,7 @@ namespace Silicon
                 Label lbl = new Label
                 {
                     Text = actionName,
+                    ForeColor = Color.White,
                     AutoSize = true,
                     Width = 150,
                     TextAlign = ContentAlignment.MiddleLeft,

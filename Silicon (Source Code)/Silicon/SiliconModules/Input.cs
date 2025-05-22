@@ -15,8 +15,8 @@ namespace Silicon
         private Point lastMousePos;
 
 
-        private HashSet<Keys> pressedKeys = new HashSet<Keys>();      // currently held down
-        private Dictionary<Keys, (Action onPress, Action onRelease)> keyBindings;          // for single-press actions
+        private HashSet<Keys> pressedKeys = new HashSet<Keys>();      
+        private Dictionary<Keys, (Action onPress, Action onRelease)> keyBindings;       
         private object keyMonitorLock = new object();
         private static readonly Action NoOp = () => { };
 

@@ -131,10 +131,13 @@ namespace Silicon
 
         private void Silicon_Load(object sender, EventArgs e)
         {
-            InitializeKeyBindings();
+            
             StartProcessCheckTimer();
             PopulateCubicWindowThumbnails();
+            InitializeKeyBindings();
+            LoadKeyBindings();
             PopulateHotkeyPanel();
+            
 
             if (!SiliconWorker.IsBusy)
                 SiliconWorker.RunWorkerAsync();

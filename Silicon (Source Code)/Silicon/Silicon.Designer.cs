@@ -101,6 +101,7 @@ namespace Silicon
             this.HotkeyPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.metroSetSetToolTip1 = new MetroSet_UI.Components.MetroSetSetToolTip();
             this.metroSetLabel1 = new MetroSet_UI.Controls.MetroSetLabel();
+            this.Fog = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Information.SuspendLayout();
             this.panel1.SuspendLayout();
             this.Utility.SuspendLayout();
@@ -900,7 +901,7 @@ namespace Silicon
             this.Cinematic.Controls.Add(this.AddAnimationFrameButton);
             this.Cinematic.Location = new System.Drawing.Point(0, 30);
             this.Cinematic.Name = "Cinematic";
-            this.Cinematic.Size = new System.Drawing.Size(483, 183);
+            this.Cinematic.Size = new System.Drawing.Size(483, 272);
             this.Cinematic.TabIndex = 2;
             this.Cinematic.Text = "Cinematic";
             // 
@@ -1150,10 +1151,11 @@ namespace Silicon
             this.Pitch,
             this.Yaw,
             this.Roll,
-            this.Speed,
-            this.FOV});
+            this.FOV,
+            this.Fog,
+            this.Speed});
             this.listViewFrames.Cursor = System.Windows.Forms.Cursors.Default;
-            this.listViewFrames.Font = new System.Drawing.Font("Leelawadee UI", 8.5F);
+            this.listViewFrames.Font = new System.Drawing.Font("Leelawadee UI", 7F);
             this.listViewFrames.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
             this.listViewFrames.HideSelection = false;
             this.listViewFrames.Location = new System.Drawing.Point(3, 3);
@@ -1171,47 +1173,49 @@ namespace Silicon
             // 
             this.X.Text = "X";
             this.X.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.X.Width = 39;
+            this.X.Width = 35;
             // 
             // Y
             // 
             this.Y.Text = "Y";
             this.Y.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Y.Width = 39;
+            this.Y.Width = 35;
             // 
             // Z
             // 
             this.Z.Text = "Z";
             this.Z.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Z.Width = 39;
+            this.Z.Width = 35;
             // 
             // Pitch
             // 
             this.Pitch.Text = "Pitch";
             this.Pitch.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Pitch.Width = 42;
+            this.Pitch.Width = 39;
             // 
             // Yaw
             // 
             this.Yaw.Text = "Yaw";
             this.Yaw.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Yaw.Width = 42;
+            this.Yaw.Width = 39;
             // 
             // Roll
             // 
             this.Roll.Text = "Roll";
-            this.Roll.Width = 42;
+            this.Roll.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.Roll.Width = 39;
             // 
             // Speed
             // 
             this.Speed.Text = "Speed";
             this.Speed.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Speed.Width = 50;
+            this.Speed.Width = 45;
             // 
             // FOV
             // 
             this.FOV.Text = "FOV";
-            this.FOV.Width = 39;
+            this.FOV.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.FOV.Width = 33;
             // 
             // Hotkeys
             // 
@@ -1219,7 +1223,7 @@ namespace Silicon
             this.Hotkeys.Controls.Add(this.panel2);
             this.Hotkeys.Location = new System.Drawing.Point(0, 30);
             this.Hotkeys.Name = "Hotkeys";
-            this.Hotkeys.Size = new System.Drawing.Size(483, 183);
+            this.Hotkeys.Size = new System.Drawing.Size(483, 272);
             this.Hotkeys.TabIndex = 3;
             this.Hotkeys.Text = "Hotkeys";
             // 
@@ -1266,6 +1270,12 @@ namespace Silicon
             this.metroSetLabel1.TextAlign = System.Drawing.ContentAlignment.BottomRight;
             this.metroSetLabel1.ThemeAuthor = "Narwin";
             this.metroSetLabel1.ThemeName = "MetroLite";
+            // 
+            // Fog
+            // 
+            this.Fog.Text = "Fog";
+            this.Fog.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.Fog.Width = 33;
             // 
             // SiliconForm
             // 
@@ -1383,6 +1393,7 @@ namespace Silicon
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.FlowLayoutPanel HotkeyPanel;
         private MetroSet_UI.Controls.MetroSetLabel metroSetLabel1;
+        private System.Windows.Forms.ColumnHeader Fog;
     }
 }
 

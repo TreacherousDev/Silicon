@@ -144,7 +144,7 @@ namespace Silicon
                 while (isRunning)
                 {
                     UpdateKeyStates();
-                    Thread.Sleep(5);
+                    Thread.Sleep(10);
                 }
             })
             {

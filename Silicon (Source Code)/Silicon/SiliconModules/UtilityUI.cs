@@ -119,7 +119,7 @@ namespace Silicon
             if (CameraDistanceSlider.Value != cameraDistanceSliderValue)
             {
                 cameraDistanceSliderValue = CameraDistanceSlider.Value;
-                m.WriteMemory("Cubic.exe+E20FAC", "float", ((float)CameraDistanceSlider.Value / 2).ToString());
+                m.WriteMemory("Cubic.exe+30E9FA", "float", ((float)CameraDistanceSlider.Value / 2).ToString());
             }
 
             if (GameFogSlider.Value != gameFogSliderValue)

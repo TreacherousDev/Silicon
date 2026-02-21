@@ -176,20 +176,24 @@ namespace Silicon
 
         private void HandleManualProcess()
         {
-            bool stillExists = Process.GetProcesses().Any(p => p.Id == connectedPID);
-            if (stillExists && m.OpenProcess(connectedPID))
+            // Try to get the process by the manual PID
+            Process proc = null;
+            try { proc = Process.GetProcessById(connectedPID); } catch { }
+
+            if (proc != null && !proc.HasExited && m.OpenProcess(connectedPID))
             {
                 SafeInvoke(() => UpdateConnectionStatus(true, connectedPID));
 
                 if (!wasConnected)
                 {
                     wasConnected = true;
+
                     InjectBaseFunctions();
                 }
                 return;
             }
 
-            // Manual PID is invalid or inaccessible
+            // Reset if process is gone
             connectedPID = -1;
             wasConnected = false;
             SafeInvoke(() =>
@@ -215,7 +219,9 @@ namespace Silicon
             }
             else if (cubicProcesses.Length == 1)
             {
-                connectedPID = cubicProcesses[0].Id;
+                Process targetProc = cubicProcesses[0]; // Get the specific process object
+                connectedPID = targetProc.Id;
+
                 if (m.OpenProcess(connectedPID))
                 {
                     SafeInvoke(() =>
@@ -227,12 +233,14 @@ namespace Silicon
                     if (!wasConnected)
                     {
                         wasConnected = true;
+
                         InjectBaseFunctions();
                     }
                 }
             }
             else
             {
+                // Multiple processes found - user must select one from thumbnails
                 SafeInvoke(() =>
                 {
                     PopulateCubicWindowThumbnails();
@@ -283,8 +291,18 @@ namespace Silicon
         private void Silicon_OnFormClosing(object sender, FormClosingEventArgs e)
         {
             isRunning = false;
-            keyPollingThread.Join();
+
+            processCheckTimer?.Stop();
+            processCheckTimer?.Dispose();
+
+            _updateTimer?.Stop();
+            _updateTimer?.Dispose();
+
             mouseHook?.Dispose();
+
+            // Only join if the thread is actually running
+            if (keyPollingThread != null && keyPollingThread.IsAlive)
+                keyPollingThread.Join(2000); // timeout after 2 seconds max
         }
 
         private bool IsCubicWindowFocused()
@@ -319,14 +337,17 @@ namespace Silicon
             {
                 connectedPID = (int)pid;
                 wasConnected = true;
+
+                // GET PROCESS OBJECT
+                Process proc = Process.GetProcessById((int)pid);
+
                 UpdateLabel(procIDLabel, pid.ToString(), Color.Green);
                 UpdateLabel(getStatus, "CONNECTED", Color.Green);
+
                 InjectBaseFunctions();
+                // --- NEW LOGIC END ---
+
                 CubicWindows.Visible = false;
-            }
-            else
-            {
-                MessageBox.Show("Failed to connect to PID " + pid);
             }
         }
 

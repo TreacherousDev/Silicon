@@ -120,7 +120,7 @@ namespace Silicon
             UnlockCubicMemoryRegion();
 
             m.WriteMemory("Cubic.exe+1BD80A", "bytes", cameraCoordinatesFunction);
-            m.WriteMemory("Cubic.exe+1BC915", "bytes", adjustFogFunction);
+            m.WriteMemory("Cubic.exe+1BD921", "bytes", adjustFogFunction);
 
             // Special case for cameraLookAtEditor
             // Always inject, but skip assignment if deactivated (inject to the adress after assignment)

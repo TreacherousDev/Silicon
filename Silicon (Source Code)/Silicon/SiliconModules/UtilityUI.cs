@@ -34,6 +34,7 @@ namespace Silicon
             HideUserInterfaceSwitch.Switched = false;
             HideNametagsSwitch.Switched = false;
             FreecamSwitch.Switched = false;
+            isHeadBobEnabled = false;
 
             ResetCameraRoll();
         }
@@ -49,6 +50,7 @@ namespace Silicon
             HideUserInterfaceSwitch.Switched = false;
             HideNametagsSwitch.Switched = false;
             FreecamSwitch.Switched = false;
+            isHeadBobEnabled = false;
 
             ResetCameraRoll();
         }
@@ -64,6 +66,7 @@ namespace Silicon
             HideUserInterfaceSwitch.Switched = false;
             HideNametagsSwitch.Switched = true;
             FreecamSwitch.Switched = false;
+            isHeadBobEnabled = true;
 
             ResetCameraRoll();
         }
@@ -79,6 +82,7 @@ namespace Silicon
             HideUserInterfaceSwitch.Switched = true;
             HideNametagsSwitch.Switched = true;
             FreecamSwitch.Switched = false;
+            isHeadBobEnabled = false;
 
             ResetCameraRoll();
         }
@@ -119,7 +123,7 @@ namespace Silicon
             if (CameraDistanceSlider.Value != cameraDistanceSliderValue)
             {
                 cameraDistanceSliderValue = CameraDistanceSlider.Value;
-                m.WriteMemory("Cubic.exe+30E9FA", "float", ((float)CameraDistanceSlider.Value / 2).ToString());
+                //currentCameraDistance = CameraDistanceSlider.Value;
             }
 
             if (GameFogSlider.Value != gameFogSliderValue)

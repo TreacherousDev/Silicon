@@ -48,6 +48,52 @@ namespace Silicon
         private double cameraRotateSpeed = 1.5;
 
 
+        private bool isHeadBobEnabled = false;
+        private double headBobTimer = 0;
+        private double headBobAmplitude = 0.04;   // height of bob
+        private double headBobFrequency = 60;   // speed of bob
+        private double headBobCurrentOffset = 0;
+        private float baseCameraHeight = 1.1f;      // original value
+        private float currentCameraHeight = 1.1f;
+        private float currentFOVOffset = 0f;
+        private float walkFOVBoost = 4.0f;   // how much FOV increases
+        private float fovLerpSpeed = 0.08f;  // smoothness (0–1)
+
+        private void HeadBob()
+        {
+            if (isFreecamEnabled) return;
+            if (isChatting) return;
+
+            bool isMoving = movementState.Forward || movementState.Backward || movementState.Left || movementState.Right;
+            if (isHeadBobEnabled)
+            {
+                if (isMoving)
+                {
+                    // 5ms tick = 0.005 seconds
+                    headBobTimer += 0.005;
+                    headBobCurrentOffset = Math.Sin(headBobTimer * headBobFrequency) * headBobAmplitude;
+                    currentFOVOffset += (walkFOVBoost - currentFOVOffset) * fovLerpSpeed;
+                }
+                else
+                {
+                    // Smooth reset
+                    headBobCurrentOffset *= 0.85;
+                    if (Math.Abs(headBobCurrentOffset) < 0.0001) headBobCurrentOffset = 0;
+                    currentFOVOffset += (0 - currentFOVOffset) * fovLerpSpeed;
+                }
+
+                float finalHeight = baseCameraHeight + (float)headBobCurrentOffset;
+                float finalFOV = CameraFOVSlider.Value + currentFOVOffset;
+                targetCameraFOV = finalFOV;
+                currentCameraHeight = finalHeight;
+
+            }
+            else
+            {
+                // Restore original height if disabled
+                currentCameraHeight = baseCameraHeight;
+            }
+        }
         private void HandleCameraController(double yawRotation)
         {
             if (!IsCubicWindowFocused() || isChatting) return;

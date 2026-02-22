@@ -38,6 +38,8 @@ namespace Silicon
         readonly string overrideArrowHotkeysFunction = "90 90 90 90 90 90 90 90";
         readonly string overrideRightClickDragFunction = "90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90";
 
+        readonly string checkIsChattingInjection = "50 E8 00 00 00 00 58 88 48 10 58 88 88 A8 11 00 00 E9 64 8E EB FF 00 00 00 00 FF FF FF FF";
+        readonly string checkIsChattingFunctionEntry = "E9 87 71 14 00 90";
 
         // Revertable functions (Optional switch states available)
         readonly string cameraLookAtEditorInjection = "50 E8 00 00 00 00 58 F3 0F 11 58 5D F3 0F 11 48 61 F3 0F 11 40 65 F3 0F 10 58 4D F3 0F 10 48 51 F3 0F 10 40 55 58 50 E8 00 00 00 00 58 F3 0F 11 58 37 F3 0F 11 48 3B F3 0F 11 40 3F 53 8D 5E 10 89 58 33 5B 58 F3 0F 11 1E F3 0F 11 4E 04 E9 6F B6 EA FF 00 00 00 00 00 00 00 00 00 00 8C 42 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 FF FF FF FF";
@@ -139,6 +141,8 @@ namespace Silicon
             m.WriteMemory("Cubic.exe+1BD816", "bytes", adjustCameraDistanceFunctionEntry);
             m.WriteMemory("Cubic.exe+30EAE5", "bytes", upVectorInjection);
             m.WriteMemory("Cubic.exe+1BD87D", "bytes", upVectorFunctionEntry);
+            m.WriteMemory("Cubic.exe+30EB75", "bytes", checkIsChattingInjection);
+            m.WriteMemory("Cubic.exe+1C79E9", "bytes", checkIsChattingFunctionEntry);
 
             m.WriteMemory("Cubic.exe+1B9ADE", "bytes", overrideArrowHotkeysFunction);
             m.WriteMemory("Cubic.exe+1B9B1A", "bytes", overrideArrowHotkeysFunction);
@@ -151,7 +155,11 @@ namespace Silicon
 
         private void UpdateMemory()
         {
-            HandleCameraController(currentCameraYaw);
+
+            HeadBob();
+            m.WriteMemory("Cubic.exe+30E7A0", "float", currentCameraHeight.ToString());
+
+            HandleCameraController(currentCameraYaw); 
 
             uint intRotationAddress = m.ReadUInt("Cubic.exe+30EA8C");
             string pitchAddress = (intRotationAddress + 4).ToString("X");
@@ -170,7 +178,9 @@ namespace Silicon
 
             // FOV
             m.WriteMemory("Cubic.exe+30E86B", "bytes", ConvertDoubleToFloatBytes(currentCameraFOV));
-            //Game Fog
+            // Distance 
+            m.WriteMemory("Cubic.exe+30E9FA", "float", ((float)CameraDistanceSlider.Value / 2).ToString());
+            // Game Fog
             m.WriteMemory("Cubic.exe+300ED0", "bytes", ConvertDoubleToFloatBytes(currentCameraSightRange));
 
             if (FreecamSwitch.Switched == false)

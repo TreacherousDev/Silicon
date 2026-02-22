@@ -101,7 +101,8 @@ Freecam detaches the camera from your player character, allowing independent cam
 - **Toggle**: Use the Freecam switch or press F4
 - **Movement**: WASD for horizontal movement, Spacebar/Ctrl for vertical movement
 - **Rotation**: Arrow Keys or Right Click to look around, Q and E to roll sideways
-- **Speed Sliders**: Controls how fast the camera moves or rotates while in Freecam mode  
+- **Speed Sliders**: Controls how fast the camera moves or rotates while in Freecam mode
+  
 When Freecam is enabled, player character movement is disabled to prevent conflicts between camera and character control.
 
 ---

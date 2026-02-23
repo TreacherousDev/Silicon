@@ -193,10 +193,17 @@ namespace Silicon
                     if (InterpolationComboBox.Text == "Catmull-Rom")
                     {
                         int lastIndex = animationFrames.Count - 1;
-                        List<double> p1 = animationFrames[i];
-                        List<double> p2 = animationFrames[i + 1];
-                        List<double> p0 = (i - 1) >= 0 ? animationFrames[i - 1] : p1;
-                        List<double> p3 = (i + 2) <= lastIndex ? animationFrames[i + 2] : p2;
+
+                        int p1Index = i;
+                        int p2Index = nextIndex;
+
+                        int p0Index = isReversePlayback ? Math.Min(i + 1, lastIndex) : Math.Max(i - 1, 0);
+                        int p3Index = isReversePlayback ? Math.Max(nextIndex - 1, 0) : Math.Min(nextIndex + 1, lastIndex);
+
+                        List<double> p0 = animationFrames[p0Index];
+                        List<double> p1 = animationFrames[p1Index];
+                        List<double> p2 = animationFrames[p2Index];
+                        List<double> p3 = animationFrames[p3Index];
 
                         targetCameraLookAtX = CatmullRom(p0[0], p1[0], p2[0], p3[0], alpha);
                         targetCameraLookAtY = CatmullRom(p0[1], p1[1], p2[1], p3[1], alpha);

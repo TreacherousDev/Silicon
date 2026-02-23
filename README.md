@@ -63,7 +63,7 @@ Silicon provides several improvements to the default camera system that are acti
 ---
 ### Field of View
 
-![2026-02-2404-34-09-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/209a2722-59cf-4ee3-a43b-b28ff0e6502e)
+![2026-02-2405-22-03-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/b762d61a-3d5c-498b-9d47-7d46d4e6b7f9)
 
 Controls the camera's field of view between 10° and 135°:
 - Default setting is 33°
@@ -72,7 +72,7 @@ Controls the camera's field of view between 10° and 135°:
 ---
 ### Distance to Focal Point
 
-![2026-02-2404-36-26-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/eb8504d0-4dd8-4411-b7dd-c179b79f433f)
+![2026-02-2405-23-21-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/0579da2f-c97c-4071-b8c8-ff2357ea3bf4)
 
 Controls how far the camera is positioned from the focal point:
 - Default setting is 22 units

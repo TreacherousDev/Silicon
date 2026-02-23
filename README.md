@@ -5,7 +5,7 @@ Silicon is an advanced camera mod for Cubic Castles that enhances the in-game ca
 
 <img width="523" height="432" alt="image" src="https://github.com/user-attachments/assets/f712c2af-9a8f-4e9a-bddb-f5bf7135083a" />
 
-*last updated: v2.9.1
+*last updated: v2.10
 
 ## Table of Contents
 - [Installation](#installation)

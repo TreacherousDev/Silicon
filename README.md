@@ -122,7 +122,7 @@ Toggle the visibility of player and entity nametags:
 ![2026-02-2404-53-40-ezgif com-optimize](https://github.com/user-attachments/assets/9f63d4d6-cbe7-4ebb-a4c9-0a60dc58ddd6)
 
 Freecam detaches the camera from your player character, allowing independent camera movement:
-- **Toggle**: Use the Freecam switch or press F4
+- **Toggle**: Use the Freecam switch or press F5
 - **Movement**: WASD for horizontal movement, Spacebar/Ctrl for vertical movement
 - **Rotation**: Arrow Keys or Right Click to look around, Q and E to roll sideways
 - **Speed Sliders**: Controls how fast the camera moves or rotates while in Freecam mode

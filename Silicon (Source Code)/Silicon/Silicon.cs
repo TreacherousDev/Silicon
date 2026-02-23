@@ -89,6 +89,7 @@ namespace Silicon
             listViewFrames.ItemDrag += ListViewFrames_ItemDrag;
             listViewFrames.DragEnter += ListViewFrames_DragEnter;
             listViewFrames.DragDrop += ListViewFrames_DragDrop;
+            listViewFrames.DoubleClick += listViewFrames_DoubleClick;
 
 
             // Some color overrides since the TabControl seems to be bugged

@@ -323,6 +323,41 @@ namespace Silicon
             }
         }
 
+        private void listViewFrames_DoubleClick(object sender, EventArgs e)
+        {
+            if (listViewFrames.SelectedItems.Count == 0)
+                return;
+
+            var item = listViewFrames.SelectedItems[0];
+
+            int columnCount = listViewFrames.Columns.Count;
+
+            string[] columnNames = new string[columnCount];
+            string[] values = new string[columnCount];
+
+            for (int i = 0; i < columnCount; i++)
+            {
+                columnNames[i] = listViewFrames.Columns[i].Text;
+                values[i] = item.SubItems[i].Text;
+            }
+
+            EditRowForm editForm = new EditRowForm(columnNames, values);
+
+            if (editForm.ShowDialog() == DialogResult.OK)
+            {
+                int rowIndex = item.Index; // which frame we are editing
+
+                for (int j = 0; j < 9; j++)
+                {
+                    animationFrames[rowIndex][j] = float.Parse(editForm.TextBoxes[j + 1].Text);
+                }
+
+                UpdateListView();
+            }
+        }
+
+
+
         private void DeleteAnimationFrameButton_Click(object sender, EventArgs e)
         {
             if (playButtonState == PlayButtonState.Stop)
@@ -688,4 +723,6 @@ namespace Silicon
             }
         }
     }
+
+
 }

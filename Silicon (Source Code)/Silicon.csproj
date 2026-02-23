@@ -28,7 +28,7 @@
     <SuiteName>Silicon</SuiteName>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
     <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>73</ApplicationRevision>
+    <ApplicationRevision>74</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -169,6 +169,12 @@
     <Compile Include="Silicon\SiliconModules\Camera.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Silicon\SiliconModules\EditRowForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Silicon\SiliconModules\EditRowForm.Designer.cs">
+      <DependentUpon>EditRowForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Silicon\SiliconModules\HotkeyUI.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -209,6 +215,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Silicon\SiliconModules\EditRowForm.resx">
+      <DependentUpon>EditRowForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="App.config" />
     <None Include="Config\.editorconfig" />
     <None Include="Config\app.manifest" />

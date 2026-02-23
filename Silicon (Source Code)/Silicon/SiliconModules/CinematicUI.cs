@@ -19,6 +19,7 @@ namespace Silicon
         // Animation stopping mechanism for when stop button is pressed or freecam is disabled
         private CancellationTokenSource animationCancellationTokenSource;
         List<List<double>> animationFrames = new List<List<double>>();
+        private bool isReversePlayback = false;
 
         // Saved JSON Format
         public class AnimationData
@@ -141,15 +142,17 @@ namespace Silicon
 
             await Task.Delay(20);
 
-            for (int i = startIndex; i < animationFrames.Count - 1; i++)
+            int i = startIndex;
+
+            while (isReversePlayback ? i > 0 : i < animationFrames.Count - 1)
             {
                 if (token.IsCancellationRequested)
                     break;
 
-                    
+                int nextIndex = isReversePlayback ? i - 1 : i + 1;
 
                 List<double> startFrame = animationFrames[i];
-                List<double> endFrame = animationFrames[i + 1];
+                List<double> endFrame = animationFrames[nextIndex];
 
                 //
                 startCameraLookAtX = startFrame[0];
@@ -228,13 +231,13 @@ namespace Silicon
 
                     await Task.Delay(5);
                 }
+
+                i = nextIndex;
             }
 
             playButtonState = PlayButtonState.Play;
             PlayAnimationButton.Text = " ►";
-            PlayAnimationButton.Refresh();
-            
-            
+            PlayAnimationButton.Refresh();   
         }
 
         // Interpolation Helper Method
@@ -447,18 +450,93 @@ namespace Silicon
         {
             if (listViewFrames.SelectedItems.Count == 0)
             {
-                MessageBox.Show("Please select a frame to view.", "Delete Frame", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please select a frame to view.", "Go to Frame", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             if (listViewFrames.SelectedItems.Count > 1)
             {
-                MessageBox.Show("multiple frames selected. Please select only one.", "Delete Frame", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("multiple frames selected. Please select only one.", "Go to Frame", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             int selectedIndex = listViewFrames.SelectedItems[0].Index;
             ActivateGoToFrame(selectedIndex);
+        }
+
+        private void TpToAnnimationFrameButton_Click(object sender, EventArgs e)
+        {
+            if (listViewFrames.SelectedItems.Count == 0)
+            {
+                MessageBox.Show("Please select a frame to view.", "TP to Frame", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (listViewFrames.SelectedItems.Count > 1)
+            {
+                MessageBox.Show("multiple frames selected. Please select only one.", "TP to Frame", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            int selectedIndex = listViewFrames.SelectedItems[0].Index;
+
+
+            // Cancel if too many selected
+            // Show warning if trying to go to frame while animation is playing
+            if (selectedIndex >= animationFrames.Count) return;
+            if (playButtonState == PlayButtonState.Stop)
+            {
+                MessageBox.Show("Cannot go to frame while animation is in progress", "Go To Frame", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            FreecamSwitch.Switched = true;
+
+            List<double> goToFrame = animationFrames[selectedIndex];
+            // Set new target
+            targetCameraLookAtX = goToFrame[0];
+            targetCameraLookAtY = goToFrame[1];
+            targetCameraLookAtZ = goToFrame[2];
+            targetCameraPitch = goToFrame[3];
+            targetCameraYaw = goToFrame[4];
+            targetCameraRoll = goToFrame[5];
+            targetCameraFOV = goToFrame[6];
+            targetCameraSightRange = goToFrame[7];
+
+            startCameraLookAtX = goToFrame[0];
+            startCameraLookAtY = goToFrame[1];
+            startCameraLookAtZ = goToFrame[2];
+            startCameraPitch = goToFrame[3];
+            startCameraYaw = goToFrame[4];
+            startCameraRoll = goToFrame[5];
+            startCameraFOV = goToFrame[6];
+            startCameraSightRange = goToFrame[7];
+
+            // Update FOV and Sight Range sliders
+            CameraFOVSlider.Value = (int)goToFrame[6];
+            cameraFOVSliderValue = (int)goToFrame[6];
+            GameFogSlider.Value = (int)goToFrame[7];
+            gameFogSliderValue = (int)goToFrame[7];
+
+            currentCameraLookAtX = targetCameraLookAtX;
+            currentCameraLookAtY = targetCameraLookAtY;
+            currentCameraLookAtZ = targetCameraLookAtZ;
+            
+        }
+
+        private void ReverseAnimationButton_Click(object sender, EventArgs e)
+        {
+            if (playButtonState == PlayButtonState.Stop)
+            {
+                MessageBox.Show("Cannot change direction while animation is playing.",
+                    "Reverse Playback",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            isReversePlayback = !isReversePlayback;
+            ReverseAnimationButton.Text = isReversePlayback ? "⏩" : "⏪";
         }
 
         private void SaveAnimationButton_Click(object sender, EventArgs e)

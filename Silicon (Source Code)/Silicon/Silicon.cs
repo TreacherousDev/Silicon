@@ -110,7 +110,9 @@ namespace Silicon
                 DeleteAnimationFrameButton,
                 GoToAnnimationFrameButton,
                 SaveAnimationButton,
-                LoadAnimationButton
+                LoadAnimationButton,
+                TpToAnnimationFrameButton,
+                ReverseAnimationButton
             };
             foreach (MetroSet_UI.Controls.MetroSetButton button in interfaceButtons)
             {
@@ -581,5 +583,6 @@ namespace Silicon
 
             return thumbnailBmp;
         }
+
     }
 }

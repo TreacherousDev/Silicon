@@ -62,18 +62,27 @@ Silicon provides several improvements to the default camera system that are acti
 
 ---
 ### Field of View
+
+![2026-02-2404-34-09-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/209a2722-59cf-4ee3-a43b-b28ff0e6502e)
+
 Controls the camera's field of view between 10° and 135°:
 - Default setting is 33°
 - Lower values create a telephoto effect with less peripheral vision
 - Higher values create a wide-angle effect with more peripheral vision
 ---
 ### Distance to Focal Point
+
+![2026-02-2404-36-26-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/eb8504d0-4dd8-4411-b7dd-c179b79f433f)
+
 Controls how far the camera is positioned from the focal point:
 - Default setting is 22 units
 - Setting to very low values (e.g, 1) creates a first-person-like perspective
 - Higher values (30+) provide a more distant, overhead view
 ---
 ### Sight Range
+
+![2026-02-2404-40-47-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/385b8356-f2dc-4f55-a074-e9f69ea745f7)
+
 Controls the visibility of the in game fog:
 - Default setting is 110 blocks
 - Lower values bring the fog closer, limiting how much of the world is visible
@@ -81,24 +90,37 @@ Controls the visibility of the in game fog:
 
 ---
 ### Hide Player
+
+![2026-02-2404-47-31-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/06f1d70f-8c54-4692-91df-2f13af7cdb60)
+
 Toggle player character visibility:
 - Useful when using first-person-perspective
 - Prevents the player model from blocking the camera view
 
 ---
 ### Hide UI
+
+![2026-02-2404-48-30-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/22bea016-c76d-4c21-8e18-5d09a09e7d75)
+
 Toggle the visibility of on-screen interface elements:
 - Hides HUD elements: health, chat, level, cubits and inventory
 - Useful for taking clean screenshots or recording cinematic scenes
 
 ---
 ### Hide Nametags
+
+![2026-02-2404-49-13-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/625f0c66-aaf3-4205-8633-b97ad1e72ab7)
+
+
 Toggle the visibility of player and entity nametags:
 - Removes floating names above players
 - Recommended to have on when using 1st person POV
 
 ---
 ### Freecam Mode
+
+![2026-02-2404-53-40-ezgif com-optimize](https://github.com/user-attachments/assets/9f63d4d6-cbe7-4ebb-a4c9-0a60dc58ddd6)
+
 Freecam detaches the camera from your player character, allowing independent camera movement:
 - **Toggle**: Use the Freecam switch or press F4
 - **Movement**: WASD for horizontal movement, Spacebar/Ctrl for vertical movement
@@ -109,6 +131,9 @@ When Freecam is enabled, player character movement is disabled to prevent confli
 
 ---
 ### Default Presets
+
+![2026-02-2404-56-55-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/0a7f5f53-837b-4825-81b6-c76718d7726d)
+
 Shortcut keybinds to reset the camera layout to useful configurations:
 - **1**: Standard Realm View
 - **2**: Standard Overworld View
@@ -117,6 +142,9 @@ Shortcut keybinds to reset the camera layout to useful configurations:
   
 ---
 ### Cinematics System
+
+![2026-02-2405-02-58-ezgif com-optimize(1)](https://github.com/user-attachments/assets/e5ae1cc4-38ad-49f8-a867-286f3f8066fa)
+
 Silicon includes a robust cinematics system for creating smooth camera animations:
 - Keyframe-based animation system
 - Multiple interpolation methods

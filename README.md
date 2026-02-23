@@ -3,6 +3,8 @@ Silicon is an advanced camera mod for Cubic Castles that enhances the in-game ca
 
 ![SiliconGIF-ezgif com-video-to-gif-converter(1)](https://github.com/user-attachments/assets/78887645-bd76-4817-a8bc-8cbbd22076a9)
 
+<img width="523" height="432" alt="image" src="https://github.com/user-attachments/assets/f712c2af-9a8f-4e9a-bddb-f5bf7135083a" />
+
 *last updated: v2.9.1
 
 ## Table of Contents
@@ -137,6 +139,12 @@ Silicon's cinematic system uses keyframes to create smooth camera animations. He
 9. Once finished, click "Play" to preview the animation
 10. Use the Animation Frame List to select, reorder, or remove keyframes
 
+Toggling the reverse button will play the animation in reverse, from the currently selected keyframe going up to the first.  
+You can reorder keyframes by selecting a row and dragging it into its preferred position. Double clicking a row also allows you to manually edit its content.
+
+<img width="975" height="586" alt="image" src="https://github.com/user-attachments/assets/f7b5c62e-46a7-4d09-8adf-8e5514d871a0" />
+
+
 Each keyframe stores:
 - Camera position (X, Y, Z)
 - Camera rotation (Pitch, Yaw. Roll)
@@ -148,19 +156,19 @@ Each keyframe stores:
 
 Silicon provides several interpolation methods to define how the camera transitions between keyframes. These affect the speed curve of the movement:  
 
-| **Interpolation Method** | **Code** | **Description**                                                               |
-| ------------------------ | -------- | ----------------------------------------------------------------------------- |
-| **Linear**               | 0        | Moves at a constant speed between keyframes.                                  |
-| **Ease**                 | 1        | Applies a subtle, smooth curve — a basic ease that feels more natural.        |
-| **Ease In**              | 2        | Starts slowly and accelerates toward the next keyframe.                       |
-| **Ease Out**             | 3        | Starts quickly and slows down near the end.                                   |
-| **Ease In Out**          | 4        | Smooth acceleration at the beginning and deceleration at the end.             |
-| **Exponential In**       | 5        | Begins extremely slow, then rapidly speeds up.                                |
-| **Exponential Out**      | 6        | Begins fast and quickly eases into a stop.                                    |
-| **Exponential In Out**   | 7        | Starts very slowly, accelerates rapidly in the middle, and slows down at end. |
-| **Catmull-Rom**          | 8        | Creates a smooth curved path along all keyframes. Use this for cinematics.    |
+| **Interpolation Method** | **Description**                                                               |
+| ------------------------ | ----------------------------------------------------------------------------- |
+| **Linear**               | Moves at a constant speed between keyframes.                                  |
+| **Ease**                 | Applies a subtle, smooth curve — a basic ease that feels more natural.        |
+| **Ease In**              | Starts slowly and accelerates toward the next keyframe.                       |
+| **Ease Out**             | Starts quickly and slows down near the end.                                   |
+| **Ease In Out**          | Smooth acceleration at the beginning and deceleration at the end.             |
+| **Exponential In**       | Begins extremely slow, then rapidly speeds up.                                |
+| **Exponential Out**      | Begins fast and quickly eases into a stop.                                    |
+| **Exponential In Out**   | Starts very slowly, accelerates rapidly in the middle, and slows down at end. |
+| **Catmull-Rom**          | Creates a smooth curved path along all keyframes. Use this for cinematics.    |
 
-Each method is stored in the animation data as a numeric code from 0 to 8, matching the order above. Interpolation type applies to the entire animation and is not stored as file data.
+Interpolation type applies to the entire animation and is not stored as file data.
 ### Saving & Loading Animations
 Save your animations to reuse them later:
 1. Create your animation by adding keyframes

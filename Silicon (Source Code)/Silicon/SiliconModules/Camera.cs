@@ -63,6 +63,7 @@ namespace Silicon
         {
             if (isFreecamEnabled) return;
             if (isChatting) return;
+            isHeadBobEnabled = CameraDistanceSlider.Value < 3;
 
             bool isMoving = movementState.Forward || movementState.Backward || movementState.Left || movementState.Right;
             if (isHeadBobEnabled)

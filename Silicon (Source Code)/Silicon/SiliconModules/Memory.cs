@@ -38,8 +38,11 @@ namespace Silicon
         readonly string overrideArrowHotkeysFunction = "90 90 90 90 90 90 90 90";
         readonly string overrideRightClickDragFunction = "90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90";
 
-        readonly string checkIsChattingInjection = "50 E8 00 00 00 00 58 88 48 10 58 88 88 A8 11 00 00 E9 64 8E EB FF 00 00 00 00 FF FF FF FF";
-        readonly string checkIsChattingFunctionEntry = "E9 87 71 14 00 90";
+        readonly string closeChatInjection = "50 E8 00 00 00 00 58 C7 40 14 00 00 00 00 58 FF 92 A4 00 00 00 E9 BE D7 DA FF 00 00 00 00 FF FF FF FF";
+        readonly string closeChatFunctionEntry = "E9 29 28 25 00 90";
+
+        readonly string openChatInjection = "50 E8 00 00 00 00 58 C7 40 D8 01 00 00 00 58 83 F0 02 89 46 64 E9 68 D7 DA FF 00 00 00 00";
+        readonly string openChatFunctionEntry = "E9 7F 28 25 00 90";
 
         // Revertable functions (Optional switch states available)
         readonly string cameraLookAtEditorInjection = "50 E8 00 00 00 00 58 F3 0F 11 58 5D F3 0F 11 48 61 F3 0F 11 40 65 F3 0F 10 58 4D F3 0F 10 48 51 F3 0F 10 40 55 58 50 E8 00 00 00 00 58 F3 0F 11 58 37 F3 0F 11 48 3B F3 0F 11 40 3F 53 8D 5E 10 89 58 33 5B 58 F3 0F 11 1E F3 0F 11 4E 04 E9 6F B6 EA FF 00 00 00 00 00 00 00 00 00 00 8C 42 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 FF FF FF FF";
@@ -141,8 +144,10 @@ namespace Silicon
             m.WriteMemory("Cubic.exe+1BD816", "bytes", adjustCameraDistanceFunctionEntry);
             m.WriteMemory("Cubic.exe+30EAE5", "bytes", upVectorInjection);
             m.WriteMemory("Cubic.exe+1BD87D", "bytes", upVectorFunctionEntry);
-            m.WriteMemory("Cubic.exe+30EB75", "bytes", checkIsChattingInjection);
-            m.WriteMemory("Cubic.exe+1C79E9", "bytes", checkIsChattingFunctionEntry);
+            m.WriteMemory("Cubic.exe+30EB75", "bytes", closeChatInjection);
+            m.WriteMemory("Cubic.exe+BC347", "bytes", closeChatFunctionEntry);
+            m.WriteMemory("Cubic.exe+30EBB1", "bytes", openChatInjection);
+            m.WriteMemory("Cubic.exe+BC32D", "bytes", openChatFunctionEntry);
 
             m.WriteMemory("Cubic.exe+1B9ADE", "bytes", overrideArrowHotkeysFunction);
             m.WriteMemory("Cubic.exe+1B9B1A", "bytes", overrideArrowHotkeysFunction);
@@ -165,7 +170,7 @@ namespace Silicon
             string pitchAddress = (intRotationAddress + 4).ToString("X");
             string yawAddress = (intRotationAddress).ToString("X");
 
-            isChatting = m.ReadInt("Cubic.exe+30EB8B") != 0;
+            isChatting = m.ReadInt("Cubic.exe+30EB8F") != 0;
 
             // Up Vector -> Roll
             m.WriteMemory("Cubic.exe+30EB24", "float", upVector.X.ToString());

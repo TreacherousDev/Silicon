@@ -34,7 +34,6 @@ namespace Silicon
             HideUserInterfaceSwitch.Switched = false;
             HideNametagsSwitch.Switched = false;
             FreecamSwitch.Switched = false;
-            isHeadBobEnabled = false;
 
             ResetCameraRoll();
         }
@@ -50,14 +49,13 @@ namespace Silicon
             HideUserInterfaceSwitch.Switched = false;
             HideNametagsSwitch.Switched = false;
             FreecamSwitch.Switched = false;
-            isHeadBobEnabled = false;
 
             ResetCameraRoll();
         }
 
         private void Preset3Button_Click(object sender, EventArgs e)
         {
-            CameraFOVSlider.Value = 70;
+            CameraFOVSlider.Value = 85;
             CameraDistanceSlider.Value = 2;
             GameFogSlider.Value = 110;
             targetCameraFOV = 70;
@@ -66,7 +64,6 @@ namespace Silicon
             HideUserInterfaceSwitch.Switched = false;
             HideNametagsSwitch.Switched = true;
             FreecamSwitch.Switched = false;
-            isHeadBobEnabled = true;
 
             ResetCameraRoll();
         }
@@ -82,7 +79,6 @@ namespace Silicon
             HideUserInterfaceSwitch.Switched = true;
             HideNametagsSwitch.Switched = true;
             FreecamSwitch.Switched = false;
-            isHeadBobEnabled = false;
 
             ResetCameraRoll();
         }

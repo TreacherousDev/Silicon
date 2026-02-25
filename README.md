@@ -3,7 +3,9 @@ Silicon is an advanced camera mod for Cubic Castles that enhances the in-game ca
 
 ![SiliconGIF-ezgif com-video-to-gif-converter(1)](https://github.com/user-attachments/assets/78887645-bd76-4817-a8bc-8cbbd22076a9)
 
-*last updated: v2.9.1
+<img width="523" height="432" alt="image" src="https://github.com/user-attachments/assets/f712c2af-9a8f-4e9a-bddb-f5bf7135083a" />
+
+*last updated: v2.10
 
 ## Table of Contents
 - [Installation](#installation)
@@ -60,18 +62,27 @@ Silicon provides several improvements to the default camera system that are acti
 
 ---
 ### Field of View
+
+![2026-02-2405-22-03-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/b762d61a-3d5c-498b-9d47-7d46d4e6b7f9)
+
 Controls the camera's field of view between 10° and 135°:
 - Default setting is 33°
 - Lower values create a telephoto effect with less peripheral vision
 - Higher values create a wide-angle effect with more peripheral vision
 ---
 ### Distance to Focal Point
+
+![2026-02-2405-23-21-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/0579da2f-c97c-4071-b8c8-ff2357ea3bf4)
+
 Controls how far the camera is positioned from the focal point:
 - Default setting is 22 units
 - Setting to very low values (e.g, 1) creates a first-person-like perspective
 - Higher values (30+) provide a more distant, overhead view
 ---
 ### Sight Range
+
+![2026-02-2404-40-47-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/385b8356-f2dc-4f55-a074-e9f69ea745f7)
+
 Controls the visibility of the in game fog:
 - Default setting is 110 blocks
 - Lower values bring the fog closer, limiting how much of the world is visible
@@ -79,26 +90,39 @@ Controls the visibility of the in game fog:
 
 ---
 ### Hide Player
+
+![2026-02-2404-47-31-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/06f1d70f-8c54-4692-91df-2f13af7cdb60)
+
 Toggle player character visibility:
 - Useful when using first-person-perspective
 - Prevents the player model from blocking the camera view
 
 ---
 ### Hide UI
+
+![2026-02-2404-48-30-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/22bea016-c76d-4c21-8e18-5d09a09e7d75)
+
 Toggle the visibility of on-screen interface elements:
 - Hides HUD elements: health, chat, level, cubits and inventory
 - Useful for taking clean screenshots or recording cinematic scenes
 
 ---
 ### Hide Nametags
+
+![2026-02-2404-49-13-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/625f0c66-aaf3-4205-8633-b97ad1e72ab7)
+
+
 Toggle the visibility of player and entity nametags:
 - Removes floating names above players
 - Recommended to have on when using 1st person POV
 
 ---
 ### Freecam Mode
+
+![2026-02-2404-53-40-ezgif com-optimize](https://github.com/user-attachments/assets/9f63d4d6-cbe7-4ebb-a4c9-0a60dc58ddd6)
+
 Freecam detaches the camera from your player character, allowing independent camera movement:
-- **Toggle**: Use the Freecam switch or press F4
+- **Toggle**: Use the Freecam switch or press F5
 - **Movement**: WASD for horizontal movement, Spacebar/Ctrl for vertical movement
 - **Rotation**: Arrow Keys or Right Click to look around, Q and E to roll sideways
 - **Speed Sliders**: Controls how fast the camera moves or rotates while in Freecam mode
@@ -107,6 +131,9 @@ When Freecam is enabled, player character movement is disabled to prevent confli
 
 ---
 ### Default Presets
+
+![2026-02-2404-56-55-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/0a7f5f53-837b-4825-81b6-c76718d7726d)
+
 Shortcut keybinds to reset the camera layout to useful configurations:
 - **1**: Standard Realm View
 - **2**: Standard Overworld View
@@ -115,6 +142,9 @@ Shortcut keybinds to reset the camera layout to useful configurations:
   
 ---
 ### Cinematics System
+
+![2026-02-2405-02-58-ezgif com-optimize(1)](https://github.com/user-attachments/assets/e5ae1cc4-38ad-49f8-a867-286f3f8066fa)
+
 Silicon includes a robust cinematics system for creating smooth camera animations:
 - Keyframe-based animation system
 - Multiple interpolation methods
@@ -137,6 +167,12 @@ Silicon's cinematic system uses keyframes to create smooth camera animations. He
 9. Once finished, click "Play" to preview the animation
 10. Use the Animation Frame List to select, reorder, or remove keyframes
 
+Toggling the reverse button will play the animation in reverse, from the currently selected keyframe going up to the first.  
+You can reorder keyframes by selecting a row and dragging it into its preferred position. Double clicking a row also allows you to manually edit its content.
+
+<img width="975" height="586" alt="image" src="https://github.com/user-attachments/assets/f7b5c62e-46a7-4d09-8adf-8e5514d871a0" />
+
+
 Each keyframe stores:
 - Camera position (X, Y, Z)
 - Camera rotation (Pitch, Yaw. Roll)
@@ -148,19 +184,19 @@ Each keyframe stores:
 
 Silicon provides several interpolation methods to define how the camera transitions between keyframes. These affect the speed curve of the movement:  
 
-| **Interpolation Method** | **Code** | **Description**                                                               |
-| ------------------------ | -------- | ----------------------------------------------------------------------------- |
-| **Linear**               | 0        | Moves at a constant speed between keyframes.                                  |
-| **Ease**                 | 1        | Applies a subtle, smooth curve — a basic ease that feels more natural.        |
-| **Ease In**              | 2        | Starts slowly and accelerates toward the next keyframe.                       |
-| **Ease Out**             | 3        | Starts quickly and slows down near the end.                                   |
-| **Ease In Out**          | 4        | Smooth acceleration at the beginning and deceleration at the end.             |
-| **Exponential In**       | 5        | Begins extremely slow, then rapidly speeds up.                                |
-| **Exponential Out**      | 6        | Begins fast and quickly eases into a stop.                                    |
-| **Exponential In Out**   | 7        | Starts very slowly, accelerates rapidly in the middle, and slows down at end. |
-| **Catmull-Rom**          | 8        | Creates a smooth curved path along all keyframes. Use this for cinematics.    |
+| **Interpolation Method** | **Description**                                                               |
+| ------------------------ | ----------------------------------------------------------------------------- |
+| **Linear**               | Moves at a constant speed between keyframes.                                  |
+| **Ease**                 | Applies a subtle, smooth curve — a basic ease that feels more natural.        |
+| **Ease In**              | Starts slowly and accelerates toward the next keyframe.                       |
+| **Ease Out**             | Starts quickly and slows down near the end.                                   |
+| **Ease In Out**          | Smooth acceleration at the beginning and deceleration at the end.             |
+| **Exponential In**       | Begins extremely slow, then rapidly speeds up.                                |
+| **Exponential Out**      | Begins fast and quickly eases into a stop.                                    |
+| **Exponential In Out**   | Starts very slowly, accelerates rapidly in the middle, and slows down at end. |
+| **Catmull-Rom**          | Creates a smooth curved path along all keyframes. Use this for cinematics.    |
 
-Each method is stored in the animation data as a numeric code from 0 to 8, matching the order above. Interpolation type applies to the entire animation and is not stored as file data.
+Interpolation type applies to the entire animation and is not stored as file data.
 ### Saving & Loading Animations
 Save your animations to reuse them later:
 1. Create your animation by adding keyframes

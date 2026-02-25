@@ -212,9 +212,23 @@ namespace Silicon
 
         void HandleKeyUp(Keys key)
         {
+            if (IsDisposed || Disposing)
+                return;
+
             if (InvokeRequired)
             {
-                Invoke(new Action(() => HandleKeyUp(key)));
+                try
+                {
+                    BeginInvoke(new Action(() => HandleKeyUp(key)));
+                }
+                catch (ObjectDisposedException)
+                {
+                    return;
+                }
+                catch (InvalidOperationException)
+                {
+                    return;
+                }
                 return;
             }
 

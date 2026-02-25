@@ -119,7 +119,7 @@ namespace Silicon
             if (CameraDistanceSlider.Value != cameraDistanceSliderValue)
             {
                 cameraDistanceSliderValue = CameraDistanceSlider.Value;
-                //currentCameraDistance = CameraDistanceSlider.Value;
+                targetCameraDistance = CameraDistanceSlider.Value / 2;
             }
 
             if (GameFogSlider.Value != gameFogSliderValue)

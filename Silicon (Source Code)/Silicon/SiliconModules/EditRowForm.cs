@@ -23,7 +23,9 @@ namespace Silicon
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.ThemeName = "MetroDark";
             this.Style = MetroSet_UI.Enums.Style.Dark;
-            InitializeControls(columnNames, values);
+            this.UseSlideAnimation = true;
+            
+        InitializeControls(columnNames, values);
         }
 
         private void InitializeControls(string[] columnNames, string[] values)
@@ -34,7 +36,7 @@ namespace Silicon
 
             int startY = 90;
 
-            for (int i = 0; i < columnNames.Length; i++)
+            for (int i = 1; i < columnNames.Length; i++)
             {
                 var label = new MetroSetLabel();
                 label.Text = columnNames[i];

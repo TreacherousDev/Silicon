@@ -20,6 +20,11 @@ namespace Silicon
         private CancellationTokenSource animationCancellationTokenSource;
         List<List<double>> animationFrames = new List<List<double>>();
         private bool isReversePlayback = false;
+        private double playbackSpeedMultiplier = 1.0;
+
+        private bool isRecording = false;
+        private double recordTimer = 0.0;
+        private const double recordInterval = 0.5; // 0.5 seconds
 
         // Saved JSON Format
         public class AnimationData
@@ -38,8 +43,9 @@ namespace Silicon
             frame.Add(currentCameraYaw);
             frame.Add(currentCameraRoll);
             frame.Add(currentCameraFOV);
+            frame.Add(currentCameraDistance);
             frame.Add(currentCameraSightRange);
-            frame.Add(double.TryParse(CinematicSpeedTextBox.Text, out double speed) ? speed : 10.0);
+            frame.Add(double.TryParse(CinematicDurationTextBox.Text, out double duration) ? duration : 10.0);
 
 
             // Insert frame after selected row
@@ -90,22 +96,40 @@ namespace Silicon
 
             FreecamSwitch.Switched = true;
             playButtonState = PlayButtonState.Stop;
-            PlayAnimationButton.Text = "◼";
+            PlayAnimationButton.Text = "⏹";
+
             animationCancellationTokenSource = new CancellationTokenSource();
             CancellationToken token = animationCancellationTokenSource.Token;
 
-            // Play from selected frame (from first if there are multiple)
-            int startIndex = 0;
-            if (listViewFrames.SelectedItems.Count > 0)
+            // -------- DETERMINE PLAYBACK INDICES --------
+
+            List<int> playbackIndices;
+
+            if (listViewFrames.SelectedItems.Count == 0)
             {
-                startIndex = listViewFrames.SelectedItems
-                    .Cast<ListViewItem>()
-                    .Min(item => item.Index);
+                // No selection → play all
+                playbackIndices = Enumerable.Range(0, animationFrames.Count).ToList();
+            }
+            else if (listViewFrames.SelectedItems.Count == 1)
+            {
+                // One selected → play from selected to end
+                int startIndex = listViewFrames.SelectedItems[0].Index;
+                playbackIndices = Enumerable.Range(startIndex, animationFrames.Count - startIndex).ToList();
+            }
+            else
+            {
+                // Multiple selected → play only selected (ordered)
+                playbackIndices = listViewFrames.SelectedItems.Cast<ListViewItem>().Select(item => item.Index).OrderBy(i => i).ToList();
             }
 
-            //CameraDistanceSlider.Value = cinematicLoadedCameraDistance;
-            // Teleport immediately to start frame
-            List<double> firstFrame = animationFrames[startIndex];
+            if (playbackIndices.Count < 1)
+                return;
+
+            // -------- TELEPORT TO FIRST PLAYED FRAME --------
+
+            int firstIndex = isReversePlayback ? playbackIndices.Last() : playbackIndices.First();
+            List<double> firstFrame = animationFrames[firstIndex];
+
             currentCameraLookAtX = firstFrame[0];
             currentCameraLookAtY = firstFrame[1];
             currentCameraLookAtZ = firstFrame[2];
@@ -113,7 +137,8 @@ namespace Silicon
             currentCameraYaw = firstFrame[4];
             currentCameraRoll = firstFrame[5];
             currentCameraFOV = firstFrame[6];
-            currentCameraSightRange = firstFrame[7];
+            currentCameraDistance = firstFrame[7];
+            currentCameraSightRange = firstFrame[8];
 
             targetCameraLookAtX = firstFrame[0];
             targetCameraLookAtY = firstFrame[1];
@@ -122,9 +147,9 @@ namespace Silicon
             targetCameraYaw = firstFrame[4];
             targetCameraRoll = firstFrame[5];
             targetCameraFOV = firstFrame[6];
-            targetCameraSightRange = firstFrame[7];
+            currentCameraDistance = firstFrame[7];
+            targetCameraSightRange = firstFrame[8];
 
-            //
             startCameraLookAtX = firstFrame[0];
             startCameraLookAtY = firstFrame[1];
             startCameraLookAtZ = firstFrame[2];
@@ -132,53 +157,51 @@ namespace Silicon
             startCameraYaw = firstFrame[4];
             startCameraRoll = firstFrame[5];
             startCameraFOV = firstFrame[6];
-            startCameraSightRange = firstFrame[7];
+            currentCameraDistance = firstFrame[7];
+            startCameraSightRange = firstFrame[8];
 
-            // Update FOV and Sight Range Sliders
             CameraFOVSlider.Value = (int)firstFrame[6];
             cameraFOVSliderValue = (int)firstFrame[6];
-            GameFogSlider.Value = (int)firstFrame[7];
-            gameFogSliderValue = (int)firstFrame[7];
+            CameraDistanceSlider.Value = (int)firstFrame[7];
+            cameraDistanceSliderValue = (int)firstFrame[7];
+            GameFogSlider.Value = (int)firstFrame[8];
+            gameFogSliderValue = (int)firstFrame[8];
 
             await Task.Delay(20);
 
-            int i = startIndex;
+            if (playbackIndices.Count < 2)
+                return;
 
-            while (isReversePlayback ? i > 0 : i < animationFrames.Count - 1)
+            int step = isReversePlayback ? -1 : 1;
+            int startPos = isReversePlayback ? playbackIndices.Count - 1 : 0;
+            int endPos = isReversePlayback ? 0 : playbackIndices.Count - 1;
+
+            // -------- MAIN PLAYBACK LOOP --------
+
+            for (int pos = startPos;
+                 isReversePlayback ? pos > endPos : pos < endPos;
+                 pos += step)
             {
                 if (token.IsCancellationRequested)
                     break;
 
-                int nextIndex = isReversePlayback ? i - 1 : i + 1;
+                int i = playbackIndices[pos];
+                int nextIndex = playbackIndices[pos + step];
 
                 List<double> startFrame = animationFrames[i];
                 List<double> endFrame = animationFrames[nextIndex];
 
-                //
-                startCameraLookAtX = startFrame[0];
-                startCameraLookAtY = startFrame[1];
-                startCameraLookAtZ = startFrame[2];
-                startCameraPitch = startFrame[3];
-                startCameraYaw = startFrame[4];
-                startCameraRoll = startFrame[5];
-                startCameraFOV = startFrame[6];
-                startCameraSightRange = startFrame[7];
-
                 double startX = startFrame[0], startY = startFrame[1], startZ = startFrame[2];
                 double startPitch = startFrame[3], startYaw = startFrame[4], startRoll = startFrame[5];
-                double startFOV = startFrame[6], startSightRange = startFrame[7];
+                double startFOV = startFrame[6],  startDistance = startFrame[7], startSightRange = startFrame[8];
+
                 double endX = endFrame[0], endY = endFrame[1], endZ = endFrame[2];
                 double endPitch = endFrame[3], endYaw = endFrame[4], endRoll = endFrame[5];
-                double endFOV = endFrame[6], endSightRange = endFrame[7];
-                double moveSpeed = endFrame[8];
-                
-                Interpolator.MethodDelegate frameInterpolation = _interpolator;
-                double distance = Math.Sqrt(
-                    Math.Pow(endX - startX, 2) +
-                    Math.Pow(endY - startY, 2) +
-                    Math.Pow(endZ - startZ, 2));
+                double endFOV = endFrame[6], endDistance = endFrame[7], endSightRange = endFrame[8];
 
-                double duration = distance / moveSpeed;
+                double duration = endFrame[9];
+                Interpolator.MethodDelegate frameInterpolation = _interpolator;
+
                 double startTime = Environment.TickCount;
 
                 while (true)
@@ -186,8 +209,8 @@ namespace Silicon
                     if (token.IsCancellationRequested)
                         return;
 
-                    double elapsedTime = (Environment.TickCount - startTime) / 10000.0;
-                    double alpha = elapsedTime / duration;
+                    double elapsedTime = (Environment.TickCount - startTime) / 1000.0;
+                    double alpha = (elapsedTime * playbackSpeedMultiplier) / duration;
                     alpha = Clamp(alpha, 0.0, 1.0);
 
                     if (InterpolationComboBox.Text == "Catmull-Rom")
@@ -197,8 +220,8 @@ namespace Silicon
                         int p1Index = i;
                         int p2Index = nextIndex;
 
-                        int p0Index = isReversePlayback ? Math.Min(i + 1, lastIndex) : Math.Max(i - 1, 0);
-                        int p3Index = isReversePlayback ? Math.Max(nextIndex - 1, 0) : Math.Min(nextIndex + 1, lastIndex);
+                        int p0Index = Math.Max(p1Index - 1, 0);
+                        int p3Index = Math.Min(p2Index + 1, lastIndex);
 
                         List<double> p0 = animationFrames[p0Index];
                         List<double> p1 = animationFrames[p1Index];
@@ -212,7 +235,8 @@ namespace Silicon
                         targetCameraYaw = CatmullRom(p0[4], p1[4], p2[4], p3[4], alpha);
                         targetCameraRoll = CatmullRom(p0[5], p1[5], p2[5], p3[5], alpha);
                         targetCameraFOV = CatmullRom(p0[6], p1[6], p2[6], p3[6], alpha);
-                        targetCameraSightRange = CatmullRom(p0[7], p1[7], p2[7], p3[7], alpha);
+                        targetCameraDistance = CatmullRom(p0[7], p1[7], p2[7], p3[7], alpha);
+                        targetCameraSightRange = CatmullRom(p0[8], p1[8], p2[8], p3[8], alpha);
                     }
                     else
                     {
@@ -223,28 +247,22 @@ namespace Silicon
                         targetCameraYaw = frameInterpolation(startYaw, endYaw, alpha);
                         targetCameraRoll = frameInterpolation(startRoll, endRoll, alpha);
                         targetCameraFOV = frameInterpolation(startFOV, endFOV, alpha);
+                        targetCameraDistance = frameInterpolation(startDistance, endDistance, alpha);
                         targetCameraSightRange = frameInterpolation(startSightRange, endSightRange, alpha);
                     }
-                    upVector = ComputeUpVectorFromRoll((float)currentCameraRoll);
 
-                    // Update FOV and Sight Range sliders after each keyframe pass
-                    CameraFOVSlider.Value = (int)endFrame[6];
-                    cameraFOVSliderValue = (int)endFrame[6];
-                    GameFogSlider.Value = (int)endFrame[7];
-                    gameFogSliderValue = (int)endFrame[7];
+                    upVector = ComputeUpVectorFromRoll((float)currentCameraRoll);
 
                     if (alpha >= 1.0)
                         break;
 
                     await Task.Delay(5);
                 }
-
-                i = nextIndex;
             }
 
             playButtonState = PlayButtonState.Play;
             PlayAnimationButton.Text = " ►";
-            PlayAnimationButton.Refresh();   
+            PlayAnimationButton.Refresh();
         }
 
         // Interpolation Helper Method
@@ -257,6 +275,7 @@ namespace Silicon
                 (-p0 + 3 * p1 - 3 * p2 + p3) * t * t * t
             );
         }
+
         private void StopAnimation()
         {
             animationCancellationTokenSource?.Cancel();
@@ -283,8 +302,9 @@ namespace Silicon
                 item.SubItems.Add(frame[4].ToString("F1")); // Yaw
                 item.SubItems.Add(frame[5].ToString("F1")); // Roll
                 item.SubItems.Add(frame[6].ToString("F0")); // FOV
-                item.SubItems.Add(frame[7].ToString("F0")); // Sight Range
-                item.SubItems.Add(frame[8].ToString("F1")); // Speed
+                item.SubItems.Add(frame[7].ToString("F1")); // Distance
+                item.SubItems.Add(frame[8].ToString("F0")); // Sight Range
+                item.SubItems.Add(frame[9].ToString("F3")); // Duration
                 listViewFrames.Items.Add(item);
                 i++;
             }
@@ -356,8 +376,6 @@ namespace Silicon
             }
         }
 
-
-
         private void DeleteAnimationFrameButton_Click(object sender, EventArgs e)
         {
             if (playButtonState == PlayButtonState.Stop)
@@ -382,7 +400,6 @@ namespace Silicon
             UpdateListView();
         }
 
-
         private async void ActivateGoToFrame(int selectedIndex)
         {
             // Cancel if too many selected
@@ -406,7 +423,8 @@ namespace Silicon
             targetCameraYaw = goToFrame[4];
             targetCameraRoll = goToFrame[5];
             targetCameraFOV = goToFrame[6];
-            targetCameraSightRange = goToFrame[7];
+            targetCameraDistance = goToFrame[7];
+            targetCameraSightRange = goToFrame[8];
 
             startCameraLookAtX = currentCameraLookAtX;
             startCameraLookAtY = currentCameraLookAtY;
@@ -415,13 +433,17 @@ namespace Silicon
             startCameraYaw = currentCameraYaw;
             startCameraRoll = currentCameraRoll;
             startCameraFOV = currentCameraFOV;
+            startCameraDistance = currentCameraDistance;
             startCameraSightRange = currentCameraSightRange;
 
-            // Update FOV and Sight Range sliders
+            // Update FOV, Distance and Sight Range sliders
             CameraFOVSlider.Value = (int)goToFrame[6];
             cameraFOVSliderValue = (int)goToFrame[6];
-            GameFogSlider.Value = (int)goToFrame[7];
-            gameFogSliderValue = (int)goToFrame[7];
+            //checkpoint
+            CameraDistanceSlider.Value = (int)goToFrame[7];
+            cameraDistanceSliderValue = (int)goToFrame[7];
+            GameFogSlider.Value = (int)goToFrame[8];
+            gameFogSliderValue = (int)goToFrame[8];
 
             // Compute animation duration based on distance
             double distance = Math.Sqrt(
@@ -437,9 +459,9 @@ namespace Silicon
                 currentCameraLookAtZ = targetCameraLookAtZ;
             }
 
-            double speed = double.TryParse(CinematicSpeedTextBox.Text, out var s) ? s : 10.0;
-            animationDuration = distance / (speed);
-            animationStartTime = (Environment.TickCount / 10000.0);
+            double duration = double.TryParse(CinematicDurationTextBox.Text, out var s) ? s : 10.0;
+            animationDuration = duration;
+            animationStartTime = (Environment.TickCount / 1000.0);
         }
 
         private void GoToNextFrame()
@@ -543,7 +565,8 @@ namespace Silicon
             targetCameraYaw = goToFrame[4];
             targetCameraRoll = goToFrame[5];
             targetCameraFOV = goToFrame[6];
-            targetCameraSightRange = goToFrame[7];
+            targetCameraDistance = goToFrame[7];
+            targetCameraSightRange = goToFrame[8];
 
             startCameraLookAtX = goToFrame[0];
             startCameraLookAtY = goToFrame[1];
@@ -552,13 +575,17 @@ namespace Silicon
             startCameraYaw = goToFrame[4];
             startCameraRoll = goToFrame[5];
             startCameraFOV = goToFrame[6];
-            startCameraSightRange = goToFrame[7];
+            startCameraDistance = goToFrame[7];
+            startCameraSightRange = goToFrame[8];
 
             // Update FOV and Sight Range sliders
             CameraFOVSlider.Value = (int)goToFrame[6];
             cameraFOVSliderValue = (int)goToFrame[6];
-            GameFogSlider.Value = (int)goToFrame[7];
-            gameFogSliderValue = (int)goToFrame[7];
+            //checkpoint
+            CameraDistanceSlider.Value = (int)goToFrame[7];
+            cameraDistanceSliderValue = (int)goToFrame[7];
+            GameFogSlider.Value = (int)goToFrame[8];
+            gameFogSliderValue = (int)goToFrame[8];
 
             currentCameraLookAtX = targetCameraLookAtX;
             currentCameraLookAtY = targetCameraLookAtY;
@@ -579,6 +606,94 @@ namespace Silicon
 
             isReversePlayback = !isReversePlayback;
             ReverseAnimationButton.Text = isReversePlayback ? "⏩" : "⏪";
+        }
+
+        private void RecordAnimationButton_Click(object sender, EventArgs e)
+        {
+            if (!isRecording)
+            {
+                if (playButtonState == PlayButtonState.Stop)
+                {
+                    MessageBox.Show("Cannot record while animation is playing.",
+                        "Record",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+
+                isRecording = true;
+                recordTimer = 0.0;
+
+                //animationFrames.Clear();
+                //listViewFrames.Items.Clear();
+
+                RecordAnimationButton.Text = "⏹";
+                FreecamSwitch.Switched = true;
+            }
+            else
+            {
+                isRecording = false;
+                RecordAnimationButton.Text = "⏺";
+
+                UpdateListView();
+            }
+        }
+
+        private void HandleRecording()
+        {
+            if (!isRecording)
+                return;
+
+            recordTimer += 0.005; // because your loop runs every 5ms
+
+            if (recordTimer < recordInterval)
+                return;
+
+            recordTimer = 0.0;
+
+            List<double> frame = new List<double>
+            {
+                currentCameraLookAtX,
+                currentCameraLookAtY,
+                currentCameraLookAtZ,
+                currentCameraPitch,
+                currentCameraYaw,
+                currentCameraRoll,
+                currentCameraFOV,
+                currentCameraDistance,
+                currentCameraSightRange,
+                0.5 // duration between recorded frames
+            };
+
+            animationFrames.Add(frame);
+        }
+
+        private void SpeedToggleButton_Click(object sender, EventArgs e)
+        {
+            switch (playbackSpeedMultiplier)
+            {
+                case 1.0:
+                    playbackSpeedMultiplier = 2.0;
+                    break;
+
+                case 2.0:
+                    playbackSpeedMultiplier = 4.0;
+                    break;
+
+                case 4.0:
+                    playbackSpeedMultiplier = 0.5;
+                    break;
+
+                case 0.5:
+                    playbackSpeedMultiplier = 0.25;
+                    break;
+
+                default:
+                    playbackSpeedMultiplier = 1.0;
+                    break;
+            }
+
+            SpeedToggleButton.Text = $"x{playbackSpeedMultiplier}";
         }
 
         private void SaveAnimationButton_Click(object sender, EventArgs e)
@@ -672,8 +787,9 @@ namespace Silicon
                             rawFrame.Count > 4 ? rawFrame[4] : 0.0,
                             rawFrame.Count > 5 ? rawFrame[5] : 0.0,
                             rawFrame.Count > 6 ? rawFrame[6] : 70.0,
-                            rawFrame.Count > 7 ? rawFrame[7] : 100.0,
-                            rawFrame.Count > 7 ? rawFrame[8] : 60.0
+                            rawFrame.Count > 7 ? rawFrame[7] : 22.5,
+                            rawFrame.Count > 8 ? rawFrame[8] : 100,
+                            rawFrame.Count > 9 ? rawFrame[9] : 1.0
                         };
 
                         animationFrames.Add(frame);
@@ -686,8 +802,9 @@ namespace Silicon
                         item.SubItems.Add(frame[4].ToString("F1"));
                         item.SubItems.Add(frame[5].ToString("F1"));
                         item.SubItems.Add(frame[6].ToString("F0"));
-                        item.SubItems.Add(frame[7].ToString("F0"));
-                        item.SubItems.Add(frame[8].ToString("F1"));
+                        item.SubItems.Add(frame[7].ToString("F1"));
+                        item.SubItems.Add(frame[8].ToString("F0"));
+                        item.SubItems.Add(frame[9].ToString("F3"));
                         listViewFrames.Items.Add(item);
                         i++;
                     }
@@ -706,7 +823,7 @@ namespace Silicon
             _interpolator = Interpolator.GetMethodWithIndex(InterpolationComboBox.SelectedIndex);
         }
 
-        private void CinematicSpeedTextBox_TextChanged(object sender, EventArgs e)
+        private void CinematicDurationTextBox_TextChanged(object sender, EventArgs e)
         {
             var metroBox = sender as MetroSet_UI.Controls.MetroSetTextBox;
             var innerTextBox = metroBox.Controls[0] as TextBox;

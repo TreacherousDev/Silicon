@@ -113,7 +113,9 @@ namespace Silicon
                 SaveAnimationButton,
                 LoadAnimationButton,
                 TpToAnnimationFrameButton,
-                ReverseAnimationButton
+                ReverseAnimationButton,
+                SpeedToggleButton,
+                RecordAnimationButton
             };
             foreach (MetroSet_UI.Controls.MetroSetButton button in interfaceButtons)
             {

@@ -13,6 +13,7 @@ namespace Silicon
         private double currentCameraYaw;
         private double currentCameraRoll;
         private double currentCameraFOV = 33;
+        private double currentCameraDistance = 45;
         private double currentCameraSightRange = 100;
 
         private double targetCameraLookAtX;
@@ -22,6 +23,7 @@ namespace Silicon
         private double targetCameraYaw;
         private double targetCameraRoll;
         private double targetCameraFOV = 33;
+        private double targetCameraDistance = 45;
         private double targetCameraSightRange = 100;
 
         private double startCameraLookAtX = 0;
@@ -31,6 +33,7 @@ namespace Silicon
         private double startCameraYaw = 0;
         private double startCameraRoll = 0;
         private double startCameraFOV = 33;
+        private double startCameraDistance = 45;
         private double startCameraSightRange = 100;
 
         private Vector3 upVector = new Vector3(0, 0, -1);
@@ -177,6 +180,8 @@ namespace Silicon
             upVector = ComputeUpVectorFromRoll((float)currentCameraRoll);
             // FOV
             Interpolate(ref currentCameraFOV, startCameraFOV, targetCameraFOV);
+            // Distance to Focal Point
+            Interpolate(ref currentCameraDistance, startCameraDistance, targetCameraDistance);
             // Sight Range
             Interpolate(ref currentCameraSightRange, startCameraSightRange, targetCameraSightRange);
         }
@@ -189,7 +194,7 @@ namespace Silicon
 
         private double GetAlpha()
         {
-            double elapsedTime = (Environment.TickCount / 10000.0) - animationStartTime;
+            double elapsedTime = (Environment.TickCount / 1000.0) - animationStartTime;
             double alpha = elapsedTime / animationDuration;
             return Clamp(alpha, 0.0, 1.0);
         }

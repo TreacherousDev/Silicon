@@ -160,7 +160,7 @@ namespace Silicon
 
         private void UpdateMemory()
         {
-
+            HandleRecording();
             HeadBob();
             m.WriteMemory("Cubic.exe+30E7A0", "float", currentCameraHeight.ToString());
 
@@ -184,7 +184,7 @@ namespace Silicon
             // FOV
             m.WriteMemory("Cubic.exe+30E86B", "bytes", ConvertDoubleToFloatBytes(currentCameraFOV));
             // Distance 
-            m.WriteMemory("Cubic.exe+30E9FA", "float", ((float)CameraDistanceSlider.Value / 2).ToString());
+            m.WriteMemory("Cubic.exe+30E9FA", "bytes", ConvertDoubleToFloatBytes(currentCameraDistance));
             // Game Fog
             m.WriteMemory("Cubic.exe+300ED0", "bytes", ConvertDoubleToFloatBytes(currentCameraSightRange));
 
@@ -218,8 +218,8 @@ namespace Silicon
             UpdateLabel(CameraLookAtInfoLabel2, $"X: {currentCameraLookAtX:F2}\nY: {currentCameraLookAtY:F2}\nZ: {currentCameraLookAtZ:F2}", Color.White);
             UpdateLabel(CameraRotationInfoLabel, $"Pitch: {currentCameraPitch:F2}\nYaw: {currentCameraYaw:F2}\nRoll: {currentCameraRoll:F2}", Color.White);
             UpdateLabel(CameraRotationInfoLabel2, $"Pitch: {currentCameraPitch:F2}\nYaw: {currentCameraYaw:F2}\nRoll: {currentCameraRoll:F2}", Color.White);
-            UpdateLabel(CameraZoomInfoLabel, $"Zoom: {(float)cameraDistanceSliderValue / 2}\nFOV: {currentCameraFOV:F1}", Color.White);
-            UpdateLabel(CameraZoomInfoLabel2, $"Zoom: {(float)cameraDistanceSliderValue / 2}\nFOV: {currentCameraFOV:F1}", Color.White);
+            UpdateLabel(CameraZoomInfoLabel, $"Zoom: {currentCameraDistance:F1}\nFOV: {currentCameraFOV:F1}", Color.White);
+            UpdateLabel(CameraZoomInfoLabel2, $"Zoom: {currentCameraDistance:F1}\nFOV: {currentCameraFOV:F1}", Color.White);
         }
 
         private void FreecamToggle(bool enabled)

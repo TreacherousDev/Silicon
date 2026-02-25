@@ -75,12 +75,14 @@ namespace Silicon
             this.AddAnimationFrameButton = new MetroSet_UI.Controls.MetroSetButton();
             this.TabControl = new Sunny.UI.UITabControl();
             this.Cinematic = new System.Windows.Forms.TabPage();
+            this.RecordAnimationButton = new MetroSet_UI.Controls.MetroSetButton();
+            this.SpeedToggleButton = new MetroSet_UI.Controls.MetroSetButton();
             this.ReverseAnimationButton = new MetroSet_UI.Controls.MetroSetButton();
             this.TpToAnnimationFrameButton = new MetroSet_UI.Controls.MetroSetButton();
             this.CameraZoomInfoLabel2 = new Sunny.UI.UILabel();
             this.InterpolationComboBox = new System.Windows.Forms.ComboBox();
             this.uiLabel13 = new Sunny.UI.UILabel();
-            this.CinematicSpeedTextBox = new MetroSet_UI.Controls.MetroSetTextBox();
+            this.CinematicDurationTextBox = new MetroSet_UI.Controls.MetroSetTextBox();
             this.uiLabel12 = new Sunny.UI.UILabel();
             this.LoadAnimationButton = new MetroSet_UI.Controls.MetroSetButton();
             this.SaveAnimationButton = new MetroSet_UI.Controls.MetroSetButton();
@@ -99,11 +101,12 @@ namespace Silicon
             this.Roll = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.FOV = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Fog = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Speed = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Duration = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Hotkeys = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
             this.HotkeyPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.metroSetSetToolTip1 = new MetroSet_UI.Components.MetroSetSetToolTip();
+            this.Zoom = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Information.SuspendLayout();
             this.panel1.SuspendLayout();
             this.Utility.SuspendLayout();
@@ -157,7 +160,7 @@ namespace Silicon
             this.Information.ForeColor = System.Drawing.Color.White;
             this.Information.Location = new System.Drawing.Point(0, 30);
             this.Information.Name = "Information";
-            this.Information.Size = new System.Drawing.Size(200, 70);
+            this.Information.Size = new System.Drawing.Size(483, 272);
             this.Information.TabIndex = 1;
             this.Information.Text = "Information";
             // 
@@ -834,7 +837,7 @@ namespace Silicon
             this.PlayAnimationButton.PressBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
             this.PlayAnimationButton.PressColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
             this.PlayAnimationButton.PressTextColor = System.Drawing.Color.White;
-            this.PlayAnimationButton.Size = new System.Drawing.Size(53, 40);
+            this.PlayAnimationButton.Size = new System.Drawing.Size(53, 32);
             this.PlayAnimationButton.Style = MetroSet_UI.Enums.Style.Light;
             this.PlayAnimationButton.StyleManager = null;
             this.PlayAnimationButton.TabIndex = 41;
@@ -848,7 +851,7 @@ namespace Silicon
             this.AddAnimationFrameButton.DisabledBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.AddAnimationFrameButton.DisabledBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.AddAnimationFrameButton.DisabledForeColor = System.Drawing.Color.Gray;
-            this.AddAnimationFrameButton.Font = new System.Drawing.Font("Impact", 17F, System.Drawing.FontStyle.Bold);
+            this.AddAnimationFrameButton.Font = new System.Drawing.Font("Impact", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.AddAnimationFrameButton.HoverBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
             this.AddAnimationFrameButton.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
             this.AddAnimationFrameButton.HoverTextColor = System.Drawing.Color.White;
@@ -861,7 +864,7 @@ namespace Silicon
             this.AddAnimationFrameButton.PressBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
             this.AddAnimationFrameButton.PressColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
             this.AddAnimationFrameButton.PressTextColor = System.Drawing.Color.White;
-            this.AddAnimationFrameButton.Size = new System.Drawing.Size(53, 40);
+            this.AddAnimationFrameButton.Size = new System.Drawing.Size(53, 32);
             this.AddAnimationFrameButton.Style = MetroSet_UI.Enums.Style.Light;
             this.AddAnimationFrameButton.StyleManager = null;
             this.AddAnimationFrameButton.TabIndex = 40;
@@ -901,12 +904,14 @@ namespace Silicon
             // Cinematic
             // 
             this.Cinematic.BackColor = System.Drawing.Color.Transparent;
+            this.Cinematic.Controls.Add(this.RecordAnimationButton);
+            this.Cinematic.Controls.Add(this.SpeedToggleButton);
             this.Cinematic.Controls.Add(this.ReverseAnimationButton);
             this.Cinematic.Controls.Add(this.TpToAnnimationFrameButton);
             this.Cinematic.Controls.Add(this.CameraZoomInfoLabel2);
             this.Cinematic.Controls.Add(this.InterpolationComboBox);
             this.Cinematic.Controls.Add(this.uiLabel13);
-            this.Cinematic.Controls.Add(this.CinematicSpeedTextBox);
+            this.Cinematic.Controls.Add(this.CinematicDurationTextBox);
             this.Cinematic.Controls.Add(this.uiLabel12);
             this.Cinematic.Controls.Add(this.LoadAnimationButton);
             this.Cinematic.Controls.Add(this.SaveAnimationButton);
@@ -924,17 +929,71 @@ namespace Silicon
             this.Cinematic.TabIndex = 2;
             this.Cinematic.Text = "Cinematic";
             // 
+            // RecordAnimationButton
+            // 
+            this.RecordAnimationButton.DisabledBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.RecordAnimationButton.DisabledBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.RecordAnimationButton.DisabledForeColor = System.Drawing.Color.Gray;
+            this.RecordAnimationButton.Font = new System.Drawing.Font("Impact", 17F);
+            this.RecordAnimationButton.HoverBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
+            this.RecordAnimationButton.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
+            this.RecordAnimationButton.HoverTextColor = System.Drawing.Color.White;
+            this.RecordAnimationButton.IsDerivedStyle = true;
+            this.RecordAnimationButton.Location = new System.Drawing.Point(426, 41);
+            this.RecordAnimationButton.Name = "RecordAnimationButton";
+            this.RecordAnimationButton.NormalBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.RecordAnimationButton.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.RecordAnimationButton.NormalTextColor = System.Drawing.Color.White;
+            this.RecordAnimationButton.PressBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
+            this.RecordAnimationButton.PressColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
+            this.RecordAnimationButton.PressTextColor = System.Drawing.Color.White;
+            this.RecordAnimationButton.Size = new System.Drawing.Size(53, 32);
+            this.RecordAnimationButton.Style = MetroSet_UI.Enums.Style.Light;
+            this.RecordAnimationButton.StyleManager = null;
+            this.RecordAnimationButton.TabIndex = 57;
+            this.RecordAnimationButton.Text = "⏺";
+            this.RecordAnimationButton.ThemeAuthor = "Narwin";
+            this.RecordAnimationButton.ThemeName = "MetroLite";
+            this.RecordAnimationButton.Click += new System.EventHandler(this.RecordAnimationButton_Click);
+            // 
+            // SpeedToggleButton
+            // 
+            this.SpeedToggleButton.DisabledBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.SpeedToggleButton.DisabledBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.SpeedToggleButton.DisabledForeColor = System.Drawing.Color.Gray;
+            this.SpeedToggleButton.Font = new System.Drawing.Font("Impact", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SpeedToggleButton.HoverBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
+            this.SpeedToggleButton.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
+            this.SpeedToggleButton.HoverTextColor = System.Drawing.Color.White;
+            this.SpeedToggleButton.IsDerivedStyle = true;
+            this.SpeedToggleButton.Location = new System.Drawing.Point(426, 117);
+            this.SpeedToggleButton.Name = "SpeedToggleButton";
+            this.SpeedToggleButton.NormalBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.SpeedToggleButton.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.SpeedToggleButton.NormalTextColor = System.Drawing.Color.White;
+            this.SpeedToggleButton.PressBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
+            this.SpeedToggleButton.PressColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
+            this.SpeedToggleButton.PressTextColor = System.Drawing.Color.White;
+            this.SpeedToggleButton.Size = new System.Drawing.Size(53, 32);
+            this.SpeedToggleButton.Style = MetroSet_UI.Enums.Style.Light;
+            this.SpeedToggleButton.StyleManager = null;
+            this.SpeedToggleButton.TabIndex = 56;
+            this.SpeedToggleButton.Text = "x1";
+            this.SpeedToggleButton.ThemeAuthor = "Narwin";
+            this.SpeedToggleButton.ThemeName = "MetroLite";
+            this.SpeedToggleButton.Click += new System.EventHandler(this.SpeedToggleButton_Click);
+            // 
             // ReverseAnimationButton
             // 
             this.ReverseAnimationButton.DisabledBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.ReverseAnimationButton.DisabledBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.ReverseAnimationButton.DisabledForeColor = System.Drawing.Color.Gray;
-            this.ReverseAnimationButton.Font = new System.Drawing.Font("Impact", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ReverseAnimationButton.Font = new System.Drawing.Font("Impact", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ReverseAnimationButton.HoverBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
             this.ReverseAnimationButton.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
             this.ReverseAnimationButton.HoverTextColor = System.Drawing.Color.White;
             this.ReverseAnimationButton.IsDerivedStyle = true;
-            this.ReverseAnimationButton.Location = new System.Drawing.Point(426, 49);
+            this.ReverseAnimationButton.Location = new System.Drawing.Point(368, 117);
             this.ReverseAnimationButton.Name = "ReverseAnimationButton";
             this.ReverseAnimationButton.NormalBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.ReverseAnimationButton.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
@@ -942,7 +1001,7 @@ namespace Silicon
             this.ReverseAnimationButton.PressBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
             this.ReverseAnimationButton.PressColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
             this.ReverseAnimationButton.PressTextColor = System.Drawing.Color.White;
-            this.ReverseAnimationButton.Size = new System.Drawing.Size(53, 40);
+            this.ReverseAnimationButton.Size = new System.Drawing.Size(53, 32);
             this.ReverseAnimationButton.Style = MetroSet_UI.Enums.Style.Light;
             this.ReverseAnimationButton.StyleManager = null;
             this.ReverseAnimationButton.TabIndex = 55;
@@ -956,12 +1015,12 @@ namespace Silicon
             this.TpToAnnimationFrameButton.DisabledBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.TpToAnnimationFrameButton.DisabledBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.TpToAnnimationFrameButton.DisabledForeColor = System.Drawing.Color.Gray;
-            this.TpToAnnimationFrameButton.Font = new System.Drawing.Font("Impact", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TpToAnnimationFrameButton.Font = new System.Drawing.Font("Impact", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TpToAnnimationFrameButton.HoverBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
             this.TpToAnnimationFrameButton.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
             this.TpToAnnimationFrameButton.HoverTextColor = System.Drawing.Color.White;
             this.TpToAnnimationFrameButton.IsDerivedStyle = true;
-            this.TpToAnnimationFrameButton.Location = new System.Drawing.Point(426, 95);
+            this.TpToAnnimationFrameButton.Location = new System.Drawing.Point(426, 79);
             this.TpToAnnimationFrameButton.Name = "TpToAnnimationFrameButton";
             this.TpToAnnimationFrameButton.NormalBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.TpToAnnimationFrameButton.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
@@ -969,7 +1028,7 @@ namespace Silicon
             this.TpToAnnimationFrameButton.PressBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
             this.TpToAnnimationFrameButton.PressColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
             this.TpToAnnimationFrameButton.PressTextColor = System.Drawing.Color.White;
-            this.TpToAnnimationFrameButton.Size = new System.Drawing.Size(53, 40);
+            this.TpToAnnimationFrameButton.Size = new System.Drawing.Size(53, 32);
             this.TpToAnnimationFrameButton.Style = MetroSet_UI.Enums.Style.Light;
             this.TpToAnnimationFrameButton.StyleManager = null;
             this.TpToAnnimationFrameButton.TabIndex = 54;
@@ -984,7 +1043,7 @@ namespace Silicon
             this.CameraZoomInfoLabel2.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.CameraZoomInfoLabel2.Font = new System.Drawing.Font("Leelawadee UI", 7F, System.Drawing.FontStyle.Bold);
             this.CameraZoomInfoLabel2.ForeColor = System.Drawing.Color.White;
-            this.CameraZoomInfoLabel2.Location = new System.Drawing.Point(366, 241);
+            this.CameraZoomInfoLabel2.Location = new System.Drawing.Point(366, 246);
             this.CameraZoomInfoLabel2.Name = "CameraZoomInfoLabel2";
             this.CameraZoomInfoLabel2.Size = new System.Drawing.Size(71, 44);
             this.CameraZoomInfoLabel2.TabIndex = 53;
@@ -993,7 +1052,7 @@ namespace Silicon
             // InterpolationComboBox
             // 
             this.InterpolationComboBox.BackColor = System.Drawing.Color.White;
-            this.InterpolationComboBox.Font = new System.Drawing.Font("Impact", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.InterpolationComboBox.Font = new System.Drawing.Font("Impact", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.InterpolationComboBox.ForeColor = System.Drawing.Color.Black;
             this.InterpolationComboBox.FormattingEnabled = true;
             this.InterpolationComboBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
@@ -1007,9 +1066,9 @@ namespace Silicon
             " Exponential Out",
             " Exponential In Out",
             "Catmull-Rom"});
-            this.InterpolationComboBox.Location = new System.Drawing.Point(215, 246);
+            this.InterpolationComboBox.Location = new System.Drawing.Point(226, 246);
             this.InterpolationComboBox.Name = "InterpolationComboBox";
-            this.InterpolationComboBox.Size = new System.Drawing.Size(146, 28);
+            this.InterpolationComboBox.Size = new System.Drawing.Size(135, 25);
             this.InterpolationComboBox.TabIndex = 49;
             this.InterpolationComboBox.Text = " Linear";
             this.InterpolationComboBox.SelectedIndexChanged += new System.EventHandler(this.InterpolationComboBox_SelectedIndexChanged);
@@ -1020,42 +1079,42 @@ namespace Silicon
             this.uiLabel13.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.uiLabel13.Font = new System.Drawing.Font("Impact", 12F);
             this.uiLabel13.ForeColor = System.Drawing.Color.White;
-            this.uiLabel13.Location = new System.Drawing.Point(110, 249);
+            this.uiLabel13.Location = new System.Drawing.Point(120, 249);
             this.uiLabel13.Name = "uiLabel13";
             this.uiLabel13.Size = new System.Drawing.Size(110, 17);
             this.uiLabel13.TabIndex = 52;
             this.uiLabel13.Text = "INTERPOLATION";
             // 
-            // CinematicSpeedTextBox
+            // CinematicDurationTextBox
             // 
-            this.CinematicSpeedTextBox.AutoCompleteCustomSource = null;
-            this.CinematicSpeedTextBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.CinematicSpeedTextBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
-            this.CinematicSpeedTextBox.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(155)))), ((int)(((byte)(155)))));
-            this.CinematicSpeedTextBox.DisabledBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(204)))), ((int)(((byte)(204)))), ((int)(((byte)(204)))));
-            this.CinematicSpeedTextBox.DisabledBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(155)))), ((int)(((byte)(155)))));
-            this.CinematicSpeedTextBox.DisabledForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(136)))), ((int)(((byte)(136)))), ((int)(((byte)(136)))));
-            this.CinematicSpeedTextBox.Font = new System.Drawing.Font("Impact", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CinematicSpeedTextBox.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(102)))), ((int)(((byte)(102)))));
-            this.CinematicSpeedTextBox.Image = null;
-            this.CinematicSpeedTextBox.IsDerivedStyle = true;
-            this.CinematicSpeedTextBox.Lines = null;
-            this.CinematicSpeedTextBox.Location = new System.Drawing.Point(53, 246);
-            this.CinematicSpeedTextBox.MaxLength = 32767;
-            this.CinematicSpeedTextBox.Multiline = false;
-            this.CinematicSpeedTextBox.Name = "CinematicSpeedTextBox";
-            this.CinematicSpeedTextBox.ReadOnly = false;
-            this.CinematicSpeedTextBox.Size = new System.Drawing.Size(53, 28);
-            this.CinematicSpeedTextBox.Style = MetroSet_UI.Enums.Style.Light;
-            this.CinematicSpeedTextBox.StyleManager = null;
-            this.CinematicSpeedTextBox.TabIndex = 51;
-            this.CinematicSpeedTextBox.Text = "60.0";
-            this.CinematicSpeedTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.CinematicSpeedTextBox.ThemeAuthor = "Narwin";
-            this.CinematicSpeedTextBox.ThemeName = "MetroLite";
-            this.CinematicSpeedTextBox.UseSystemPasswordChar = false;
-            this.CinematicSpeedTextBox.WatermarkText = "";
-            this.CinematicSpeedTextBox.TextChanged += new System.EventHandler(this.CinematicSpeedTextBox_TextChanged);
+            this.CinematicDurationTextBox.AutoCompleteCustomSource = null;
+            this.CinematicDurationTextBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.CinematicDurationTextBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.CinematicDurationTextBox.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(155)))), ((int)(((byte)(155)))));
+            this.CinematicDurationTextBox.DisabledBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(204)))), ((int)(((byte)(204)))), ((int)(((byte)(204)))));
+            this.CinematicDurationTextBox.DisabledBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(155)))), ((int)(((byte)(155)))));
+            this.CinematicDurationTextBox.DisabledForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(136)))), ((int)(((byte)(136)))), ((int)(((byte)(136)))));
+            this.CinematicDurationTextBox.Font = new System.Drawing.Font("Impact", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CinematicDurationTextBox.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(102)))), ((int)(((byte)(102)))));
+            this.CinematicDurationTextBox.Image = null;
+            this.CinematicDurationTextBox.IsDerivedStyle = true;
+            this.CinematicDurationTextBox.Lines = null;
+            this.CinematicDurationTextBox.Location = new System.Drawing.Point(74, 246);
+            this.CinematicDurationTextBox.MaxLength = 32767;
+            this.CinematicDurationTextBox.Multiline = false;
+            this.CinematicDurationTextBox.Name = "CinematicDurationTextBox";
+            this.CinematicDurationTextBox.ReadOnly = false;
+            this.CinematicDurationTextBox.Size = new System.Drawing.Size(41, 26);
+            this.CinematicDurationTextBox.Style = MetroSet_UI.Enums.Style.Light;
+            this.CinematicDurationTextBox.StyleManager = null;
+            this.CinematicDurationTextBox.TabIndex = 51;
+            this.CinematicDurationTextBox.Text = "1.0";
+            this.CinematicDurationTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.CinematicDurationTextBox.ThemeAuthor = "Narwin";
+            this.CinematicDurationTextBox.ThemeName = "MetroLite";
+            this.CinematicDurationTextBox.UseSystemPasswordChar = false;
+            this.CinematicDurationTextBox.WatermarkText = "";
+            this.CinematicDurationTextBox.TextChanged += new System.EventHandler(this.CinematicDurationTextBox_TextChanged);
             // 
             // uiLabel12
             // 
@@ -1065,21 +1124,21 @@ namespace Silicon
             this.uiLabel12.ForeColor = System.Drawing.Color.White;
             this.uiLabel12.Location = new System.Drawing.Point(3, 249);
             this.uiLabel12.Name = "uiLabel12";
-            this.uiLabel12.Size = new System.Drawing.Size(51, 17);
+            this.uiLabel12.Size = new System.Drawing.Size(84, 17);
             this.uiLabel12.TabIndex = 50;
-            this.uiLabel12.Text = "SPEED";
+            this.uiLabel12.Text = "DURATION";
             // 
             // LoadAnimationButton
             // 
             this.LoadAnimationButton.DisabledBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.LoadAnimationButton.DisabledBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.LoadAnimationButton.DisabledForeColor = System.Drawing.Color.Gray;
-            this.LoadAnimationButton.Font = new System.Drawing.Font("Impact", 13F, System.Drawing.FontStyle.Bold);
+            this.LoadAnimationButton.Font = new System.Drawing.Font("Impact", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LoadAnimationButton.HoverBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
             this.LoadAnimationButton.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
             this.LoadAnimationButton.HoverTextColor = System.Drawing.Color.White;
             this.LoadAnimationButton.IsDerivedStyle = true;
-            this.LoadAnimationButton.Location = new System.Drawing.Point(426, 141);
+            this.LoadAnimationButton.Location = new System.Drawing.Point(426, 155);
             this.LoadAnimationButton.Name = "LoadAnimationButton";
             this.LoadAnimationButton.NormalBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.LoadAnimationButton.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
@@ -1087,7 +1146,7 @@ namespace Silicon
             this.LoadAnimationButton.PressBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
             this.LoadAnimationButton.PressColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
             this.LoadAnimationButton.PressTextColor = System.Drawing.Color.White;
-            this.LoadAnimationButton.Size = new System.Drawing.Size(53, 40);
+            this.LoadAnimationButton.Size = new System.Drawing.Size(53, 32);
             this.LoadAnimationButton.Style = MetroSet_UI.Enums.Style.Light;
             this.LoadAnimationButton.StyleManager = null;
             this.LoadAnimationButton.TabIndex = 48;
@@ -1101,12 +1160,12 @@ namespace Silicon
             this.SaveAnimationButton.DisabledBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.SaveAnimationButton.DisabledBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.SaveAnimationButton.DisabledForeColor = System.Drawing.Color.Gray;
-            this.SaveAnimationButton.Font = new System.Drawing.Font("Impact", 13F, System.Drawing.FontStyle.Bold);
+            this.SaveAnimationButton.Font = new System.Drawing.Font("Impact", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SaveAnimationButton.HoverBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
             this.SaveAnimationButton.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
             this.SaveAnimationButton.HoverTextColor = System.Drawing.Color.White;
             this.SaveAnimationButton.IsDerivedStyle = true;
-            this.SaveAnimationButton.Location = new System.Drawing.Point(367, 141);
+            this.SaveAnimationButton.Location = new System.Drawing.Point(367, 155);
             this.SaveAnimationButton.Name = "SaveAnimationButton";
             this.SaveAnimationButton.NormalBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.SaveAnimationButton.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
@@ -1114,7 +1173,7 @@ namespace Silicon
             this.SaveAnimationButton.PressBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
             this.SaveAnimationButton.PressColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
             this.SaveAnimationButton.PressTextColor = System.Drawing.Color.White;
-            this.SaveAnimationButton.Size = new System.Drawing.Size(53, 40);
+            this.SaveAnimationButton.Size = new System.Drawing.Size(53, 32);
             this.SaveAnimationButton.Style = MetroSet_UI.Enums.Style.Light;
             this.SaveAnimationButton.StyleManager = null;
             this.SaveAnimationButton.TabIndex = 47;
@@ -1129,7 +1188,7 @@ namespace Silicon
             this.CameraRotationInfoLabel2.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.CameraRotationInfoLabel2.Font = new System.Drawing.Font("Leelawadee UI", 7F, System.Drawing.FontStyle.Bold);
             this.CameraRotationInfoLabel2.ForeColor = System.Drawing.Color.White;
-            this.CameraRotationInfoLabel2.Location = new System.Drawing.Point(414, 203);
+            this.CameraRotationInfoLabel2.Location = new System.Drawing.Point(414, 208);
             this.CameraRotationInfoLabel2.Name = "CameraRotationInfoLabel2";
             this.CameraRotationInfoLabel2.Size = new System.Drawing.Size(71, 44);
             this.CameraRotationInfoLabel2.TabIndex = 46;
@@ -1141,7 +1200,7 @@ namespace Silicon
             this.CameraLookAtInfoLabel2.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.CameraLookAtInfoLabel2.Font = new System.Drawing.Font("Leelawadee UI", 7F, System.Drawing.FontStyle.Bold);
             this.CameraLookAtInfoLabel2.ForeColor = System.Drawing.Color.White;
-            this.CameraLookAtInfoLabel2.Location = new System.Drawing.Point(366, 203);
+            this.CameraLookAtInfoLabel2.Location = new System.Drawing.Point(366, 208);
             this.CameraLookAtInfoLabel2.Name = "CameraLookAtInfoLabel2";
             this.CameraLookAtInfoLabel2.Size = new System.Drawing.Size(54, 44);
             this.CameraLookAtInfoLabel2.TabIndex = 45;
@@ -1153,7 +1212,7 @@ namespace Silicon
             this.uiLabel9.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.uiLabel9.Font = new System.Drawing.Font("Impact", 10F);
             this.uiLabel9.ForeColor = System.Drawing.Color.White;
-            this.uiLabel9.Location = new System.Drawing.Point(364, 185);
+            this.uiLabel9.Location = new System.Drawing.Point(364, 190);
             this.uiLabel9.Name = "uiLabel9";
             this.uiLabel9.Size = new System.Drawing.Size(76, 17);
             this.uiLabel9.TabIndex = 44;
@@ -1164,12 +1223,12 @@ namespace Silicon
             this.GoToAnnimationFrameButton.DisabledBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.GoToAnnimationFrameButton.DisabledBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.GoToAnnimationFrameButton.DisabledForeColor = System.Drawing.Color.Gray;
-            this.GoToAnnimationFrameButton.Font = new System.Drawing.Font("Impact", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GoToAnnimationFrameButton.Font = new System.Drawing.Font("Impact", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GoToAnnimationFrameButton.HoverBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
             this.GoToAnnimationFrameButton.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
             this.GoToAnnimationFrameButton.HoverTextColor = System.Drawing.Color.White;
             this.GoToAnnimationFrameButton.IsDerivedStyle = true;
-            this.GoToAnnimationFrameButton.Location = new System.Drawing.Point(367, 95);
+            this.GoToAnnimationFrameButton.Location = new System.Drawing.Point(367, 79);
             this.GoToAnnimationFrameButton.Name = "GoToAnnimationFrameButton";
             this.GoToAnnimationFrameButton.NormalBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.GoToAnnimationFrameButton.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
@@ -1177,7 +1236,7 @@ namespace Silicon
             this.GoToAnnimationFrameButton.PressBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
             this.GoToAnnimationFrameButton.PressColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
             this.GoToAnnimationFrameButton.PressTextColor = System.Drawing.Color.White;
-            this.GoToAnnimationFrameButton.Size = new System.Drawing.Size(53, 40);
+            this.GoToAnnimationFrameButton.Size = new System.Drawing.Size(53, 32);
             this.GoToAnnimationFrameButton.Style = MetroSet_UI.Enums.Style.Light;
             this.GoToAnnimationFrameButton.StyleManager = null;
             this.GoToAnnimationFrameButton.TabIndex = 43;
@@ -1191,12 +1250,12 @@ namespace Silicon
             this.DeleteAnimationFrameButton.DisabledBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.DeleteAnimationFrameButton.DisabledBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.DeleteAnimationFrameButton.DisabledForeColor = System.Drawing.Color.Gray;
-            this.DeleteAnimationFrameButton.Font = new System.Drawing.Font("Impact", 17F, System.Drawing.FontStyle.Bold);
+            this.DeleteAnimationFrameButton.Font = new System.Drawing.Font("Impact", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DeleteAnimationFrameButton.HoverBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
             this.DeleteAnimationFrameButton.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
             this.DeleteAnimationFrameButton.HoverTextColor = System.Drawing.Color.White;
             this.DeleteAnimationFrameButton.IsDerivedStyle = true;
-            this.DeleteAnimationFrameButton.Location = new System.Drawing.Point(367, 49);
+            this.DeleteAnimationFrameButton.Location = new System.Drawing.Point(367, 41);
             this.DeleteAnimationFrameButton.Name = "DeleteAnimationFrameButton";
             this.DeleteAnimationFrameButton.NormalBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.DeleteAnimationFrameButton.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
@@ -1204,7 +1263,7 @@ namespace Silicon
             this.DeleteAnimationFrameButton.PressBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
             this.DeleteAnimationFrameButton.PressColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
             this.DeleteAnimationFrameButton.PressTextColor = System.Drawing.Color.White;
-            this.DeleteAnimationFrameButton.Size = new System.Drawing.Size(53, 40);
+            this.DeleteAnimationFrameButton.Size = new System.Drawing.Size(53, 32);
             this.DeleteAnimationFrameButton.Style = MetroSet_UI.Enums.Style.Light;
             this.DeleteAnimationFrameButton.StyleManager = null;
             this.DeleteAnimationFrameButton.TabIndex = 42;
@@ -1225,10 +1284,11 @@ namespace Silicon
             this.Yaw,
             this.Roll,
             this.FOV,
+            this.Zoom,
             this.Fog,
-            this.Speed});
+            this.Duration});
             this.listViewFrames.Cursor = System.Windows.Forms.Cursors.Default;
-            this.listViewFrames.Font = new System.Drawing.Font("Leelawadee UI", 7F);
+            this.listViewFrames.Font = new System.Drawing.Font("Leelawadee UI", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listViewFrames.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
             this.listViewFrames.HideSelection = false;
             this.listViewFrames.Location = new System.Drawing.Point(3, 3);
@@ -1246,55 +1306,55 @@ namespace Silicon
             // 
             this.X.Text = "X";
             this.X.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.X.Width = 35;
+            this.X.Width = 30;
             // 
             // Y
             // 
             this.Y.Text = "Y";
             this.Y.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Y.Width = 35;
+            this.Y.Width = 30;
             // 
             // Z
             // 
             this.Z.Text = "Z";
             this.Z.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Z.Width = 35;
+            this.Z.Width = 30;
             // 
             // Pitch
             // 
             this.Pitch.Text = "Pitch";
             this.Pitch.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Pitch.Width = 39;
+            this.Pitch.Width = 35;
             // 
             // Yaw
             // 
             this.Yaw.Text = "Yaw";
             this.Yaw.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Yaw.Width = 39;
+            this.Yaw.Width = 35;
             // 
             // Roll
             // 
             this.Roll.Text = "Roll";
             this.Roll.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Roll.Width = 39;
+            this.Roll.Width = 35;
             // 
             // FOV
             // 
             this.FOV.Text = "FOV";
             this.FOV.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.FOV.Width = 33;
+            this.FOV.Width = 30;
             // 
             // Fog
             // 
             this.Fog.Text = "Fog";
             this.Fog.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Fog.Width = 33;
+            this.Fog.Width = 27;
             // 
-            // Speed
+            // Duration
             // 
-            this.Speed.Text = "Speed";
-            this.Speed.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Speed.Width = 45;
+            this.Duration.Text = "Duration";
+            this.Duration.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.Duration.Width = 50;
             // 
             // Hotkeys
             // 
@@ -1334,6 +1394,12 @@ namespace Silicon
             this.metroSetSetToolTip1.StyleManager = null;
             this.metroSetSetToolTip1.ThemeAuthor = "Narwin";
             this.metroSetSetToolTip1.ThemeName = "MetroLite";
+            // 
+            // Zoom
+            // 
+            this.Zoom.Text = "Zoom";
+            this.Zoom.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.Zoom.Width = 35;
             // 
             // SiliconForm
             // 
@@ -1416,7 +1482,7 @@ namespace Silicon
         private System.Windows.Forms.ColumnHeader Z;
         private System.Windows.Forms.ColumnHeader Pitch;
         private System.Windows.Forms.ColumnHeader Yaw;
-        private System.Windows.Forms.ColumnHeader Speed;
+        private System.Windows.Forms.ColumnHeader Duration;
         private MetroSet_UI.Controls.MetroSetButton DeleteAnimationFrameButton;
         private MetroSet_UI.Controls.MetroSetButton GoToAnnimationFrameButton;
         private Sunny.UI.UILabel CameraRotationInfoLabel2;
@@ -1436,7 +1502,7 @@ namespace Silicon
         private MetroSet_UI.Controls.MetroSetButton Preset2Button;
         private MetroSet_UI.Controls.MetroSetButton Preset3Button;
         private Sunny.UI.UILabel uiLabel12;
-        private MetroSet_UI.Controls.MetroSetTextBox CinematicSpeedTextBox;
+        private MetroSet_UI.Controls.MetroSetTextBox CinematicDurationTextBox;
         private Sunny.UI.UILabel uiLabel13;
         private System.Windows.Forms.ColumnHeader FOV;
         private Sunny.UI.UILabel uiLabel14;
@@ -1454,6 +1520,9 @@ namespace Silicon
         private System.Windows.Forms.ColumnHeader Fog;
         private MetroSet_UI.Controls.MetroSetButton TpToAnnimationFrameButton;
         private MetroSet_UI.Controls.MetroSetButton ReverseAnimationButton;
+        private MetroSet_UI.Controls.MetroSetButton SpeedToggleButton;
+        private MetroSet_UI.Controls.MetroSetButton RecordAnimationButton;
+        private System.Windows.Forms.ColumnHeader Zoom;
     }
 }
 

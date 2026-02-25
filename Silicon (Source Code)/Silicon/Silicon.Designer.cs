@@ -100,13 +100,13 @@ namespace Silicon
             this.Yaw = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Roll = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.FOV = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Zoom = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Fog = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Duration = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Hotkeys = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
             this.HotkeyPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.metroSetSetToolTip1 = new MetroSet_UI.Components.MetroSetSetToolTip();
-            this.Zoom = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Information.SuspendLayout();
             this.panel1.SuspendLayout();
             this.Utility.SuspendLayout();
@@ -160,7 +160,7 @@ namespace Silicon
             this.Information.ForeColor = System.Drawing.Color.White;
             this.Information.Location = new System.Drawing.Point(0, 30);
             this.Information.Name = "Information";
-            this.Information.Size = new System.Drawing.Size(483, 272);
+            this.Information.Size = new System.Drawing.Size(200, 70);
             this.Information.TabIndex = 1;
             this.Information.Text = "Information";
             // 
@@ -993,7 +993,7 @@ namespace Silicon
             this.ReverseAnimationButton.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
             this.ReverseAnimationButton.HoverTextColor = System.Drawing.Color.White;
             this.ReverseAnimationButton.IsDerivedStyle = true;
-            this.ReverseAnimationButton.Location = new System.Drawing.Point(368, 117);
+            this.ReverseAnimationButton.Location = new System.Drawing.Point(367, 117);
             this.ReverseAnimationButton.Name = "ReverseAnimationButton";
             this.ReverseAnimationButton.NormalBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.ReverseAnimationButton.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
@@ -1344,6 +1344,12 @@ namespace Silicon
             this.FOV.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.FOV.Width = 30;
             // 
+            // Zoom
+            // 
+            this.Zoom.Text = "Zoom";
+            this.Zoom.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.Zoom.Width = 35;
+            // 
             // Fog
             // 
             this.Fog.Text = "Fog";
@@ -1394,12 +1400,6 @@ namespace Silicon
             this.metroSetSetToolTip1.StyleManager = null;
             this.metroSetSetToolTip1.ThemeAuthor = "Narwin";
             this.metroSetSetToolTip1.ThemeName = "MetroLite";
-            // 
-            // Zoom
-            // 
-            this.Zoom.Text = "Zoom";
-            this.Zoom.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Zoom.Width = 35;
             // 
             // SiliconForm
             // 

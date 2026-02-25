@@ -24,6 +24,7 @@ namespace Silicon
 
         private bool isRecording = false;
         private double recordTimer = 0.0;
+        private double lastRecordTime = 0;
         private const double recordInterval = 0.5; // 0.5 seconds
 
         // Saved JSON Format
@@ -220,8 +221,20 @@ namespace Silicon
                         int p1Index = i;
                         int p2Index = nextIndex;
 
-                        int p0Index = Math.Max(p1Index - 1, 0);
-                        int p3Index = Math.Min(p2Index + 1, lastIndex);
+                        int p0Index;
+                        int p3Index;
+
+                        if (!isReversePlayback)
+                        {
+                            p0Index = Math.Max(p1Index - 1, 0);
+                            p3Index = Math.Min(p2Index + 1, lastIndex);
+                        }
+                        else
+                        {
+                            // swap direction neighbors
+                            p0Index = Math.Min(p1Index + 1, lastIndex);
+                            p3Index = Math.Max(p2Index - 1, 0);
+                        }
 
                         List<double> p0 = animationFrames[p0Index];
                         List<double> p1 = animationFrames[p1Index];
@@ -622,7 +635,7 @@ namespace Silicon
                 }
 
                 isRecording = true;
-                recordTimer = 0.0;
+                lastRecordTime = Environment.TickCount / 1000.0;
 
                 //animationFrames.Clear();
                 //listViewFrames.Items.Clear();
@@ -644,12 +657,12 @@ namespace Silicon
             if (!isRecording)
                 return;
 
-            recordTimer += 0.005; // because your loop runs every 5ms
+            double now = Environment.TickCount / 1000.0;
 
-            if (recordTimer < recordInterval)
+            if (now - lastRecordTime < recordInterval)
                 return;
 
-            recordTimer = 0.0;
+            lastRecordTime = now;
 
             List<double> frame = new List<double>
             {
@@ -662,7 +675,7 @@ namespace Silicon
                 currentCameraFOV,
                 currentCameraDistance,
                 currentCameraSightRange,
-                0.5 // duration between recorded frames
+                recordInterval
             };
 
             animationFrames.Add(frame);

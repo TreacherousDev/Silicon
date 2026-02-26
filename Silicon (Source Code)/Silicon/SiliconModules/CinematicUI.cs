@@ -308,12 +308,12 @@ namespace Silicon
             foreach (var frame in animationFrames)
             {
                 ListViewItem item = new ListViewItem(i.ToString()); // LookAtX
-                item.SubItems.Add(frame[0].ToString("F1")); // LookAtX
-                item.SubItems.Add(frame[1].ToString("F1")); // LookAtY
-                item.SubItems.Add(frame[2].ToString("F1")); // LookAtZ
-                item.SubItems.Add(frame[3].ToString("F1")); // Pitch
-                item.SubItems.Add(frame[4].ToString("F1")); // Yaw
-                item.SubItems.Add(frame[5].ToString("F1")); // Roll
+                item.SubItems.Add(frame[0].ToString("F2")); // LookAtX
+                item.SubItems.Add(frame[1].ToString("F2")); // LookAtY
+                item.SubItems.Add(frame[2].ToString("F2")); // LookAtZ
+                item.SubItems.Add(frame[3].ToString("F2")); // Pitch
+                item.SubItems.Add(frame[4].ToString("F2")); // Yaw
+                item.SubItems.Add(frame[5].ToString("F2")); // Roll
                 item.SubItems.Add(frame[6].ToString("F0")); // FOV
                 item.SubItems.Add(frame[7].ToString("F1")); // Distance
                 item.SubItems.Add(frame[8].ToString("F0")); // Sight Range

@@ -23,7 +23,6 @@ namespace Silicon
         private double playbackSpeedMultiplier = 1.0;
 
         private bool isRecording = false;
-        private double recordTimer = 0.0;
         private double lastRecordTime = 0;
         private const double recordInterval = 0.5; // 0.5 seconds
 
@@ -228,7 +227,7 @@ namespace Silicon
                     double alpha = (elapsedTime * playbackSpeedMultiplier) / duration;
                     alpha = Clamp(alpha, 0.0, 1.0);
 
-                    if (InterpolationComboBox.Text == "Catmull-Rom")
+                    if (interpolationIndex == 8)
                     {
                         int lastIndex = animationFrames.Count - 1;
 

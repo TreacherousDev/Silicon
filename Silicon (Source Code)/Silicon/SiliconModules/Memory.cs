@@ -77,7 +77,7 @@ namespace Silicon
         const uint MEM_RESERVE = 0x00002000;
         const uint PAGE_EXECUTE_READWRITE = 0x40; // Giving full permissions for this example
         const uint PROCESS_ALL_ACCESS = 0x001F0FFF;
-        int hexAddressAllocated = 0;
+        //int hexAddressAllocated = 0;
         private IntPtr allocatedMemoryPtr = IntPtr.Zero;
 
         public bool UnlockCubicMemoryRegion()

@@ -81,7 +81,6 @@ namespace Silicon
             this.TpToAnnimationFrameButton = new MetroSet_UI.Controls.MetroSetButton();
             this.CameraZoomInfoLabel2 = new Sunny.UI.UILabel();
             this.InterpolationComboBox = new System.Windows.Forms.ComboBox();
-            this.uiLabel13 = new Sunny.UI.UILabel();
             this.CinematicDurationTextBox = new MetroSet_UI.Controls.MetroSetTextBox();
             this.uiLabel12 = new Sunny.UI.UILabel();
             this.LoadAnimationButton = new MetroSet_UI.Controls.MetroSetButton();
@@ -107,6 +106,8 @@ namespace Silicon
             this.panel2 = new System.Windows.Forms.Panel();
             this.HotkeyPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.metroSetSetToolTip1 = new MetroSet_UI.Components.MetroSetSetToolTip();
+            this.OverrideInterpolationCheckBox = new Sunny.UI.UICheckBox();
+            this.Interpolation = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Information.SuspendLayout();
             this.panel1.SuspendLayout();
             this.Utility.SuspendLayout();
@@ -904,13 +905,13 @@ namespace Silicon
             // Cinematic
             // 
             this.Cinematic.BackColor = System.Drawing.Color.Transparent;
+            this.Cinematic.Controls.Add(this.InterpolationComboBox);
+            this.Cinematic.Controls.Add(this.OverrideInterpolationCheckBox);
             this.Cinematic.Controls.Add(this.RecordAnimationButton);
             this.Cinematic.Controls.Add(this.SpeedToggleButton);
             this.Cinematic.Controls.Add(this.ReverseAnimationButton);
             this.Cinematic.Controls.Add(this.TpToAnnimationFrameButton);
             this.Cinematic.Controls.Add(this.CameraZoomInfoLabel2);
-            this.Cinematic.Controls.Add(this.InterpolationComboBox);
-            this.Cinematic.Controls.Add(this.uiLabel13);
             this.Cinematic.Controls.Add(this.CinematicDurationTextBox);
             this.Cinematic.Controls.Add(this.uiLabel12);
             this.Cinematic.Controls.Add(this.LoadAnimationButton);
@@ -1066,24 +1067,12 @@ namespace Silicon
             " Exponential Out",
             " Exponential In Out",
             "Catmull-Rom"});
-            this.InterpolationComboBox.Location = new System.Drawing.Point(226, 246);
+            this.InterpolationComboBox.Location = new System.Drawing.Point(248, 246);
             this.InterpolationComboBox.Name = "InterpolationComboBox";
-            this.InterpolationComboBox.Size = new System.Drawing.Size(135, 25);
+            this.InterpolationComboBox.Size = new System.Drawing.Size(113, 25);
             this.InterpolationComboBox.TabIndex = 49;
             this.InterpolationComboBox.Text = " Linear";
             this.InterpolationComboBox.SelectedIndexChanged += new System.EventHandler(this.InterpolationComboBox_SelectedIndexChanged);
-            // 
-            // uiLabel13
-            // 
-            this.uiLabel13.BackColor = System.Drawing.Color.Transparent;
-            this.uiLabel13.Cursor = System.Windows.Forms.Cursors.Arrow;
-            this.uiLabel13.Font = new System.Drawing.Font("Impact", 12F);
-            this.uiLabel13.ForeColor = System.Drawing.Color.White;
-            this.uiLabel13.Location = new System.Drawing.Point(120, 249);
-            this.uiLabel13.Name = "uiLabel13";
-            this.uiLabel13.Size = new System.Drawing.Size(110, 17);
-            this.uiLabel13.TabIndex = 52;
-            this.uiLabel13.Text = "INTERPOLATION";
             // 
             // CinematicDurationTextBox
             // 
@@ -1122,7 +1111,7 @@ namespace Silicon
             this.uiLabel12.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.uiLabel12.Font = new System.Drawing.Font("Impact", 12F);
             this.uiLabel12.ForeColor = System.Drawing.Color.White;
-            this.uiLabel12.Location = new System.Drawing.Point(3, 249);
+            this.uiLabel12.Location = new System.Drawing.Point(3, 248);
             this.uiLabel12.Name = "uiLabel12";
             this.uiLabel12.Size = new System.Drawing.Size(84, 17);
             this.uiLabel12.TabIndex = 50;
@@ -1286,7 +1275,8 @@ namespace Silicon
             this.FOV,
             this.Zoom,
             this.Fog,
-            this.Duration});
+            this.Duration,
+            this.Interpolation});
             this.listViewFrames.Cursor = System.Windows.Forms.Cursors.Default;
             this.listViewFrames.Font = new System.Drawing.Font("Leelawadee UI", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listViewFrames.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
@@ -1346,9 +1336,9 @@ namespace Silicon
             // 
             // Zoom
             // 
-            this.Zoom.Text = "Zoom";
+            this.Zoom.Text = "🔍";
             this.Zoom.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Zoom.Width = 35;
+            this.Zoom.Width = 25;
             // 
             // Fog
             // 
@@ -1358,9 +1348,9 @@ namespace Silicon
             // 
             // Duration
             // 
-            this.Duration.Text = "Duration";
+            this.Duration.Text = "⏱";
             this.Duration.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Duration.Width = 50;
+            this.Duration.Width = 25;
             // 
             // Hotkeys
             // 
@@ -1400,6 +1390,23 @@ namespace Silicon
             this.metroSetSetToolTip1.StyleManager = null;
             this.metroSetSetToolTip1.ThemeAuthor = "Narwin";
             this.metroSetSetToolTip1.ThemeName = "MetroLite";
+            // 
+            // OverrideInterpolationCheckBox
+            // 
+            this.OverrideInterpolationCheckBox.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.OverrideInterpolationCheckBox.Font = new System.Drawing.Font("Impact", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.OverrideInterpolationCheckBox.ForeColor = System.Drawing.Color.White;
+            this.OverrideInterpolationCheckBox.Location = new System.Drawing.Point(120, 244);
+            this.OverrideInterpolationCheckBox.MinimumSize = new System.Drawing.Size(1, 1);
+            this.OverrideInterpolationCheckBox.Name = "OverrideInterpolationCheckBox";
+            this.OverrideInterpolationCheckBox.Size = new System.Drawing.Size(150, 29);
+            this.OverrideInterpolationCheckBox.TabIndex = 58;
+            this.OverrideInterpolationCheckBox.Text = "INTERPOLATION";
+            // 
+            // Interpolation
+            // 
+            this.Interpolation.Text = "ƒ";
+            this.Interpolation.Width = 25;
             // 
             // SiliconForm
             // 
@@ -1503,7 +1510,6 @@ namespace Silicon
         private MetroSet_UI.Controls.MetroSetButton Preset3Button;
         private Sunny.UI.UILabel uiLabel12;
         private MetroSet_UI.Controls.MetroSetTextBox CinematicDurationTextBox;
-        private Sunny.UI.UILabel uiLabel13;
         private System.Windows.Forms.ColumnHeader FOV;
         private Sunny.UI.UILabel uiLabel14;
         private System.Windows.Forms.FlowLayoutPanel CubicWindows;
@@ -1523,6 +1529,8 @@ namespace Silicon
         private MetroSet_UI.Controls.MetroSetButton SpeedToggleButton;
         private MetroSet_UI.Controls.MetroSetButton RecordAnimationButton;
         private System.Windows.Forms.ColumnHeader Zoom;
+        private Sunny.UI.UICheckBox OverrideInterpolationCheckBox;
+        private System.Windows.Forms.ColumnHeader Interpolation;
     }
 }
 

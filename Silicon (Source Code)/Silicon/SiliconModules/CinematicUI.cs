@@ -46,7 +46,9 @@ namespace Silicon
             frame.Add(currentCameraFOV);
             frame.Add(currentCameraDistance);
             frame.Add(currentCameraSightRange);
-            frame.Add(double.TryParse(CinematicDurationTextBox.Text, out double duration) ? duration : 10.0);
+            frame.Add(double.TryParse(CinematicDurationTextBox.Text, out double duration) ? duration : 1.0);
+            // Store interpolation index
+            frame.Add(InterpolationComboBox.SelectedIndex);
 
 
             // Insert frame after selected row
@@ -201,7 +203,19 @@ namespace Silicon
                 double endFOV = endFrame[6], endDistance = endFrame[7], endSightRange = endFrame[8];
 
                 double duration = endFrame[9];
-                Interpolator.MethodDelegate frameInterpolation = _interpolator;
+                //Interpolator.MethodDelegate frameInterpolation = _interpolator;
+                int interpolationIndex;
+
+                if (OverrideInterpolationCheckBox.Checked)
+                {
+                    interpolationIndex = InterpolationComboBox.SelectedIndex;
+                }
+                else
+                {
+                    interpolationIndex = endFrame.Count > 10 ? (int)endFrame[10] : 0;
+                }
+
+                Interpolator.MethodDelegate frameInterpolation = Interpolator.GetMethodWithIndex(interpolationIndex);
 
                 double startTime = Environment.TickCount;
 
@@ -307,7 +321,7 @@ namespace Silicon
             int i = 1;
             foreach (var frame in animationFrames)
             {
-                ListViewItem item = new ListViewItem(i.ToString()); // LookAtX
+                ListViewItem item = new ListViewItem(i.ToString());
                 item.SubItems.Add(frame[0].ToString("F2")); // LookAtX
                 item.SubItems.Add(frame[1].ToString("F2")); // LookAtY
                 item.SubItems.Add(frame[2].ToString("F2")); // LookAtZ
@@ -318,6 +332,7 @@ namespace Silicon
                 item.SubItems.Add(frame[7].ToString("F1")); // Distance
                 item.SubItems.Add(frame[8].ToString("F0")); // Sight Range
                 item.SubItems.Add(frame[9].ToString("F3")); // Duration
+                item.SubItems.Add(frame[10].ToString("F0"));
                 listViewFrames.Items.Add(item);
                 i++;
             }
@@ -356,7 +371,7 @@ namespace Silicon
             }
         }
 
-        private void listViewFrames_DoubleClick(object sender, EventArgs e)
+        private void ListViewFrames_DoubleClick(object sender, EventArgs e)
         {
             if (listViewFrames.SelectedItems.Count == 0)
                 return;
@@ -380,7 +395,7 @@ namespace Silicon
             {
                 int rowIndex = item.Index; // which frame we are editing
 
-                for (int j = 0; j < 9; j++)
+                for (int j = 0; j < 11; j++)
                 {
                     animationFrames[rowIndex][j] = float.Parse(editForm.TextBoxes[j + 1].Text);
                 }
@@ -675,7 +690,8 @@ namespace Silicon
                 currentCameraFOV,
                 currentCameraDistance,
                 currentCameraSightRange,
-                recordInterval
+                recordInterval,
+                InterpolationComboBox.SelectedIndex // save interpolation per frame
             };
 
             animationFrames.Add(frame);
@@ -802,7 +818,8 @@ namespace Silicon
                             rawFrame.Count > 6 ? rawFrame[6] : 70.0,
                             rawFrame.Count > 7 ? rawFrame[7] : 22.5,
                             rawFrame.Count > 8 ? rawFrame[8] : 100,
-                            rawFrame.Count > 9 ? rawFrame[9] : 1.0
+                            rawFrame.Count > 9 ? rawFrame[9] : 1.0,
+                            rawFrame.Count > 10 ? rawFrame[10] : 0
                         };
 
                         animationFrames.Add(frame);
@@ -818,6 +835,7 @@ namespace Silicon
                         item.SubItems.Add(frame[7].ToString("F1"));
                         item.SubItems.Add(frame[8].ToString("F0"));
                         item.SubItems.Add(frame[9].ToString("F3"));
+                        item.SubItems.Add(frame[10].ToString("F0"));
                         listViewFrames.Items.Add(item);
                         i++;
                     }

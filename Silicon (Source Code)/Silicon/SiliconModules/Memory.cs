@@ -158,18 +158,24 @@ namespace Silicon
             m.WriteMemory("Cubic.exe+30E925", "bytes", hidePlayerAvatarInjection);
         }
 
+
+        // Called every timer tick
         private void UpdateMemory()
         {
+            // Record button keyframe capture
             HandleRecording();
+
+            // First Person POV Head bob
             HeadBob();
             m.WriteMemory("Cubic.exe+30E7A0", "float", currentCameraHeight.ToString());
 
-            HandleCameraController(currentCameraYaw); 
 
+            HandleCameraController(currentCameraYaw); // remove argument? idk kkkk
+
+            // Get current values from predetermined addresses and offsets
             uint intRotationAddress = m.ReadUInt("Cubic.exe+30EA8C");
             string pitchAddress = (intRotationAddress + 4).ToString("X");
             string yawAddress = (intRotationAddress).ToString("X");
-
             isChatting = m.ReadInt("Cubic.exe+30EB8F") != 0;
 
             // Up Vector -> Roll
@@ -244,6 +250,8 @@ namespace Silicon
             }
 
         }
+
+        // inconsisntent methodology kkkk
         private void HidePlayerToggle(bool enabled)
         {
             if (enabled)

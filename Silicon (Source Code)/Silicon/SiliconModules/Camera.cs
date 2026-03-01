@@ -159,7 +159,6 @@ namespace Silicon
             targetCameraPitch = Clamp(targetCameraPitch, -89, 89);
         }
 
-
         public static double Clamp(double value, double min, double max)
         {
             if (value < min) return min;
@@ -243,7 +242,6 @@ namespace Silicon
 
             return Vector3.Normalize(c1 * v + c2 * kCrossV);
         }
-
 
         private void ResetCameraRoll()
         {

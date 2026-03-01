@@ -1354,9 +1354,9 @@ namespace Silicon
             // 
             // Fog
             // 
-            this.Fog.Text = "Fog";
+            this.Fog.Text = "👁️";
             this.Fog.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.Fog.Width = 30;
+            this.Fog.Width = 25;
             // 
             // Duration
             // 
@@ -1367,7 +1367,7 @@ namespace Silicon
             // Interpolation
             // 
             this.Interpolation.Text = "ƒ";
-            this.Interpolation.Width = 20;
+            this.Interpolation.Width = 25;
             // 
             // Hotkeys
             // 

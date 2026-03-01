@@ -57,7 +57,7 @@ namespace Silicon
             new KeyAction("Camera Move Left",       Keys.A,          () => movementState.Left      = true,  () => movementState.Left      = false),
             new KeyAction("Camera Move Right",      Keys.D,          () => movementState.Right     = true,  () => movementState.Right     = false),
             new KeyAction("Camera Move Down",       Keys.ShiftKey,   () => movementState.Down      = true,  () => movementState.Down      = false),
-            new KeyAction("Camera Move Up",         Keys.ControlKey, () => movementState.Up       = true,  () => movementState.Up        = false),
+            new KeyAction("Camera Move Up",         Keys.ControlKey, () => movementState.Up        = true,  () => movementState.Up        = false),
             new KeyAction("Camera Pitch Up",        Keys.Up,         () => movementState.PitchUp   = true,  () => movementState.PitchUp   = false),
             new KeyAction("Camera Pitch Down",      Keys.Down,       () => movementState.PitchDown = true,  () => movementState.PitchDown = false),
             new KeyAction("Camera Yaw Left",        Keys.Left,       () => movementState.YawLeft   = true,  () => movementState.YawLeft   = false),
@@ -206,6 +206,7 @@ namespace Silicon
 
         private void HandleKeyDown(Keys key)
         {
+            if (isChatting) return;
             if (InvokeRequired) { Invoke(new Action(() => HandleKeyDown(key))); return; }
             if (keyMap.TryGetValue(key, out var action)) action.OnPress();
         }
@@ -213,6 +214,7 @@ namespace Silicon
         private void HandleKeyUp(Keys key)
         {
             if (IsDisposed || Disposing) return;
+            if (isChatting) return;
             if (InvokeRequired)
             {
                 try { BeginInvoke(new Action(() => HandleKeyUp(key))); }

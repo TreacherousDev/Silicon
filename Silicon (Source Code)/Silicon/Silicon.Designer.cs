@@ -48,7 +48,6 @@ namespace Silicon
             this.Preset3Button = new MetroSet_UI.Controls.MetroSetButton();
             this.Preset2Button = new MetroSet_UI.Controls.MetroSetButton();
             this.Preset1Button = new MetroSet_UI.Controls.MetroSetButton();
-            this.uiLabel11 = new Sunny.UI.UILabel();
             this.GameFogSlider = new MetroSet_UI.Controls.MetroSetTrackBar();
             this.uiLabel10 = new Sunny.UI.UILabel();
             this.uiLabel8 = new Sunny.UI.UILabel();
@@ -64,13 +63,18 @@ namespace Silicon
             this.uiLabel4 = new Sunny.UI.UILabel();
             this.CameraRotateSpeedSlider = new MetroSet_UI.Controls.MetroSetTrackBar();
             this.CameraMoveSpeedSlider = new MetroSet_UI.Controls.MetroSetTrackBar();
-            this.uiLabel2 = new Sunny.UI.UILabel();
             this.uiLabel1 = new Sunny.UI.UILabel();
             this.FreecamLabel = new Sunny.UI.UILabel();
             this.FreecamSwitch = new MetroSet_UI.Controls.MetroSetSwitch();
             this.TabBorder1 = new System.Windows.Forms.Panel();
+            this.PlayItemBobbingButton = new MetroSet_UI.Controls.MetroSetButton();
+            this.BPMTextbox = new MetroSet_UI.Controls.MetroSetTextBox();
+            this.uiLabel13 = new Sunny.UI.UILabel();
+            this.ItemBobbingCheckbox = new Sunny.UI.UICheckBox();
             this.uiLabel3 = new Sunny.UI.UILabel();
             this.CameraDistanceSlider = new MetroSet_UI.Controls.MetroSetTrackBar();
+            this.uiLabel11 = new Sunny.UI.UILabel();
+            this.uiLabel2 = new Sunny.UI.UILabel();
             this.PlayAnimationButton = new MetroSet_UI.Controls.MetroSetButton();
             this.AddAnimationFrameButton = new MetroSet_UI.Controls.MetroSetButton();
             this.TabControl = new Sunny.UI.UITabControl();
@@ -161,7 +165,7 @@ namespace Silicon
             this.Information.ForeColor = System.Drawing.Color.White;
             this.Information.Location = new System.Drawing.Point(0, 30);
             this.Information.Name = "Information";
-            this.Information.Size = new System.Drawing.Size(483, 272);
+            this.Information.Size = new System.Drawing.Size(200, 70);
             this.Information.TabIndex = 1;
             this.Information.Text = "Information";
             // 
@@ -293,7 +297,6 @@ namespace Silicon
             this.Utility.Controls.Add(this.Preset3Button);
             this.Utility.Controls.Add(this.Preset2Button);
             this.Utility.Controls.Add(this.Preset1Button);
-            this.Utility.Controls.Add(this.uiLabel11);
             this.Utility.Controls.Add(this.GameFogSlider);
             this.Utility.Controls.Add(this.uiLabel10);
             this.Utility.Controls.Add(this.uiLabel8);
@@ -309,7 +312,6 @@ namespace Silicon
             this.Utility.Controls.Add(this.uiLabel4);
             this.Utility.Controls.Add(this.CameraRotateSpeedSlider);
             this.Utility.Controls.Add(this.CameraMoveSpeedSlider);
-            this.Utility.Controls.Add(this.uiLabel2);
             this.Utility.Controls.Add(this.uiLabel1);
             this.Utility.Controls.Add(this.FreecamLabel);
             this.Utility.Controls.Add(this.FreecamSwitch);
@@ -327,7 +329,7 @@ namespace Silicon
             this.CameraZoomInfoLabel.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.CameraZoomInfoLabel.Font = new System.Drawing.Font("Leelawadee UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CameraZoomInfoLabel.ForeColor = System.Drawing.Color.White;
-            this.CameraZoomInfoLabel.Location = new System.Drawing.Point(371, 211);
+            this.CameraZoomInfoLabel.Location = new System.Drawing.Point(371, 199);
             this.CameraZoomInfoLabel.Name = "CameraZoomInfoLabel";
             this.CameraZoomInfoLabel.Size = new System.Drawing.Size(74, 44);
             this.CameraZoomInfoLabel.TabIndex = 55;
@@ -343,7 +345,7 @@ namespace Silicon
             this.Preset4Button.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
             this.Preset4Button.HoverTextColor = System.Drawing.Color.White;
             this.Preset4Button.IsDerivedStyle = true;
-            this.Preset4Button.Location = new System.Drawing.Point(155, 202);
+            this.Preset4Button.Location = new System.Drawing.Point(154, 187);
             this.Preset4Button.Name = "Preset4Button";
             this.Preset4Button.NormalBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.Preset4Button.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
@@ -351,7 +353,7 @@ namespace Silicon
             this.Preset4Button.PressBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
             this.Preset4Button.PressColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
             this.Preset4Button.PressTextColor = System.Drawing.Color.White;
-            this.Preset4Button.Size = new System.Drawing.Size(40, 30);
+            this.Preset4Button.Size = new System.Drawing.Size(40, 25);
             this.Preset4Button.Style = MetroSet_UI.Enums.Style.Light;
             this.Preset4Button.StyleManager = null;
             this.Preset4Button.TabIndex = 54;
@@ -370,7 +372,7 @@ namespace Silicon
             this.Preset3Button.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
             this.Preset3Button.HoverTextColor = System.Drawing.Color.White;
             this.Preset3Button.IsDerivedStyle = true;
-            this.Preset3Button.Location = new System.Drawing.Point(109, 202);
+            this.Preset3Button.Location = new System.Drawing.Point(108, 187);
             this.Preset3Button.Name = "Preset3Button";
             this.Preset3Button.NormalBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.Preset3Button.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
@@ -378,7 +380,7 @@ namespace Silicon
             this.Preset3Button.PressBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
             this.Preset3Button.PressColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
             this.Preset3Button.PressTextColor = System.Drawing.Color.White;
-            this.Preset3Button.Size = new System.Drawing.Size(40, 30);
+            this.Preset3Button.Size = new System.Drawing.Size(40, 25);
             this.Preset3Button.Style = MetroSet_UI.Enums.Style.Light;
             this.Preset3Button.StyleManager = null;
             this.Preset3Button.TabIndex = 53;
@@ -397,7 +399,7 @@ namespace Silicon
             this.Preset2Button.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
             this.Preset2Button.HoverTextColor = System.Drawing.Color.White;
             this.Preset2Button.IsDerivedStyle = true;
-            this.Preset2Button.Location = new System.Drawing.Point(63, 202);
+            this.Preset2Button.Location = new System.Drawing.Point(62, 187);
             this.Preset2Button.Name = "Preset2Button";
             this.Preset2Button.NormalBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.Preset2Button.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
@@ -405,7 +407,7 @@ namespace Silicon
             this.Preset2Button.PressBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
             this.Preset2Button.PressColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
             this.Preset2Button.PressTextColor = System.Drawing.Color.White;
-            this.Preset2Button.Size = new System.Drawing.Size(40, 30);
+            this.Preset2Button.Size = new System.Drawing.Size(40, 25);
             this.Preset2Button.Style = MetroSet_UI.Enums.Style.Light;
             this.Preset2Button.StyleManager = null;
             this.Preset2Button.TabIndex = 52;
@@ -424,7 +426,7 @@ namespace Silicon
             this.Preset1Button.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
             this.Preset1Button.HoverTextColor = System.Drawing.Color.White;
             this.Preset1Button.IsDerivedStyle = true;
-            this.Preset1Button.Location = new System.Drawing.Point(17, 202);
+            this.Preset1Button.Location = new System.Drawing.Point(16, 187);
             this.Preset1Button.Name = "Preset1Button";
             this.Preset1Button.NormalBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.Preset1Button.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
@@ -432,7 +434,7 @@ namespace Silicon
             this.Preset1Button.PressBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
             this.Preset1Button.PressColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
             this.Preset1Button.PressTextColor = System.Drawing.Color.White;
-            this.Preset1Button.Size = new System.Drawing.Size(40, 30);
+            this.Preset1Button.Size = new System.Drawing.Size(40, 25);
             this.Preset1Button.Style = MetroSet_UI.Enums.Style.Light;
             this.Preset1Button.StyleManager = null;
             this.Preset1Button.TabIndex = 51;
@@ -440,17 +442,6 @@ namespace Silicon
             this.Preset1Button.ThemeAuthor = "Narwin";
             this.Preset1Button.ThemeName = "MetroLite";
             this.Preset1Button.Click += new System.EventHandler(this.Preset1Button_Click);
-            // 
-            // uiLabel11
-            // 
-            this.uiLabel11.Cursor = System.Windows.Forms.Cursors.Arrow;
-            this.uiLabel11.Font = new System.Drawing.Font("Impact", 12F);
-            this.uiLabel11.ForeColor = System.Drawing.Color.White;
-            this.uiLabel11.Location = new System.Drawing.Point(13, 176);
-            this.uiLabel11.Name = "uiLabel11";
-            this.uiLabel11.Size = new System.Drawing.Size(149, 23);
-            this.uiLabel11.TabIndex = 49;
-            this.uiLabel11.Text = "DEFAULT PRESETS";
             // 
             // GameFogSlider
             // 
@@ -462,7 +453,7 @@ namespace Silicon
             this.GameFogSlider.DisabledValueColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))));
             this.GameFogSlider.HandlerColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.GameFogSlider.IsDerivedStyle = true;
-            this.GameFogSlider.Location = new System.Drawing.Point(16, 152);
+            this.GameFogSlider.Location = new System.Drawing.Point(16, 145);
             this.GameFogSlider.Maximum = 250;
             this.GameFogSlider.Minimum = 5;
             this.GameFogSlider.Name = "GameFogSlider";
@@ -482,7 +473,7 @@ namespace Silicon
             this.uiLabel10.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.uiLabel10.Font = new System.Drawing.Font("Impact", 10F);
             this.uiLabel10.ForeColor = System.Drawing.Color.White;
-            this.uiLabel10.Location = new System.Drawing.Point(12, 132);
+            this.uiLabel10.Location = new System.Drawing.Point(12, 126);
             this.uiLabel10.Name = "uiLabel10";
             this.uiLabel10.Size = new System.Drawing.Size(150, 20);
             this.uiLabel10.TabIndex = 48;
@@ -493,7 +484,7 @@ namespace Silicon
             this.uiLabel8.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.uiLabel8.Font = new System.Drawing.Font("Impact", 12F);
             this.uiLabel8.ForeColor = System.Drawing.Color.White;
-            this.uiLabel8.Location = new System.Drawing.Point(318, 156);
+            this.uiLabel8.Location = new System.Drawing.Point(318, 148);
             this.uiLabel8.Name = "uiLabel8";
             this.uiLabel8.Size = new System.Drawing.Size(108, 23);
             this.uiLabel8.TabIndex = 46;
@@ -504,7 +495,7 @@ namespace Silicon
             this.uiLabel7.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.uiLabel7.Font = new System.Drawing.Font("Impact", 12F);
             this.uiLabel7.ForeColor = System.Drawing.Color.White;
-            this.uiLabel7.Location = new System.Drawing.Point(318, 123);
+            this.uiLabel7.Location = new System.Drawing.Point(318, 116);
             this.uiLabel7.Name = "uiLabel7";
             this.uiLabel7.Size = new System.Drawing.Size(101, 23);
             this.uiLabel7.TabIndex = 45;
@@ -522,7 +513,7 @@ namespace Silicon
             this.HideNametagsSwitch.DisabledCheckColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.HideNametagsSwitch.DisabledUnCheckColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))));
             this.HideNametagsSwitch.IsDerivedStyle = true;
-            this.HideNametagsSwitch.Location = new System.Drawing.Point(254, 156);
+            this.HideNametagsSwitch.Location = new System.Drawing.Point(254, 148);
             this.HideNametagsSwitch.Name = "HideNametagsSwitch";
             this.HideNametagsSwitch.Size = new System.Drawing.Size(58, 22);
             this.HideNametagsSwitch.Style = MetroSet_UI.Enums.Style.Light;
@@ -546,7 +537,7 @@ namespace Silicon
             this.HideUserInterfaceSwitch.DisabledCheckColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.HideUserInterfaceSwitch.DisabledUnCheckColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))));
             this.HideUserInterfaceSwitch.IsDerivedStyle = true;
-            this.HideUserInterfaceSwitch.Location = new System.Drawing.Point(254, 123);
+            this.HideUserInterfaceSwitch.Location = new System.Drawing.Point(254, 116);
             this.HideUserInterfaceSwitch.Name = "HideUserInterfaceSwitch";
             this.HideUserInterfaceSwitch.Size = new System.Drawing.Size(58, 22);
             this.HideUserInterfaceSwitch.Style = MetroSet_UI.Enums.Style.Light;
@@ -564,7 +555,7 @@ namespace Silicon
             this.CameraRotationInfoLabel.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.CameraRotationInfoLabel.Font = new System.Drawing.Font("Leelawadee UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CameraRotationInfoLabel.ForeColor = System.Drawing.Color.White;
-            this.CameraRotationInfoLabel.Location = new System.Drawing.Point(302, 211);
+            this.CameraRotationInfoLabel.Location = new System.Drawing.Point(302, 199);
             this.CameraRotationInfoLabel.Name = "CameraRotationInfoLabel";
             this.CameraRotationInfoLabel.Size = new System.Drawing.Size(79, 44);
             this.CameraRotationInfoLabel.TabIndex = 39;
@@ -576,7 +567,7 @@ namespace Silicon
             this.CameraLookAtInfoLabel.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.CameraLookAtInfoLabel.Font = new System.Drawing.Font("Leelawadee UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CameraLookAtInfoLabel.ForeColor = System.Drawing.Color.White;
-            this.CameraLookAtInfoLabel.Location = new System.Drawing.Point(250, 211);
+            this.CameraLookAtInfoLabel.Location = new System.Drawing.Point(250, 199);
             this.CameraLookAtInfoLabel.Name = "CameraLookAtInfoLabel";
             this.CameraLookAtInfoLabel.Size = new System.Drawing.Size(60, 44);
             this.CameraLookAtInfoLabel.TabIndex = 38;
@@ -588,7 +579,7 @@ namespace Silicon
             this.uiLabel6.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.uiLabel6.Font = new System.Drawing.Font("Impact", 12F);
             this.uiLabel6.ForeColor = System.Drawing.Color.White;
-            this.uiLabel6.Location = new System.Drawing.Point(249, 188);
+            this.uiLabel6.Location = new System.Drawing.Point(249, 177);
             this.uiLabel6.Name = "uiLabel6";
             this.uiLabel6.Size = new System.Drawing.Size(93, 17);
             this.uiLabel6.TabIndex = 37;
@@ -599,7 +590,7 @@ namespace Silicon
             this.uiLabel5.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.uiLabel5.Font = new System.Drawing.Font("Impact", 12F);
             this.uiLabel5.ForeColor = System.Drawing.Color.White;
-            this.uiLabel5.Location = new System.Drawing.Point(318, 90);
+            this.uiLabel5.Location = new System.Drawing.Point(318, 84);
             this.uiLabel5.Name = "uiLabel5";
             this.uiLabel5.Size = new System.Drawing.Size(101, 23);
             this.uiLabel5.TabIndex = 36;
@@ -617,7 +608,7 @@ namespace Silicon
             this.HidePlayerModelSwitch.DisabledCheckColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.HidePlayerModelSwitch.DisabledUnCheckColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))));
             this.HidePlayerModelSwitch.IsDerivedStyle = true;
-            this.HidePlayerModelSwitch.Location = new System.Drawing.Point(255, 90);
+            this.HidePlayerModelSwitch.Location = new System.Drawing.Point(255, 84);
             this.HidePlayerModelSwitch.Name = "HidePlayerModelSwitch";
             this.HidePlayerModelSwitch.Size = new System.Drawing.Size(58, 22);
             this.HidePlayerModelSwitch.Style = MetroSet_UI.Enums.Style.Light;
@@ -639,7 +630,7 @@ namespace Silicon
             this.CameraFOVSlider.DisabledValueColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))));
             this.CameraFOVSlider.HandlerColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.CameraFOVSlider.IsDerivedStyle = true;
-            this.CameraFOVSlider.Location = new System.Drawing.Point(16, 72);
+            this.CameraFOVSlider.Location = new System.Drawing.Point(16, 69);
             this.CameraFOVSlider.Maximum = 135;
             this.CameraFOVSlider.Minimum = 10;
             this.CameraFOVSlider.Name = "CameraFOVSlider";
@@ -659,7 +650,7 @@ namespace Silicon
             this.uiLabel4.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.uiLabel4.Font = new System.Drawing.Font("Impact", 10F);
             this.uiLabel4.ForeColor = System.Drawing.Color.White;
-            this.uiLabel4.Location = new System.Drawing.Point(12, 52);
+            this.uiLabel4.Location = new System.Drawing.Point(12, 50);
             this.uiLabel4.Name = "uiLabel4";
             this.uiLabel4.Size = new System.Drawing.Size(150, 17);
             this.uiLabel4.TabIndex = 34;
@@ -675,7 +666,7 @@ namespace Silicon
             this.CameraRotateSpeedSlider.DisabledValueColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))));
             this.CameraRotateSpeedSlider.HandlerColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.CameraRotateSpeedSlider.IsDerivedStyle = true;
-            this.CameraRotateSpeedSlider.Location = new System.Drawing.Point(16, 32);
+            this.CameraRotateSpeedSlider.Location = new System.Drawing.Point(16, 31);
             this.CameraRotateSpeedSlider.Maximum = 400;
             this.CameraRotateSpeedSlider.Minimum = 1;
             this.CameraRotateSpeedSlider.Name = "CameraRotateSpeedSlider";
@@ -700,7 +691,7 @@ namespace Silicon
             this.CameraMoveSpeedSlider.DisabledValueColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))));
             this.CameraMoveSpeedSlider.HandlerColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.CameraMoveSpeedSlider.IsDerivedStyle = true;
-            this.CameraMoveSpeedSlider.Location = new System.Drawing.Point(254, 62);
+            this.CameraMoveSpeedSlider.Location = new System.Drawing.Point(254, 59);
             this.CameraMoveSpeedSlider.Maximum = 100;
             this.CameraMoveSpeedSlider.Minimum = 3;
             this.CameraMoveSpeedSlider.Name = "CameraMoveSpeedSlider";
@@ -715,25 +706,13 @@ namespace Silicon
             this.CameraMoveSpeedSlider.ValueColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
             this.CameraMoveSpeedSlider.Scroll += new MetroSet_UI.Controls.MetroSetTrackBar.ScrollEventHandler(this.CameraMoveSpeedSlider_Scroll);
             // 
-            // uiLabel2
-            // 
-            this.uiLabel2.BackColor = System.Drawing.Color.Transparent;
-            this.uiLabel2.Cursor = System.Windows.Forms.Cursors.Arrow;
-            this.uiLabel2.Font = new System.Drawing.Font("Impact", 10F);
-            this.uiLabel2.ForeColor = System.Drawing.Color.White;
-            this.uiLabel2.Location = new System.Drawing.Point(12, 12);
-            this.uiLabel2.Name = "uiLabel2";
-            this.uiLabel2.Size = new System.Drawing.Size(127, 17);
-            this.uiLabel2.TabIndex = 30;
-            this.uiLabel2.Text = "CAMERA SENSITIVITY";
-            // 
             // uiLabel1
             // 
             this.uiLabel1.BackColor = System.Drawing.Color.Transparent;
             this.uiLabel1.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.uiLabel1.Font = new System.Drawing.Font("Impact", 10F);
             this.uiLabel1.ForeColor = System.Drawing.Color.White;
-            this.uiLabel1.Location = new System.Drawing.Point(251, 42);
+            this.uiLabel1.Location = new System.Drawing.Point(251, 40);
             this.uiLabel1.Name = "uiLabel1";
             this.uiLabel1.Size = new System.Drawing.Size(168, 23);
             this.uiLabel1.TabIndex = 28;
@@ -744,7 +723,7 @@ namespace Silicon
             this.FreecamLabel.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.FreecamLabel.Font = new System.Drawing.Font("Impact", 12F);
             this.FreecamLabel.ForeColor = System.Drawing.Color.White;
-            this.FreecamLabel.Location = new System.Drawing.Point(317, 13);
+            this.FreecamLabel.Location = new System.Drawing.Point(317, 12);
             this.FreecamLabel.Name = "FreecamLabel";
             this.FreecamLabel.Size = new System.Drawing.Size(151, 23);
             this.FreecamLabel.TabIndex = 25;
@@ -762,7 +741,7 @@ namespace Silicon
             this.FreecamSwitch.DisabledCheckColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
             this.FreecamSwitch.DisabledUnCheckColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))));
             this.FreecamSwitch.IsDerivedStyle = true;
-            this.FreecamSwitch.Location = new System.Drawing.Point(255, 13);
+            this.FreecamSwitch.Location = new System.Drawing.Point(255, 12);
             this.FreecamSwitch.Name = "FreecamSwitch";
             this.FreecamSwitch.Size = new System.Drawing.Size(58, 22);
             this.FreecamSwitch.Style = MetroSet_UI.Enums.Style.Light;
@@ -777,12 +756,98 @@ namespace Silicon
             // TabBorder1
             // 
             this.TabBorder1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.TabBorder1.Controls.Add(this.PlayItemBobbingButton);
+            this.TabBorder1.Controls.Add(this.BPMTextbox);
+            this.TabBorder1.Controls.Add(this.uiLabel13);
+            this.TabBorder1.Controls.Add(this.ItemBobbingCheckbox);
             this.TabBorder1.Controls.Add(this.uiLabel3);
             this.TabBorder1.Controls.Add(this.CameraDistanceSlider);
+            this.TabBorder1.Controls.Add(this.uiLabel11);
+            this.TabBorder1.Controls.Add(this.uiLabel2);
             this.TabBorder1.Location = new System.Drawing.Point(0, 0);
             this.TabBorder1.Name = "TabBorder1";
             this.TabBorder1.Size = new System.Drawing.Size(480, 272);
             this.TabBorder1.TabIndex = 56;
+            // 
+            // PlayItemBobbingButton
+            // 
+            this.PlayItemBobbingButton.DisabledBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.PlayItemBobbingButton.DisabledBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.PlayItemBobbingButton.DisabledForeColor = System.Drawing.Color.Gray;
+            this.PlayItemBobbingButton.Font = new System.Drawing.Font("Impact", 9F, System.Drawing.FontStyle.Bold);
+            this.PlayItemBobbingButton.HoverBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
+            this.PlayItemBobbingButton.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(207)))), ((int)(((byte)(255)))));
+            this.PlayItemBobbingButton.HoverTextColor = System.Drawing.Color.White;
+            this.PlayItemBobbingButton.IsDerivedStyle = true;
+            this.PlayItemBobbingButton.Location = new System.Drawing.Point(97, 238);
+            this.PlayItemBobbingButton.Name = "PlayItemBobbingButton";
+            this.PlayItemBobbingButton.NormalBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.PlayItemBobbingButton.NormalColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(177)))), ((int)(((byte)(225)))));
+            this.PlayItemBobbingButton.NormalTextColor = System.Drawing.Color.White;
+            this.PlayItemBobbingButton.PressBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
+            this.PlayItemBobbingButton.PressColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(147)))), ((int)(((byte)(195)))));
+            this.PlayItemBobbingButton.PressTextColor = System.Drawing.Color.White;
+            this.PlayItemBobbingButton.Size = new System.Drawing.Size(40, 25);
+            this.PlayItemBobbingButton.Style = MetroSet_UI.Enums.Style.Light;
+            this.PlayItemBobbingButton.StyleManager = null;
+            this.PlayItemBobbingButton.TabIndex = 57;
+            this.PlayItemBobbingButton.Text = " ►";
+            this.PlayItemBobbingButton.ThemeAuthor = "Narwin";
+            this.PlayItemBobbingButton.ThemeName = "MetroLite";
+            this.PlayItemBobbingButton.Click += new System.EventHandler(this.PlayItemBobbingButton_Click);
+            // 
+            // BPMTextbox
+            // 
+            this.BPMTextbox.AutoCompleteCustomSource = null;
+            this.BPMTextbox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.BPMTextbox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.BPMTextbox.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(155)))), ((int)(((byte)(155)))));
+            this.BPMTextbox.DisabledBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(204)))), ((int)(((byte)(204)))), ((int)(((byte)(204)))));
+            this.BPMTextbox.DisabledBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(155)))), ((int)(((byte)(155)))));
+            this.BPMTextbox.DisabledForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(136)))), ((int)(((byte)(136)))), ((int)(((byte)(136)))));
+            this.BPMTextbox.Font = new System.Drawing.Font("Impact", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BPMTextbox.HoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(102)))), ((int)(((byte)(102)))));
+            this.BPMTextbox.Image = null;
+            this.BPMTextbox.IsDerivedStyle = true;
+            this.BPMTextbox.Lines = null;
+            this.BPMTextbox.Location = new System.Drawing.Point(51, 238);
+            this.BPMTextbox.MaxLength = 32767;
+            this.BPMTextbox.Multiline = false;
+            this.BPMTextbox.Name = "BPMTextbox";
+            this.BPMTextbox.ReadOnly = false;
+            this.BPMTextbox.Size = new System.Drawing.Size(40, 25);
+            this.BPMTextbox.Style = MetroSet_UI.Enums.Style.Light;
+            this.BPMTextbox.StyleManager = null;
+            this.BPMTextbox.TabIndex = 60;
+            this.BPMTextbox.Text = "60";
+            this.BPMTextbox.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.BPMTextbox.ThemeAuthor = "Narwin";
+            this.BPMTextbox.ThemeName = "MetroLite";
+            this.BPMTextbox.UseSystemPasswordChar = false;
+            this.BPMTextbox.WatermarkText = "";
+            // 
+            // uiLabel13
+            // 
+            this.uiLabel13.Cursor = System.Windows.Forms.Cursors.Arrow;
+            this.uiLabel13.Font = new System.Drawing.Font("Impact", 12F);
+            this.uiLabel13.ForeColor = System.Drawing.Color.White;
+            this.uiLabel13.Location = new System.Drawing.Point(12, 239);
+            this.uiLabel13.Name = "uiLabel13";
+            this.uiLabel13.Size = new System.Drawing.Size(66, 23);
+            this.uiLabel13.TabIndex = 57;
+            this.uiLabel13.Text = "BPM";
+            // 
+            // ItemBobbingCheckbox
+            // 
+            this.ItemBobbingCheckbox.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.ItemBobbingCheckbox.Font = new System.Drawing.Font("Impact", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ItemBobbingCheckbox.ForeColor = System.Drawing.Color.White;
+            this.ItemBobbingCheckbox.Location = new System.Drawing.Point(12, 211);
+            this.ItemBobbingCheckbox.MinimumSize = new System.Drawing.Size(1, 1);
+            this.ItemBobbingCheckbox.Name = "ItemBobbingCheckbox";
+            this.ItemBobbingCheckbox.Size = new System.Drawing.Size(167, 29);
+            this.ItemBobbingCheckbox.TabIndex = 59;
+            this.ItemBobbingCheckbox.Text = "ITEM BOBBING SYNC";
             // 
             // uiLabel3
             // 
@@ -790,7 +855,7 @@ namespace Silicon
             this.uiLabel3.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.uiLabel3.Font = new System.Drawing.Font("Impact", 10F);
             this.uiLabel3.ForeColor = System.Drawing.Color.White;
-            this.uiLabel3.Location = new System.Drawing.Point(12, 92);
+            this.uiLabel3.Location = new System.Drawing.Point(12, 88);
             this.uiLabel3.Name = "uiLabel3";
             this.uiLabel3.Size = new System.Drawing.Size(169, 16);
             this.uiLabel3.TabIndex = 32;
@@ -806,7 +871,7 @@ namespace Silicon
             this.CameraDistanceSlider.DisabledValueColor = System.Drawing.Color.FromArgb(((int)(((byte)(205)))), ((int)(((byte)(205)))), ((int)(((byte)(205)))));
             this.CameraDistanceSlider.HandlerColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.CameraDistanceSlider.IsDerivedStyle = true;
-            this.CameraDistanceSlider.Location = new System.Drawing.Point(16, 112);
+            this.CameraDistanceSlider.Location = new System.Drawing.Point(16, 107);
             this.CameraDistanceSlider.Maximum = 300;
             this.CameraDistanceSlider.Minimum = 2;
             this.CameraDistanceSlider.Name = "CameraDistanceSlider";
@@ -819,6 +884,29 @@ namespace Silicon
             this.CameraDistanceSlider.ThemeName = "MetroLite";
             this.CameraDistanceSlider.Value = 45;
             this.CameraDistanceSlider.ValueColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(160)))), ((int)(((byte)(255)))));
+            // 
+            // uiLabel11
+            // 
+            this.uiLabel11.Cursor = System.Windows.Forms.Cursors.Arrow;
+            this.uiLabel11.Font = new System.Drawing.Font("Impact", 12F);
+            this.uiLabel11.ForeColor = System.Drawing.Color.White;
+            this.uiLabel11.Location = new System.Drawing.Point(11, 163);
+            this.uiLabel11.Name = "uiLabel11";
+            this.uiLabel11.Size = new System.Drawing.Size(149, 23);
+            this.uiLabel11.TabIndex = 49;
+            this.uiLabel11.Text = "DEFAULT PRESETS";
+            // 
+            // uiLabel2
+            // 
+            this.uiLabel2.BackColor = System.Drawing.Color.Transparent;
+            this.uiLabel2.Cursor = System.Windows.Forms.Cursors.Arrow;
+            this.uiLabel2.Font = new System.Drawing.Font("Impact", 10F);
+            this.uiLabel2.ForeColor = System.Drawing.Color.White;
+            this.uiLabel2.Location = new System.Drawing.Point(12, 11);
+            this.uiLabel2.Name = "uiLabel2";
+            this.uiLabel2.Size = new System.Drawing.Size(127, 17);
+            this.uiLabel2.TabIndex = 30;
+            this.uiLabel2.Text = "CAMERA SENSITIVITY";
             // 
             // PlayAnimationButton
             // 
@@ -926,7 +1014,7 @@ namespace Silicon
             this.Cinematic.Controls.Add(this.AddAnimationFrameButton);
             this.Cinematic.Location = new System.Drawing.Point(0, 30);
             this.Cinematic.Name = "Cinematic";
-            this.Cinematic.Size = new System.Drawing.Size(483, 272);
+            this.Cinematic.Size = new System.Drawing.Size(200, 70);
             this.Cinematic.TabIndex = 2;
             this.Cinematic.Text = "Cinematic";
             // 
@@ -1375,7 +1463,7 @@ namespace Silicon
             this.Hotkeys.Controls.Add(this.panel2);
             this.Hotkeys.Location = new System.Drawing.Point(0, 30);
             this.Hotkeys.Name = "Hotkeys";
-            this.Hotkeys.Size = new System.Drawing.Size(483, 272);
+            this.Hotkeys.Size = new System.Drawing.Size(200, 70);
             this.Hotkeys.TabIndex = 3;
             this.Hotkeys.Text = "Hotkeys";
             // 
@@ -1531,6 +1619,10 @@ namespace Silicon
         private System.Windows.Forms.ColumnHeader Zoom;
         private Sunny.UI.UICheckBox OverrideInterpolationCheckBox;
         private System.Windows.Forms.ColumnHeader Interpolation;
+        private Sunny.UI.UICheckBox ItemBobbingCheckbox;
+        private MetroSet_UI.Controls.MetroSetTextBox BPMTextbox;
+        private Sunny.UI.UILabel uiLabel13;
+        private MetroSet_UI.Controls.MetroSetButton PlayItemBobbingButton;
     }
 }
 

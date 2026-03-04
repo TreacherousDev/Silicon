@@ -127,6 +127,38 @@ namespace Silicon
                 gameFogSliderValue = GameFogSlider.Value;
                 targetCameraSightRange = GameFogSlider.Value;
             }
+
+            if (ItemBobbingCheckbox.Checked != isItemBobbingEnabled)
+            {
+                isItemBobbingEnabled = ItemBobbingCheckbox.Checked;
+                ItemBobbingToggle(isItemBobbingEnabled);
+            }
+        }
+
+        private void IntegerTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Allow control keys (backspace, delete, arrows via control)
+            if (char.IsControl(e.KeyChar))
+                return;
+
+            // Allow digits only
+            if (!char.IsDigit(e.KeyChar))
+                e.Handled = true;
+        }
+
+        private PlayButtonState playItemBobbingState = PlayButtonState.Play;
+        private void PlayItemBobbingButton_Click(object sender, EventArgs e)
+        {
+            if (playItemBobbingState == PlayButtonState.Stop)
+            {
+                playItemBobbingState = PlayButtonState.Play;
+                PlayItemBobbingButton.Text = " ►";
+                PlayItemBobbingButton.Refresh();
+                return;
+            }
+
+            playItemBobbingState = PlayButtonState.Stop;
+            PlayItemBobbingButton.Text = "⏹";
         }
     }
-}
+ }

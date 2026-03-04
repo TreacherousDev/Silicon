@@ -49,6 +49,8 @@ namespace Silicon
         private int gameFogSliderValue = 110;
         private double cameraMoveSpeed = 0.1;
         private double cameraRotateSpeed = 1.5;
+        private int itemBobbingBPM = 60;
+        private bool isItemBobbingEnabled = false;
 
 
         private bool isHeadBobEnabled = false;

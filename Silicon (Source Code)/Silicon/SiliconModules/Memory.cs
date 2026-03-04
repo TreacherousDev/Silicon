@@ -58,6 +58,9 @@ namespace Silicon
         readonly string disableMovement2Function = "90 90 90 90 90 90 90 90";
         readonly string disableMovement2Original = "F3 0F 11 87 80 00 00 00";
 
+        readonly string itemBobbingInjection = "50 E8 00 00 00 00 58 F3 0F 10 40 29 F3 0F 11 87 A4 01 00 00 F3 0F 10 87 A8 01 00 00 F3 0F 10 40 2D F3 0F 11 87 A8 01 00 00 58 E9 93 C8 E9 FF 00 00 00 00";
+        readonly string itemBobbingFunctionEntry = "E9 55 37 16 00 0F 1F";
+        readonly string itemBobbingFunctionOriginal= "F3 0F 11 87 A4 01 00";
 
         //
         //
@@ -92,7 +95,7 @@ namespace Silicon
 
                     // 2. Set target to Cubic.exe + 0x1000
                     IntPtr targetAddress = new IntPtr(baseAddr.ToInt64() + 0x30E77F);
-                    UIntPtr size = new UIntPtr(1024); // 1KB
+                    UIntPtr size = new UIntPtr(3000); // 3KB
 
                     uint oldProtect;
 
@@ -156,12 +159,40 @@ namespace Silicon
 
             //Revertable, injections only as set to false by default
             m.WriteMemory("Cubic.exe+30E925", "bytes", hidePlayerAvatarInjection);
+            m.WriteMemory("Cubic.exe+30EC01", "bytes", itemBobbingInjection);
         }
 
+        private double swayTime = 0;
+        private const double UPDATE_INTERVAL_MS = 5.0;
+
+        private double Lerp(double a, double b, double t) => a + (b - a) * t;
+
+        private readonly System.Diagnostics.Stopwatch swayWatch = System.Diagnostics.Stopwatch.StartNew();
+
+        private void UpdateSway()
+        {
+            if (playItemBobbingState == PlayButtonState.Play) return;
+            int bpm = int.TryParse(BPMTextbox.Text, out int value) ? value : 0;
+            double easingPower = 4;
+
+            double periodMs = (60000.0 / bpm) * 2;
+            double t = (swayWatch.Elapsed.TotalMilliseconds % periodMs) / periodMs;
+
+            double halfT = (t * 2) % 1.0;
+            double easedHalf = 1 - Math.Pow(1 - halfT, easingPower);
+            double easedT = (t < 0.5) ? easedHalf * 0.5 : 0.5 + easedHalf * 0.5;
+
+            float vertical = (float)(((easedT * 360.0) + 45) % 360);
+            float horizontal = (float)(((easedT * 360.0) + 45) % 360);
+
+            m.WriteMemory("Cubic.exe+30EC30", "float", vertical.ToString());
+            m.WriteMemory("Cubic.exe+30EC34", "float", horizontal.ToString());
+        }
 
         // Called every timer tick
         private void UpdateMemory()
         {
+            UpdateSway();
             // Record button keyframe capture
             HandleRecording();
 
@@ -290,6 +321,17 @@ namespace Silicon
             }   
         }
 
+        private void ItemBobbingToggle(bool enabled)
+        {
+            if (!enabled)
+            {
+                m.WriteMemory("Cubic.exe+1AB4A7", "bytes", "F3 0F 11 87 A4 01 00");
+            }
+            else
+            {
+                m.WriteMemory("Cubic.exe+1AB4A7", "bytes", "E9 55 37 16 00 0F 1F");
+            }
+        }
     }
 
 }

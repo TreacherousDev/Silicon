@@ -89,6 +89,7 @@ namespace Silicon
             listViewFrames.DragEnter += ListViewFrames_DragEnter;
             listViewFrames.DragDrop += ListViewFrames_DragDrop;
             listViewFrames.DoubleClick += ListViewFrames_DoubleClick;
+            BPMTextbox.KeyPress += IntegerTextBox_KeyPress;
 
 
             // Some color overrides since the TabControl seems to be bugged
@@ -114,7 +115,8 @@ namespace Silicon
                 TpToAnnimationFrameButton,
                 ReverseAnimationButton,
                 SpeedToggleButton,
-                RecordAnimationButton
+                RecordAnimationButton,
+                PlayItemBobbingButton
             };
             foreach (MetroSet_UI.Controls.MetroSetButton button in interfaceButtons)
             {

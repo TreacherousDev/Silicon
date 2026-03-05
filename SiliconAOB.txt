@@ -1,0 +1,183 @@
+Cubic.exe+1BD7F7 - 8B CE                 - mov ecx,esi
+Cubic.exe+1BD7F9 - F3 0F10 A5 F4FEFFFF   - movss xmm4,[ebp-0000010C]
+Cubic.exe+1BD801 - F3 0F10 10            - movss xmm2,[eax]
+Cubic.exe+1BD805 - F3 0F10 48 04         - movss xmm1,[eax+04]
+Cubic.exe+1BD80A - F3 0F59 C5            - mulss xmm0,xmm5
+camera coordinates adjustment: mulss xmm0,xmm5
+
+Cubic.exe+1BA0D0 - F3 0F58 DA            - addss xmm3,xmm2
+Cubic.exe+1BA0D4 - F3 0F58 4E 04         - addss xmm1,[esi+04]
+Cubic.exe+1BA0D9 - F3 0F58 46 08         - addss xmm0,[esi+08]
+Cubic.exe+1BA0DE - F3 0F10 A7 E0090000   - movss xmm4,[edi+000009E0]
+Cubic.exe+1BA0E6 - F3 0F11 1E            - movss [esi],xmm3
+camera lookat editor: movss [esi],xmm3
+
+Cubic.exe+1BD80A - F3 0F59 C5            - mulss xmm0,xmm5
+Cubic.exe+1BD80E - F3 0F59 DD            - mulss xmm3,xmm5
+Cubic.exe+1BD812 - F3 0F59 E5            - mulss xmm4,xmm5
+Cubic.exe+1BD816 - F3 0F5C D0            - subss xmm2,xmm0
+Cubic.exe+1BD81A - F3 0F10 40 08         - movss xmm0,[eax+08]
+Cubic.exe+1BD81F - F3 0F5C CB            - subss xmm1,xmm3
+camera height adjustment: subss xmm1,xmm3
+
+Cubic.exe+1B9B87 - C7 86 EC090000 0000B242 - mov [esi+000009EC],42B20000
+Cubic.exe+1B9B91 - 0F28 C1               - movaps xmm0,xmm1
+Cubic.exe+1B9B94 - 0F2F D8               - comiss xmm3,xmm0
+unlocck camera arrows: comiss xmm3,xmm0
+
+Cubic.exe+1CB27F - C7 80 EC090000 0000B242 - mov [eax+000009EC],42B20000
+Cubic.exe+1CB289 - 0F28 C8               - movaps xmm1,xmm0
+Cubic.exe+1CB28C - 0F2F F1               - comiss xmm6,xmm1
+unlock camera RMB: comiss xmm6,xmm1
+
+Cubic.exe+1BD829 - F3 0F5C C4            - subss xmm0,xmm4
+Cubic.exe+1BD82D - 50                    - push eax
+Cubic.exe+1BD82E - F3 0F11 95 FCFEFFFF   - movss [ebp-00000104],xmm2
+Cubic.exe+1BD836 - F3 0F11 8D 00FFFFFF   - movss [ebp-00000100],xmm1
+Cubic.exe+1BD83E - F3 0F11 85 04FFFFFF   - movss [ebp-000000FC],xmm0
+Cubic.exe+1BD846 - E8 42A5EBFF           - call Cubic.exe+77D8D
+Cubic.exe+1BD84B - F3 0F10 87 E8070000   - movss xmm0,[edi+000007E8]
+Cubic.exe+1BD853 - 8D 85 D8FEFFFF        - lea eax,[ebp-00000128]
+edit FOV: lea eax,[ebp-00000128]
+
+Cubic.exe+1BD7F9 - F3 0F10 A5 F4FEFFFF   - movss xmm4,[ebp-0000010C]
+Cubic.exe+1BD801 - F3 0F10 10            - movss xmm2,[eax]
+Cubic.exe+1BD805 - F3 0F10 48 04         - movss xmm1,[eax+04]
+Cubic.exe+1BD80A - F3 0F59 C5            - mulss xmm0,xmm5
+Cubic.exe+1BD80E - F3 0F59 DD            - mulss xmm3,xmm5
+Cubic.exe+1BD812 - F3 0F59 E5            - mulss xmm4,xmm5
+Cubic.exe+1BD816 - F3 0F5C D0            - subss xmm2,xmm0
+camera distance adjust: subss xmm2,xmm0
+
+Cubic.exe+1A09E1 - F3 0F58 8F 80110000   - addss xmm1,[edi+00001180]
+Cubic.exe+1A09E9 - B8 15010000           - mov eax,00000115
+Cubic.exe+1A09EE - F3 0F11 44 24 70      - movss [esp+70],xmm0
+Cubic.exe+1A09F4 - F3 0F11 45 0C         - movss [ebp+0C],xmm0
+Cubic.exe+1A09F9 - F3 0F10 45 10         - movss xmm0,[ebp+10]
+hide player avatar: movss xmm0,[ebp+10]
+
+Cubic.exe+231BFD - F3 0F10 47 14         - movss xmm0,[edi+14]
+Cubic.exe+231C02 - F3 0F58 82 38020000   - addss xmm0,[edx+00000238]
+Cubic.exe+231C0A - F3 0F10 4F 18         - movss xmm1,[edi+18]
+Cubic.exe+231C0F - F3 0F11 82 38020000   - movss [edx+00000238],xmm0
+hide UI: movss [edx+00000238],xmm0
+
+Cubic.exe+1BFB55 - 8B F9                 - mov edi,ecx
+Cubic.exe+1BFB57 - 89 BD 48FEFFFF        - mov [ebp-000001B8],edi
+Cubic.exe+1BFB5D - 80 3D F30D2B01 00     - cmp byte ptr [Cubic.exe+300DF3],00
+hide UI 2: cmp byte ptr [Cubic.exe+300DF3],00
+
+Cubic.exe+1BD84B - F3 0F10 87 E8070000   - movss xmm0,[edi+000007E8]
+Cubic.exe+1BD853 - 8D 85 D8FEFFFF        - lea eax,[ebp-00000128]
+Cubic.exe+1BD859 - 83 A5 D8FEFFFF 00     - and dword ptr [ebp-00000128],00
+Cubic.exe+1BD860 - 83 EC 10              - sub esp,10
+Cubic.exe+1BD863 - 83 A5 DCFEFFFF 00     - and dword ptr [ebp-00000124],00
+Cubic.exe+1BD86A - 8B CC                 - mov ecx,esp
+Cubic.exe+1BD86C - C7 85 E0FEFFFF 000080BF - mov [ebp-00000120],BF800000
+Cubic.exe+1BD876 - F3 0F11 44 24 0C      - movss [esp+0C],xmm0
+Cubic.exe+1BD87C - 50                    - push eax
+Cubic.exe+1BD87D - E8 0BA5EBFF           - call Cubic.exe+77D8D
+yaw pitch roll: call Cubic.exe+77D8D
+
+Cubic.exe+1BD8D9 - 33 C0                 - xor eax,eax
+Cubic.exe+1BD8DB - 88 87 44080000        - mov [edi+00000844],al
+Cubic.exe+1BD8E1 - 8B 0D 280E2B01        - mov ecx,[Cubic.exe+300E28]
+Cubic.exe+1BD8E7 - 8D 89 D0010000        - lea ecx,[ecx+000001D0]
+Cubic.exe+1BD8ED - E8 8E5C0500           - call Cubic.exe+213580
+Cubic.exe+1BD8F2 - 80 3D F30D2B01 00     - cmp byte ptr [Cubic.exe+300DF3],00
+Cubic.exe+1BD8F9 - 75 0D                 - jne Cubic.exe+1BD908
+Cubic.exe+1BD8FB - 66 0F6E 05 988F2A01   - movd xmm0,[Cubic.exe+2F8F98]
+Cubic.exe+1BD903 - 0F5B C0               - cvtdq2ps xmm0,xmm0
+Cubic.exe+1BD906 - EB 08                 - jmp Cubic.exe+1BD910
+Cubic.exe+1BD908 - F3 0F10 05 AC312801   - movss xmm0,[Cubic.exe+2D31AC]
+Cubic.exe+1BD910 - 80 3D D20D2B01 00     - cmp byte ptr [Cubic.exe+300DD2],00
+Cubic.exe+1BD917 - C7 05 CC0E2B01 0000803F - mov [Cubic.exe+300ECC],3F800000
+Cubic.exe+1BD921 - F3 0F11 05 D00E2B01   - movss [Cubic.exe+300ED0],xmm0
+fog: movss [Cubic.exe+300ED0],xmm0
+
+Cubic.exe+1A8AAC - 0F5B C0               - cvtdq2ps xmm0,xmm0
+Cubic.exe+1A8AAF - F3 0F58 80 30010000   - addss xmm0,[eax+00000130]
+Cubic.exe+1A8AB7 - F3 0F11 45 C4         - movss [ebp-3C],xmm0
+Cubic.exe+1A8ABC - F3 0F10 80 34010000   - movss xmm0,[eax+00000134]
+Cubic.exe+1A8AC4 - F3 0F59 05 402B2801   - mulss xmm0,[Cubic.exe+2D2B40]
+Cubic.exe+1A8ACC - F3 0F58 80 2C010000   - addss xmm0,[eax+0000012C]
+Cubic.exe+1A8AD4 - F3 0F58 C5            - addss xmm0,xmm5
+Cubic.exe+1A8AD8 - F3 0F11 45 C8         - movss [ebp-38],xmm0
+Cubic.exe+1A8ADD - 0F85 080F0000         - jne Cubic.exe+1A99EB
+hide nametags: jne Cubic.exe+1A99EB
+
+
+Cubic.exe+1B9AC8 - F3 0F5C CF            - subss xmm1,xmm7
+Cubic.exe+1B9ACC - B0 01                 - mov al,01
+Cubic.exe+1B9ACE - F3 0F59 CE            - mulss xmm1,xmm6
+Cubic.exe+1B9AD2 - F3 0F58 C9            - addss xmm1,xmm1
+Cubic.exe+1B9AD6 - F3 0F58 8E E8090000   - addss xmm1,[esi+000009E8]
+Cubic.exe+1B9ADE - F3 0F11 8E E8090000   - movss [esi+000009E8],xmm1
+override camera arrow hotkeys: movss [esi+000009E8],xmm1
+
+Cubic.exe+1B9B06 - F3 0F5C D7            - subss xmm2,xmm7
+Cubic.exe+1B9B0A - F3 0F59 D0            - mulss xmm2,xmm0
+Cubic.exe+1B9B0E - F3 0F58 D2            - addss xmm2,xmm2
+Cubic.exe+1B9B12 - F3 0F58 96 EC090000   - addss xmm2,[esi+000009EC]
+Cubic.exe+1B9B1A - F3 0F11 96 EC090000   - movss [esi+000009EC],xmm2
+override camera arrow hotkeys: movss [esi+000009EC],xmm2
+
+Cubic.exe+1CB1F7 - 0F5B ED               - cvtdq2ps xmm5,xmm5
+Cubic.exe+1CB1FA - F3 0F5C DC            - subss xmm3,xmm4
+Cubic.exe+1CB1FE - F3 0F10 80 E8090000   - movss xmm0,[eax+000009E8]
+Cubic.exe+1CB206 - F3 0F5C D5            - subss xmm2,xmm5
+Cubic.exe+1CB20A - F3 0F10 88 EC090000   - movss xmm1,[eax+000009EC]
+Cubic.exe+1CB212 - F3 0F5E 1D 3C2E2801   - divss xmm3,[Cubic.exe+2D2E3C]
+Cubic.exe+1CB21A - F3 0F5E 15 3C2E2801   - divss xmm2,[Cubic.exe+2D2E3C]
+Cubic.exe+1CB222 - F3 0F5C C3            - subss xmm0,xmm3
+Cubic.exe+1CB226 - F3 0F5C CA            - subss xmm1,xmm2
+Cubic.exe+1CB22A - F3 0F11 80 E8090000   - movss [eax+000009E8],xmm0
+override right click drag: movss [eax+000009E8],xmm0
+
+
+Cubic.exe+BC32D - 83 F0 02              - xor eax,02
+Cubic.exe+BC330 - 89 46 64              - mov [esi+64],eax
+Cubic.exe+BC333 - FF 92 A4000000        - call dword ptr [edx+000000A4]
+Cubic.exe+BC339 - 8B 46 64              - mov eax,[esi+64]
+Cubic.exe+BC33C - 83 C8 01              - or eax,01
+Cubic.exe+BC33F - 83 F0 01              - xor eax,01
+Cubic.exe+BC342 - 89 46 64              - mov [esi+64],eax
+Cubic.exe+BC345 - EB 0A                 - jmp Cubic.exe+BC351
+Cubic.exe+BC347 - FF 92 A4000000        - call dword ptr [edx+000000A4]
+close chat: call dword ptr [edx+000000A4]
+
+Cubic.exe+BC316 - 55                    - push ebp
+Cubic.exe+BC317 - 8B EC                 - mov ebp,esp
+Cubic.exe+BC319 - 56                    - push esi
+Cubic.exe+BC31A - 8B F1                 - mov esi,ecx
+Cubic.exe+BC31C - 8B 46 64              - mov eax,[esi+64]
+Cubic.exe+BC31F - 8B 16                 - mov edx,[esi]
+Cubic.exe+BC321 - 83 C8 02              - or eax,02
+Cubic.exe+BC324 - 80 7D 08 00           - cmp byte ptr [ebp+08],00
+Cubic.exe+BC328 - 89 46 64              - mov [esi+64],eax
+Cubic.exe+BC32B - 74 1A                 - je Cubic.exe+BC347
+Cubic.exe+BC32D - 83 F0 02              - xor eax,02
+open chat: xor eax,02
+
+Cubic.exe+1AB48A - 83 EC 1C              - sub esp,1C
+Cubic.exe+1AB48D - 57                    - push edi
+Cubic.exe+1AB48E - 8B F9                 - mov edi,ecx
+Cubic.exe+1AB490 - 80 BF B0010000 00     - cmp byte ptr [edi+000001B0],00
+Cubic.exe+1AB497 - F3 0F10 87 A4010000   - movss xmm0,[edi+000001A4]
+Cubic.exe+1AB49F - F3 0F58 05 142E2801   - addss xmm0,[Cubic.exe+2D2E14]
+Cubic.exe+1AB4A7 - F3 0F11 87 A4010000   - movss [edi+000001A4],xmm0
+item bobbing: movss [edi+000001A4],xmm0
+
+
+
+
+
+
+
+
+
+
+
+
+
+

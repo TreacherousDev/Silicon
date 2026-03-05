@@ -12,12 +12,12 @@
           <Description>"Camera Coordinates Adjustment"</Description>
           <VariableType>Auto Assembler Script</VariableType>
           <AssemblerScript>[ENABLE]
-Cubic.exe+1BD80A:
+Cubic.exe+1BE0B4:
   db 90 90 90 90 90 90 90 90 90 90 90 90
  
  
 [DISABLE]
-Cubic.exe+1BD80A:
+Cubic.exe+1BE0B4:
   mulss xmm0,xmm5
   mulss xmm3,xmm5
   mulss xmm4,xmm5
@@ -34,11 +34,11 @@ Cubic.exe+30EA2D:
   call dummy
 dummy:
   pop eax
-  movss [eax+5D],xmm3
-  movss [eax+5D+4],xmm1
+  movss [eax+5D],xmm1
+  movss [eax+5D+4],xmm2
   movss [eax+5D+8],xmm0
-  movss xmm3,[eax+4D]
-  movss xmm1,[eax+4D+4]
+  movss xmm1,[eax+4D]
+  movss xmm2,[eax+4D+4]
   movss xmm0,[eax+4D+8]
   pop eax
 
@@ -47,8 +47,8 @@ skip:
   call dummy2
 dummy2:
   pop eax
-  movss [eax+37],xmm3
-  movss [eax+37+4],xmm1
+  movss [eax+37],xmm1
+  movss [eax+37+4],xmm2
   movss [eax+37+8],xmm0
   push ebx
   lea ebx,[esi+10]
@@ -58,9 +58,8 @@ dummy2:
 
 
 originalcode:
-  movss [esi],xmm3
-  movss [esi+04],xmm1
-  exit:
+  movss [esi],xmm1
+  movss [esi+04],xmm2
   jmp returnhere
 
 x_position:
@@ -80,7 +79,7 @@ z_position_original:
   dd FFFFFFFF
 
 
-Cubic.exe+1BA0E6:
+Cubic.exe+1BA96F:
   jmp Cubic.exe+30EA2D
   nop 4
   returnhere:
@@ -94,7 +93,7 @@ Cubic.exe+1BA0E6:
 //movss [esi],xmm3
 //movss [esi+04],xmm1
 
-Cubic.exe+1BA0E6:
+Cubic.exe+1BA96F:
   jmp Cubic.exe+30EA53
   nop 4
   returnhere:
@@ -105,6 +104,8 @@ Cubic.exe+1BA0E6:
           <Description>"Camera Height Adjustment"</Description>
           <VariableType>Auto Assembler Script</VariableType>
           <AssemblerScript>[ENABLE]
+label(returnhere)
+
 Cubic.exe+30E77F:
   push ebx
   call dummy
@@ -118,13 +119,12 @@ dummy:
 originalcode:
   subss xmm1,xmm3
   lea eax,[ebp-00000104]
-  exit:
   jmp returnhere
 
 camera_height:
   dd (float)1.3
 
-Cubic.exe+1BD81F:
+Cubic.exe+1BE0C9:
   jmp Cubic.exe+30E77F
   nop 5
   returnhere:
@@ -134,7 +134,7 @@ Cubic.exe+1BD81F:
 
 [DISABLE]
 //code from here till the end of the code will be used to disable the cheat
-Cubic.exe+1BD81F:
+Cubic.exe+1BE0C9:
   db F3 0F 5C CB 8D 85 FC FE FF FF
 //subss xmm1,xmm3
 //lea eax,[ebp-00000104]
@@ -153,14 +153,14 @@ dummy:
   movss xmm3,[eax+1F]
   comiss xmm3,xmm0
   pop eax
-  jna Cubic.exe+1B9BA0
+  jna Cubic.exe+1BA429
   mov dword ptr [esi+000009EC],(float)-89
-  jmp Cubic.exe+1B9BA0
+  jmp Cubic.exe+1BA429
 
 max_camera_depth:
   dd (float)-89
 
-Cubic.exe+1B9B94:
+Cubic.exe+1BA41D:
   jmp Cubic.exe+30E7C8
   returnhere:
 
@@ -168,10 +168,10 @@ Cubic.exe+1B9B94:
  
  
 [DISABLE]
-Cubic.exe+1B9B94:
+Cubic.exe+1BA41D:
 //db 0F 2F D8 76 07
   comiss xmm3,xmm0
-  jna Cubic.exe+1B9BA0
+  jna Cubic.exe+1BA429
 
 
 
@@ -190,15 +190,15 @@ dummy:
   movss xmm6,[eax+1F]
   comiss xmm6,xmm1
   pop eax
-  jna Cubic.exe+1CB298
+  jna Cubic.exe+1CBC6B
   mov dword ptr [eax+000009EC],(float)-89
-  jmp Cubic.exe+1CB298
+  jmp Cubic.exe+1CBC6B
 
 
 max_camera_depth:
 dd (float)-89
 
-Cubic.exe+1CB28C:
+Cubic.exe+1CBC62:
   jmp Cubic.exe+30E816
   returnhere:
 
@@ -207,11 +207,10 @@ Cubic.exe+1CB28C:
  
 [DISABLE]
 //code from here till the end of the code will be used to disable the cheat
-Cubic.exe+1CB28C:
+Cubic.exe+1CBC62:
   //db 0F 2F F1 76 07
   comiss xmm6,xmm1
-  jna Cubic.exe+1CB298
-
+  jna Cubic.exe+1CBC6B
 
 </AssemblerScript>
         </CheatEntry>
@@ -230,15 +229,13 @@ call dummy
 
 originalcode:
   lea eax,[ebp-00000128]
-
-exit:
   jmp returnhere
 
 field_of_view:
   dd (float)75
   dd FFFFFFFF
 
-Cubic.exe+1BD853:
+Cubic.exe+1BE0FD:
   jmp Cubic.exe+30E853
   nop
   returnhere:
@@ -248,7 +245,7 @@ Cubic.exe+1BD853:
  
 [DISABLE]
 //code from here till the end of the code will be used to disable the cheat
-Cubic.exe+1BD853:
+Cubic.exe+1BE0FD:
   db 8D 85 D8 FE FF FF
 //lea eax,[ebp-00000128]
 </AssemblerScript>
@@ -273,7 +270,6 @@ dummy:
 originalcode:
   subss xmm2,xmm0
   movss xmm0,[eax+08]
-  exit:
   jmp returnhere
 
 //decrease this number to reduce the radius
@@ -282,7 +278,7 @@ radius:
   dd (float)25
   dd FFFFFFFF
 
-Cubic.exe+1BD816:
+Cubic.exe+1BE0C0:
   jmp Cubic.exe+30E9D0
   nop 4
   returnhere:
@@ -291,7 +287,7 @@ Cubic.exe+1BD816:
  
  
 [DISABLE]
-Cubic.exe+1BD816:
+Cubic.exe+1BE0C0:
   db F3 0F 5C D0 F3 0F 10 40 08
 //subss xmm2,xmm0
 //movss xmm0,[eax+08]
@@ -343,7 +339,6 @@ dummy:
 originalcode:
   pop ebx
   movss xmm0,[ebp+10]
-  exit:
   jmp returnhere
 
 sign_mask:
@@ -355,7 +350,7 @@ buffer:
   dd AAAAAAAA
 
 
-Cubic.exe+1A09F9:
+Cubic.exe+1A1284:
   jmp Cubic.exe+30E925
   returnhere:
 
@@ -363,7 +358,7 @@ Cubic.exe+1A09F9:
  
  
 [DISABLE]
-Cubic.exe+1A09F9:
+Cubic.exe+1A1284:
   db F3 0F 10 45 10
 //movss xmm0,[ebp+10]
 </AssemblerScript>
@@ -389,7 +384,7 @@ hide_ui:
 
 
 
-Cubic.exe+231C0F:
+Cubic.exe+232AFF:
   jmp Cubic.exe+30EB17
   nop 3
   returnhere:
@@ -398,7 +393,7 @@ Cubic.exe+231C0F:
  
  
 [DISABLE]
-Cubic.exe+231C0F:
+Cubic.exe+232AFF:
 db F3 0F 11 82 38 02 00 00
 //movss [edx+00000238],xmm0
 </AssemblerScript>
@@ -408,14 +403,15 @@ db F3 0F 11 82 38 02 00 00
           <Description>"Hide UI 2"</Description>
           <VariableType>Auto Assembler Script</VariableType>
           <AssemblerScript>[ENABLE]
-Cubic.exe+1BFB5D:
+Cubic.exe+1C0405:
   nop 7
 
  
  
 [DISABLE]
-Cubic.exe+1BFB5D:
-  cmp byte ptr [Cubic.exe+2FFDF3],00
+Cubic.exe+1C0405:
+  cmp byte ptr [Cubic.exe+301E83],00
+
 </AssemblerScript>
         </CheatEntry>
         <CheatEntry>
@@ -424,12 +420,13 @@ Cubic.exe+1BFB5D:
           <VariableType>Auto Assembler Script</VariableType>
           <AssemblerScript>[ENABLE]
 
-Cubic.exe+1BD87D:
+Cubic.exe+30EAE5:
   push ebp
   mov ebp,esp
   mov edx,[ebp+08]
   cmp ecx,edx
-  je Cubic.exe+77DA7
+  je Cubic.exe+77D8D
+
 
 
   push eax
@@ -467,15 +464,16 @@ up_vector:
 
 
 
-Cubic.exe+1BD87D:
+Cubic.exe+1BE127:
   call Cubic.exe+30EAE5
 
 
  
  
 [DISABLE]
-Cubic.exe+1BD87D:
+Cubic.exe+1BE127:
   call Cubic.exe+77D8D
+
 
 </AssemblerScript>
         </CheatEntry>
@@ -484,14 +482,15 @@ Cubic.exe+1BD87D:
           <Description>"Fog"</Description>
           <VariableType>Auto Assembler Script</VariableType>
           <AssemblerScript>[ENABLE]
-Cubic.exe+1BD921:
+Cubic.exe+1BE1CB:
   db 90 90 90 90 90 90 90 90
 
  
  
 [DISABLE]
-Cubic.exe+1BD921:
-  movss [Cubic.exe+300ED0],xmm0
+Cubic.exe+1BE1CB:
+  movss [Cubic.exe+301F58],xmm0
+
 
 </AssemblerScript>
         </CheatEntry>
@@ -500,15 +499,15 @@ Cubic.exe+1BD921:
           <Description>"Hide Nametags"</Description>
           <VariableType>Auto Assembler Script</VariableType>
           <AssemblerScript>[ENABLE]
-Cubic.exe+1A8ADD:
-  jmp Cubic.exe+1A8A45
+Cubic.exe+1A936A:
+  jmp Cubic.exe+1AA278
   nop
 
  
  
 [DISABLE]
-Cubic.exe+1A8ADD:
-  jne Cubic.exe+1A99EB
+Cubic.exe+1A936A:
+  jne Cubic.exe+1AA278
   //0F 85 08 0F 00 00
 </AssemblerScript>
         </CheatEntry>
@@ -517,19 +516,19 @@ Cubic.exe+1A8ADD:
           <Description>"Override Camera Arrow Hotkeys"</Description>
           <VariableType>Auto Assembler Script</VariableType>
           <AssemblerScript>[ENABLE]
-Cubic.exe+1B9ADE:
+Cubic.exe+1BA367:
   db 90 90 90 90 90 90 90 90
 
-Cubic.exe+1B9B1A:
+Cubic.exe+1BA3A3:
   db 90 90 90 90 90 90 90 90
 
  
  
 [DISABLE]
-Cubic.exe+1B9ADE:
+Cubic.exe+1BA367:
   movss [esi+000009E8],xmm1
 
-Cubic.exe+1B9B1A:
+Cubic.exe+1BA3A3:
   movss [esi+000009EC],xmm2
 </AssemblerScript>
         </CheatEntry>
@@ -538,13 +537,13 @@ Cubic.exe+1B9B1A:
           <Description>"Override Camera Right Click Drag"</Description>
           <VariableType>Auto Assembler Script</VariableType>
           <AssemblerScript>[ENABLE]
-Cubic.exe+1CB22A:
+Cubic.exe+1CBBFD:
   db 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90
 
  
  
 [DISABLE]
-Cubic.exe+1CB22A:
+Cubic.exe+1CBBFD:
   movss [eax+000009E8],xmm0
   movss [eax+000009EC],xmm1
 </AssemblerScript>
@@ -564,21 +563,20 @@ Cubic.exe+30EB75:
 
 originalcode:
   call dword ptr [edx+000000A4]
-  exit:
   jmp returnhere
 
 is_chatting:
   dd 0
   dd FFFFFFFF
 
-"Cubic.exe"+BC347:
+Cubic.exe+BC4B7:
   jmp Cubic.exe+30EB75
   nop
   returnhere:
  
  
 [DISABLE]
-"Cubic.exe"+BC347:
+Cubic.exe+BC4B7:
   db FF 92 A4 00 00 00
 //call dword ptr [edx+000000A4]
 </AssemblerScript>
@@ -599,10 +597,9 @@ Cubic.exe+30EBB1:
 originalcode:
   xor eax,02
   mov [esi+64],eax
-  exit:
   jmp returnhere
 
-Cubic.exe+BC32D:
+Cubic.exe+BC49D:
   jmp Cubic.exe+30EBB1
   nop
   returnhere:
@@ -611,10 +608,59 @@ Cubic.exe+BC32D:
  
  
 [DISABLE]
-"Cubic.exe"+BC32D:
+Cubic.exe+BC49D:
 db 83 F0 02 89 46 64
 //xor eax,02
 //mov [esi+64],eax
+</AssemblerScript>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>2671</ID>
+          <Description>"Item Bobbing"</Description>
+          <VariableType>Auto Assembler Script</VariableType>
+          <AssemblerScript>[ENABLE]
+//code from here to '[DISABLE]' will be used to enable the cheat
+alloc(newmem,2048)
+label(returnhere)
+label(buffer)
+registersymbol(buffer)
+
+Cubic.exe+30EC01:
+push eax
+call dummy
+dummy:
+pop eax
+
+movss xmm0,[eax+29]
+movss [edi+000001A4],xmm0
+movss xmm0,[edi+000001A8]
+
+movss xmm0,[eax+2D]
+movss [edi+000001A8],xmm0
+pop eax
+
+jmp Cubic.exe+1ABE86
+
+
+buffer:
+dd (float)0
+dd (float)0
+
+Cubic.exe+1ABD34:
+jmp Cubic.exe+30EC01
+nop 3
+returnhere:
+
+
+ 
+ 
+[DISABLE]
+//code from here till the end of the code will be used to disable the cheat
+dealloc(newmem)
+unregistersymbol(buffer)
+Cubic.exe+1ABD34:
+db F3 0F 11 87 A4 01 00 00
+//movss [edi+000001A4],xmm0
 </AssemblerScript>
         </CheatEntry>
       </CheatEntries>

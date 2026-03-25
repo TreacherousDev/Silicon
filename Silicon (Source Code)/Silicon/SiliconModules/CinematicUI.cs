@@ -690,8 +690,9 @@ namespace Silicon
                 currentCameraDistance,
                 currentCameraSightRange,
                 recordInterval,
-                InterpolationComboBox.SelectedIndex // save interpolation per frame
+                8
             };
+            Console.WriteLine("hi");
 
             animationFrames.Add(frame);
         }

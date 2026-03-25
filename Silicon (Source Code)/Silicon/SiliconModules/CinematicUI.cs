@@ -690,9 +690,8 @@ namespace Silicon
                 currentCameraDistance,
                 currentCameraSightRange,
                 recordInterval,
-                8
+                8 // Catmull Rom by default for recorded keyframes
             };
-            Console.WriteLine("hi");
 
             animationFrames.Add(frame);
         }
